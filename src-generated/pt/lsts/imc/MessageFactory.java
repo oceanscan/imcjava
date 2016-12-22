@@ -626,6 +626,12 @@ public class MessageFactory {
 				return new Tachograph(defs);
 			case ApmStatus.ID_STATIC:
 				return new ApmStatus(defs);
+			case GpioState.ID_STATIC:
+				return new GpioState(defs);
+			case GpioStateGet.ID_STATIC:
+				return new GpioStateGet(defs);
+			case GpioStateSet.ID_STATIC:
+				return new GpioStateSet(defs);
 			default:
 				return new IMCMessage(defs);
 		}
