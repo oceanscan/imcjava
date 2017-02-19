@@ -578,6 +578,8 @@ public class MessageFactory {
 				return new UamTxStatus(defs);
 			case UamRxRange.ID_STATIC:
 				return new UamRxRange(defs);
+			case UamTxRange.ID_STATIC:
+				return new UamTxRange(defs);
 			case FormCtrlParam.ID_STATIC:
 				return new FormCtrlParam(defs);
 			case FormationEval.ID_STATIC:
