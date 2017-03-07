@@ -450,6 +450,8 @@ public class MessageFactory {
 				return new AutonomousSection(defs);
 			case FollowPoint.ID_STATIC:
 				return new FollowPoint(defs);
+			case Alignment.ID_STATIC:
+				return new Alignment(defs);
 			case VehicleState.ID_STATIC:
 				return new VehicleState(defs);
 			case VehicleCommand.ID_STATIC:
@@ -634,6 +636,10 @@ public class MessageFactory {
 				return new GpioStateGet(defs);
 			case GpioStateSet.ID_STATIC:
 				return new GpioStateSet(defs);
+			case ColoredDissolvedOrganicMatter.ID_STATIC:
+				return new ColoredDissolvedOrganicMatter(defs);
+			case FluorescentDissolvedOrganicMatter.ID_STATIC:
+				return new FluorescentDissolvedOrganicMatter(defs);
 			default:
 				return new IMCMessage(defs);
 		}

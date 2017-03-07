@@ -31,9 +31,9 @@ package pt.lsts.imc;
 
 public class ImcStringDefs {
 
-	public static final String IMC_SHA = "8405bc46740f948f31c08ccc1d55160913b5fdcd";
-	public static final String IMC_BRANCH = "2017-02-19 8405bc4 (HEAD -> master, tag: imc-5.4.15, origin/master, origin/HEAD)";
-	public static final String IMC_COMMIT = "Ricardo Martins (rasm@oceanscan-mst.com), Sun Feb 19 15:06:16 WET 2017, Added REVERT flag to Brake.";
+	public static final String IMC_SHA = "5aa6d02b4d31164f1718b26b3d9f2fe802335be2";
+	public static final String IMC_BRANCH = "2017-03-07 5aa6d02 (HEAD -> master, tag: imc-5.4.16, origin/master, origin/HEAD)";
+	public static final String IMC_COMMIT = "Ricardo Martins (rasm@oceanscan-mst.com), Tue Mar 07 15:57:03 WET 2017, Merge remote-tracking branch 'origin/feature/alignment'";
 
 	public static java.util.Map<String, Integer> IMC_ADDRESSES = new java.util.LinkedHashMap<String, Integer>();
 
@@ -74,8 +74,8 @@ public class ImcStringDefs {
 		IMC_ADDRESSES.put("lauv-dmo-1-aux", 24593);
 		IMC_ADDRESSES.put("lauv-tno-1", 8209);
 		IMC_ADDRESSES.put("lauv-tno-1-aux", 24594);
-		IMC_ADDRESSES.put("lauv-spectra-1", 8210);
-		IMC_ADDRESSES.put("lauv-spectra-1-aux", 24595);
+		IMC_ADDRESSES.put("lauv-pub-1", 8210);
+		IMC_ADDRESSES.put("lauv-pub-1-aux", 24595);
 		IMC_ADDRESSES.put("lauv-oceaneco-4", 8211);
 		IMC_ADDRESSES.put("lauv-oceaneco-4-aux", 24596);
 		IMC_ADDRESSES.put("manta-10", 32795);
@@ -90,7 +90,7 @@ public class ImcStringDefs {
 		IMC_ADDRESSES.put("manta-ntnu-1", 32880);
 		IMC_ADDRESSES.put("manta-oceaneco-3", 32881);
 		IMC_ADDRESSES.put("manta-tno-1", 32883);
-		IMC_ADDRESSES.put("manta-spectra-1", 32884);
+		IMC_ADDRESSES.put("manta-pub-1", 32884);
 		IMC_ADDRESSES.put("manta-oceaneco-4", 32885);
 		IMC_ADDRESSES.put("broadcast", 65520);
 		IMC_ADDRESSES.put("null", 65535);
