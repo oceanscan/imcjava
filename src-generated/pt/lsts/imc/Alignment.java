@@ -101,13 +101,11 @@ public class Alignment extends Maneuver {
 		return m;
 	}
 
-	public Alignment(int timeout, double start_lat, double start_lon, double end_lat, double end_lon, float speed, SPEED_UNITS speed_units, String custom) {
+	public Alignment(int timeout, double lat, double lon, float speed, SPEED_UNITS speed_units, String custom) {
 		super(ID_STATIC);
 		setTimeout(timeout);
-		setStartLat(start_lat);
-		setStartLon(start_lon);
-		setEndLat(end_lat);
-		setEndLon(end_lon);
+		setLat(lat);
+		setLon(lon);
 		setSpeed(speed);
 		setSpeedUnits(speed_units);
 		if (custom != null)
@@ -130,62 +128,32 @@ public class Alignment extends Maneuver {
 	}
 
 	/**
-	 *  @return Start Latitude WGS-84 (rad) - fp64_t
+	 *  @return Latitude WGS-84 (rad) - fp64_t
 	 */
-	public double getStartLat() {
-		return getDouble("start_lat");
+	public double getLat() {
+		return getDouble("lat");
 	}
 
 	/**
-	 *  @param start_lat Start Latitude WGS-84 (rad)
+	 *  @param lat Latitude WGS-84 (rad)
 	 */
-	public Alignment setStartLat(double start_lat) {
-		values.put("start_lat", start_lat);
+	public Alignment setLat(double lat) {
+		values.put("lat", lat);
 		return this;
 	}
 
 	/**
-	 *  @return Start Longitude WGS-84 (rad) - fp64_t
+	 *  @return Longitude WGS-84 (rad) - fp64_t
 	 */
-	public double getStartLon() {
-		return getDouble("start_lon");
+	public double getLon() {
+		return getDouble("lon");
 	}
 
 	/**
-	 *  @param start_lon Start Longitude WGS-84 (rad)
+	 *  @param lon Longitude WGS-84 (rad)
 	 */
-	public Alignment setStartLon(double start_lon) {
-		values.put("start_lon", start_lon);
-		return this;
-	}
-
-	/**
-	 *  @return End Latitude WGS-84 (rad) - fp64_t
-	 */
-	public double getEndLat() {
-		return getDouble("end_lat");
-	}
-
-	/**
-	 *  @param end_lat End Latitude WGS-84 (rad)
-	 */
-	public Alignment setEndLat(double end_lat) {
-		values.put("end_lat", end_lat);
-		return this;
-	}
-
-	/**
-	 *  @return End Longitude WGS-84 (rad) - fp64_t
-	 */
-	public double getEndLon() {
-		return getDouble("end_lon");
-	}
-
-	/**
-	 *  @param end_lon End Longitude WGS-84 (rad)
-	 */
-	public Alignment setEndLon(double end_lon) {
-		values.put("end_lon", end_lon);
+	public Alignment setLon(double lon) {
+		values.put("lon", lon);
 		return this;
 	}
 
