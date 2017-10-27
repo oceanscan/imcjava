@@ -721,7 +721,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 	 * @return An hash map with all the values of the tuplelist already parsed
 	 */
 	public LinkedHashMap<String, String> getTupleList(String field) {
-		if (getMessageType().getFieldUnits(field).equals("tuplelist"))
+		if (getMessageType().getFieldUnits(field).equalsIgnoreCase("tuplelist"))
 			return IMCMessage.decodeTupleList(getAsString(field));
 
 		return new LinkedHashMap<String, String>();
