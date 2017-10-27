@@ -141,7 +141,7 @@ public class IMCMessageType {
             offsets.put(abbrv, IMCMessageType.UNKNOWN_SIZE);			
         }
         if (unit != null)
-            units.put(abbrv, unit.toLowerCase());
+            units.put(abbrv, unit);
 
 
         if (fieldType.toLowerCase().startsWith("uint") ||
