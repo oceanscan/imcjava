@@ -74,7 +74,6 @@ import pt.lsts.util.WGS84Utilities;
 public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IMCMessage> {
     protected UDPTransport discovery;
     protected UDPTransport comms;
-    protected TcpTransport tcp;
     protected LinkedHashMap<String, IMCNode> nodes = new LinkedHashMap<String, IMCNode>();
     protected int bindPort = 7001;
     protected LinkedHashMap<String, ImcSystemState> sysStates = new LinkedHashMap<String, ImcSystemState>();
@@ -114,14 +113,6 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
         IMCDefinition.getInstance();
         this.bindPort = localPort;
         comms = new UDPTransport(bindPort, 1);
-        comms.setImcId(getLocalId());
-        tcp = new TcpTransport();
-        try {
-            tcp.bind(bindPort);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         comms.setImcId(getLocalId());
 
         this.localName = localName;
@@ -300,7 +291,6 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
         Collection<String> netInt = NetworkUtilities.getNetworkInterfaces(includeLoopback);
         for (String itf : netInt) {
             services += "imc+udp://" + itf + ":" + bindPort + "/;";
-            services += "imc+tcp://" + itf + ":" + bindPort + "/;";
         }
         for (String s : this.services)
             services += s + ";";
@@ -465,42 +455,6 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
         return false;
     }
 
-    /** This method tries to send a message to given destination with reliability. If the message is
-     * not acknowledged by the remote host, this method will thrown an Exception.
-     * 
-     * @param sysName
-     *            The name of the destination of this message
-     * @param msg
-     *            The message to send to the destination
-     * @param timeoutMillis
-     *            Maximum amount of time, in milliseconds to wait for delivery.
-     * @return <code>true</code> on success.
-     * @throws Exception
-     *             In case the destination is not known, is nor currently reachable or there was an
-     *             error in the communication. */
-    public boolean sendReliably(String sysName, IMCMessage msg, int timeoutMillis)
-            throws Exception {
-        fillUp(msg, sysName);
-
-        Vector<Future<Boolean>> tries = new Vector<Future<Boolean>>();
-        for (IMCNode nd : nodes.values()) {
-            if (nd.getSysName().equals(sysName)) {
-                if (nd.getTcpAddress() != null) {
-                    msg.setValue("dst", nd.getImcId());
-                    tries.add(tcp.send(nd.getTcpAddress(), nd.getTcpPort(), msg, timeoutMillis));
-                }
-            }
-        }
-
-        if (tries.isEmpty())
-            throw new Exception("Destination not reachable");
-        for (Future<Boolean> t : tries)
-            if (t.get())
-                return true;
-
-        throw new Exception("Destination not reachable");
-    }
-
     private void fillUp(IMCMessage msg, String dst) {
         msg.setValue("src", localId);
         msg.setTimestamp(System.currentTimeMillis() / 1000.0);
@@ -563,7 +517,6 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
             Collection<String> typesToListen) {
         comms.addListener(l, typesToListen);
         discovery.addListener(l, typesToListen);
-        tcp.addMessageListener(l);
     }
 
     /** Remove a previously added message listener
@@ -573,7 +526,6 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     public void removeMessageListener(MessageListener<MessageInfo, IMCMessage> l) {
         comms.removeMessageListener(l);
         discovery.removeMessageListener(l);
-        tcp.removeMessageListener(l);
     }
 
     /** Add a global message listener that will be call on <strong>ALL</strong> incoming messages
@@ -583,7 +535,6 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     public void addMessageListener(MessageListener<MessageInfo, IMCMessage> l) {
         comms.addMessageListener(l);
         discovery.addMessageListener(l);
-        tcp.addMessageListener(l);
     }
 
     /** Add a listener that will be called once and then removed from the list of observers
@@ -708,7 +659,6 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
         if (discovery != null)
             discovery.stop();
 
-        tcp.shutdown();
         logExec.shutdown();
     }
 

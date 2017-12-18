@@ -45,9 +45,6 @@ public class IMCNode {
 	protected String address;
 	protected int port;
 
-	protected int tcpport = -1;
-	protected String tcpAddress = null;
-
 	public int getImcId() {
 		return lastAnnounce != null ? lastAnnounce.getSrc() : 0;
 	}
@@ -70,8 +67,6 @@ public class IMCNode {
 
 	private Pattern pUdp = Pattern
 			.compile("imc\\+udp\\:\\/\\/(\\d+)\\.(\\d+)\\.(\\d+)\\.(\\d+)\\:(\\d+)/");
-	private Pattern pTcp = Pattern
-			.compile("imc\\+tcp\\:\\/\\/(\\d+)\\.(\\d+)\\.(\\d+)\\.(\\d+)\\:(\\d+)/");
 
 	public void setAnnounce(Announce announce) {
 
@@ -99,7 +94,6 @@ public class IMCNode {
 		String newAddress;
 
 		LinkedHashSet<String> udpAddresses = new LinkedHashSet<String>();
-		LinkedHashSet<String> tcpAddresses = new LinkedHashSet<String>();
 
 		for (String serv : services) {
 			Matcher mUdp = pUdp.matcher(serv);
@@ -108,14 +102,6 @@ public class IMCNode {
 						+ mUdp.group(3) + "." + mUdp.group(4);
 				udpAddresses.add(newAddress);
 				this.port = Integer.parseInt(mUdp.group(5));
-			}
-
-			Matcher mTcp = pTcp.matcher(serv);
-			if (mTcp.matches()) {
-				newAddress = mTcp.group(1) + "." + mTcp.group(2) + "."
-						+ mTcp.group(3) + "." + mTcp.group(4);
-				this.tcpport = Integer.parseInt(mTcp.group(5));
-				tcpAddresses.add(newAddress);
 			}
 		}
 
@@ -130,15 +116,6 @@ public class IMCNode {
 			return false;
 		}
 
-		if (tcpAddresses.size() == 1) {
-			tcpAddress = tcpAddresses.iterator().next();
-		} else if (tcpAddresses.contains(announce.getMessageInfo()
-				.getPublisherInetAddress())) {
-			tcpAddress = announce.getMessageInfo().getPublisherInetAddress();
-		} else if (tcpAddresses.size() > 1) {
-			tcpAddress = tcpAddresses.iterator().next();
-		}
-
 		return true;
 	}
 
@@ -148,12 +125,6 @@ public class IMCNode {
 
 	public void setAddress(String address) {
 		this.address = address;
-		if (tcpAddress == null)
-			tcpAddress = address;
-	}
-
-	public void setTcpAddress(String address) {
-		this.tcpAddress = address;
 	}
 
 	public int getPort() {
@@ -162,20 +133,6 @@ public class IMCNode {
 
 	public void setPort(int port) {
 		this.port = port;
-		if (tcpport == -1)
-			tcpport = port;
-	}
-
-	public void setTcpPort(int port) {
-		this.tcpport = port;
-	}
-
-	public int getTcpPort() {
-		return tcpport;
-	}
-
-	public String getTcpAddress() {
-		return tcpAddress;
 	}
 
 	public IMCNode(Announce announceMessage) {
