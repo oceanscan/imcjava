@@ -4,8 +4,6 @@
   <property name="compile-target" value="1.7" />
   <property name="compile-encoding" value="UTF-8" />
 
-  <property name="test-dir" location="src-junit" />
-
   <path id="classpath.dependencies">
     <pathelement location="lib/minimal-json-0.9.2.jar" />
   </path>
@@ -13,12 +11,6 @@
   <path id="classpath.base">
   	<path refid="classpath.dependencies" />
   	<pathelement location="build" />
-  </path>
-  <path id="classpath.test">
-    <pathelement location="${test.dir}" />
-    <pathelement location="lib/junit-4.10.jar" />
-    <pathelement location="lib/commons-io-2.0.1.jar" />
-    <path refid="classpath.base" />
   </path>
   <path id="classpath.full">
   	<pathelement location="lib/asg.cliche-110413.jar" />
@@ -32,29 +24,9 @@
   	<path refid="classpath.base"/>
   </path>
 
-  <target name="compile-test" depends="compile-all">
-    <javac encoding="${compile-encoding}" srcdir="src-junit" destdir="build" target="${compile-target}" source="${compile-source}" includes="**/*.java" fork="false">
-      <classpath refid="classpath.test"/>
-    </javac>
-  </target>
-
   <target name="retrieve-samples" >
     <get src="http://lsts.github.io/imcjava/downloads/samples.zip" dest="."/>
   	<unzip src="samples.zip" dest="samples"></unzip>
-  </target>
-
-  <target name="test" depends="compile-test, retrieve-samples">
-	<junit fork="yes" haltonerror="true" haltonfailure="true">
-  	   <classpath refid="classpath.test" />
-  	   <formatter type="brief" usefile="false" />
-  	   <test name="pt.lsts.imc.junit.ImcStringDefsTest" />
-  	   <test name="pt.lsts.imc.junit.MessageCreationTest" />
-  	   <test name="pt.lsts.imc.junit.SerializationTest" />
-  	   <test name="pt.lsts.imc.junit.ImcSynchTest" />
-  	   <test name="pt.lsts.imc.junit.ImcFragmentsTest" />
-  	   <test name="pt.lsts.imc.junit.PlanUtilitiesTest" />
-	   <test name="pt.lsts.imc.junit.LsfIndexTest" />
-    </junit>
   </target>
 
   <target name="dist" depends="generated,libimc.jar" description="Updates IMC protocol from given repository and generates libimc.jar"/>
