@@ -95,18 +95,11 @@
    	<unjar src="lib/minimal-json-0.9.2.jar" dest="build"/>
   </target>
 
-  <target name="compile-all" depends="compile-gui">
-    <javac encoding="${compile-encoding}" srcdir="src-sniffer" destdir="build" target="${compile-target}" source="${compile-source}" includes="**/*.java" fork="false">
-    </javac>
+  <target name="compile-all">
     <copy verbose="true" todir="build">
       <fileset dir="src-generated" includes="**/*.xml"/>
       <fileset dir="src" includes="**/*.png"/>
     </copy>
-  </target>
-
-  <target name="compile-gui" depends="compile">
-	<javac encoding="${compile-encoding}" srcdir="src-gui" destdir="build" target="${compile-target}" source="${compile-source}" includes="**/*.java" fork="false">
-	</javac>
   </target>
 
   <target name="compile-generator" depends="compile">
@@ -209,7 +202,7 @@
     <echo message="The file 'dist/imc-full.jar' was generated"/>
   </target>
 
-  <target name="libimc.jar" depends="gitinfo,compile,compile-gui,copysrc,copylicense,copygenerated" description="Generates neptus-compatible library (with bundled source).">
+  <target name="libimc.jar" depends="gitinfo,compile,copysrc,copylicense,copygenerated" description="Generates neptus-compatible library (with bundled source).">
     <tstamp>
       <format property="time" pattern="yyyy-MM-dd HH:mm:ss"/>
     </tstamp>
@@ -275,7 +268,7 @@
     <delete file="dist/lsffilter.jar"/>
   </target>
 
-  <target name="lsf2llf" description="Create a program for extracting and simplifying lsf files" depends="compile, compile-gui">
+  <target name="lsf2llf" description="Create a program for extracting and simplifying lsf files" depends="compile">
     <jar destfile="dist/lsf2llf.jar" basedir="build" index="true">
       <manifest>
         <attribute name="Main-Class" value="pt.lsts.imc.llf.LSF2LLF"/>
