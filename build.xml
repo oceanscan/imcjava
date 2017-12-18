@@ -184,8 +184,6 @@
    	    addproperty="imc.dir"
   	  />
 
-    <javac encoding="${compile-encoding}" classpath="lib/commons-lang3-3.1.jar" srcdir="src-generator"  destdir="build" target="${compile-target}" source="${compile-source}" includes="**/*.java" fork="false" />
-
   	<java classname="pt.lsts.imc.generator.ClassGenerator" args="${imc.dir}" classpath="build;lib/commons-lang3-3.1.jar" />
 
   	<!-- compile newly generated classes -->
@@ -194,7 +192,7 @@
   </target>
 
   <target name="javadoc" description="Create javadoc documentation" depends="compile-all">
-    <javadoc additionalparam="-Xdoclint:none" charset="UTF-8" encoding="${compile-encoding}" access="public" author="true" classpathref="classpath.full" destdir="doc" doctitle="IMCJava API" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="pt.lsts.util,pt.lsts.imc,pt.lsts.colormap,pt.lsts.neptus.messages,pt.lsts.imc.llf,pt.lsts.imc.generator,pt.lsts.imc.gz,pt.lsts.imc.state,pt.lsts.imc.net,pt.lsts.dot,pt.lsts.imc.inspector,pt.lsts.imc.lsf,pt.lsts.messages.listener" source="${compile-source}"  sourcepath="src-generated:src-generator:src:src-bathymetry:src-generated" splitindex="true" use="true" version="true"/>
+    <javadoc additionalparam="-Xdoclint:none" charset="UTF-8" encoding="${compile-encoding}" access="public" author="true" classpathref="classpath.full" destdir="doc" doctitle="IMCJava API" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="pt.lsts.util,pt.lsts.imc,pt.lsts.colormap,pt.lsts.neptus.messages,pt.lsts.imc.llf,pt.lsts.imc.generator,pt.lsts.imc.gz,pt.lsts.imc.state,pt.lsts.imc.net,pt.lsts.dot,pt.lsts.imc.inspector,pt.lsts.imc.lsf,pt.lsts.messages.listener" source="${compile-source}"  sourcepath="src:src-generated" splitindex="true" use="true" version="true"/>
   	<zip destfile="dist/doc.zip" basedir="doc"></zip>
   </target>
 
