@@ -334,19 +334,6 @@
     <delete file="dist/lsffilter.jar"/>
   </target>
 
-
-  <target name="ripples" description="Create ripples.jar" depends="compile">
-    <javac encoding="${compile-encoding}" debug="true" srcdir="src-ripples" destdir="build" target="${compile-target}" source="${compile-source}" includes="**/*.java" fork="false" classpath="lib/firebase-client-jvm-LATEST.jar">
-    </javac>
-    <unjar src="lib/firebase-client-jvm-LATEST.jar" dest="build"/>
-
-    <jar destfile="dist/ripples.jar" basedir="build" index="true">
-      <manifest>
-        <attribute name="Main-Class" value="pt.lsts.imc.ripples.RipplesMain"/>
-      </manifest>
-    </jar>
-  </target>
-
   <target name="lsf2llf" description="Create a program for extracting and simplifying lsf files" depends="compile, compile-gui">
     <jar destfile="dist/lsf2llf.jar" basedir="build" index="true">
       <manifest>
