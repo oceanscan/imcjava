@@ -100,7 +100,7 @@
    	<unjar src="lib/minimal-json-0.9.2.jar" dest="build"/>
   </target>
 
-  <target name="compile-all" depends="compile-merge, compile-gui, compile-teleop, compile-preview">
+  <target name="compile-all" depends="compile-merge, compile-gui, compile-preview">
     <javac encoding="${compile-encoding}" srcdir="src-sniffer" destdir="build" target="${compile-target}" source="${compile-source}" includes="**/*.java" fork="false">
     </javac>
     <copy verbose="true" todir="build">
@@ -133,22 +133,6 @@
 
   <target name="compile-preview" depends="compile">
     <javac encoding="${compile-encoding}" srcdir="src-lsfpreview" destdir="build" target="${compile-target}" source="${compile-source}" includes="**/*.java" fork="false" classpath="lib/jchart2d-3.2.0.jar">
-    </javac>
-  </target>
-
-  <target name="teleop-jar" depends="compile-teleop">
-    <delete file="dist/teleop.jar"/>
-    <jar destfile="dist/teleop.jar" basedir="build" index="true">
-      <manifest>
-        <attribute name="Main-Class" value="pt.lsts.imc.teleop.TeleoperationApp"/>
-      </manifest>
-    </jar>
-    <echo message="The file 'dist/teleop.jar' was generated"/>
-  </target>
-
-  <target name="compile-teleop" depends="compile, compile-gui">
-    <mkdir dir="build"/>
-    <javac encoding="${compile-encoding}" debug="true" srcdir="src-teleop" destdir="build" target="${compile-target}" source="${compile-source}" includes="**/*.java" fork="false">
     </javac>
   </target>
 
