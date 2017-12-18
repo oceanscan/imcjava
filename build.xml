@@ -55,7 +55,7 @@
 	  <fileset dir="src-generated" includes="xml/IMC.xml"/>
   	</copy>
 
-    <javac encoding="${compile-encoding}" srcdir="src;src-generated"  destdir="build" target="${compile-target}" source="${compile-source}" includes="**/*.java" fork="false">
+    <javac encoding="${compile-encoding}" srcdir="src;src-generated"  destdir="build" target="${compile-target}" source="${compile-source}" includes="**/*.java" fork="false" classpath="lib/commons-lang3-3.1.jar">
     	<classpath refid="classpath.dependencies"/>
     </javac>
    	<unjar src="lib/minimal-json-0.9.2.jar" dest="build"/>
@@ -66,12 +66,6 @@
       <fileset dir="src-generated" includes="**/*.xml"/>
       <fileset dir="src" includes="**/*.png"/>
     </copy>
-  </target>
-
-  <target name="compile-generator" depends="compile">
-    <mkdir dir="build"/>
-    <javac encoding="${compile-encoding}" srcdir="src-generator" destdir="build" target="${compile-target}" source="${compile-source}" includes="**/*.java" fork="false" classpath="lib/commons-lang3-3.1.jar">
-    </javac>
   </target>
 
   <target name="copysrc" depends="compile">
