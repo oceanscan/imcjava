@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
 group 'pt.lsts'
-version '5.4.16'
+version '5.4.16-SNAPSHOT'
 
 ext
 {
@@ -29,8 +29,33 @@ sourceSets {
     }
 }
 
+//******************************************************************************
+//* Generator.                                                                 *
+//******************************************************************************
+
 task generate(type: JavaExec) {
     classpath sourceSets.main.runtimeClasspath
     main = "pt.lsts.imc.generator.ClassGenerator"
     args rootProject.ext.imcDir, rootProject.file('src/generated').absolutePath
+}
+
+//******************************************************************************
+//* Publishing.                                                                *
+//******************************************************************************
+
+apply plugin: 'maven-publish'
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            url "file://" + System.getProperty("user.home") + "/maven"
+        }
+    }
 }
