@@ -262,7 +262,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
      * Set all values from another message of same type
      *
      * @param otherMessage Message where to read values from
-     * @throws Exception In case the types of the messages do not match
+     * @throws Exception In case the TYPES of the messages do not match
      */
     public IMCMessage copyFrom(IMCMessage otherMessage) throws Exception {
         if (otherMessage.getMessageType().getId() != getMessageType().getId()) {
@@ -1722,7 +1722,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
      *
      * @param xml The xml to be parsed
      * @return The messages that exist in the file
-     * @throws Exception Malformed XML, incompatible types, etc
+     * @throws Exception Malformed XML, incompatible TYPES, etc
      */
     public static IMCMessage parseXml(String xml) throws Exception {
         DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();
