@@ -1226,7 +1226,7 @@ public class ClassGenerator {
 
 			IMCDefinition defs = new IMCDefinition(GenerationUtils.getImcXml(imcFolder));
 			Files.copy(imcXml, genResources, StandardCopyOption.REPLACE_EXISTING);
-			Map<String, Integer> addrs = GenerationUtils.getImcAddresses(imcFolder);
+			Map<String, Integer> addrs = GenerationUtils.getImcAddresses();
 
 			File output = getOutputDir(genJava.toFile(), "pt.lsts.imc");
 			clearDir(output);

@@ -39,13 +39,9 @@ import java.util.Scanner;
 import pt.lsts.imc.IMCAddressResolver;
 
 public class GenerationUtils {
-
-	public static String execCmd(String cmd, File where) throws Exception {
-
+	private static String execCmd(String cmd, File where) throws Exception {
 		Process p = Runtime.getRuntime().exec(cmd, null, where);
-
         Scanner s = new Scanner(p.getInputStream());
-
         String ret = "";
         s.useDelimiter("\\A");
         if (s.hasNext())
@@ -65,19 +61,20 @@ public class GenerationUtils {
 		return date+" "+head+" "+branch;
 	}
 
-	public static String getGitCommitAuthor(File repo) throws Exception {
+	private static String getGitCommitAuthor(File repo) throws Exception {
 		return execCmd("git log -1 --format=%cn", repo).trim();
 	}
 
-	public static String getGitCommitEmail(File repo) throws Exception {
+	private static String getGitCommitEmail(File repo) throws Exception {
 		return execCmd("git log -1 --format=%ce", repo).trim();
 	}
-	public static String getGitCommitNote(File repo) throws Exception {
+
+	private static String getGitCommitNote(File repo) throws Exception {
 		String log = execCmd("git log -1 --format=%B", repo).trim();
 		return org.apache.commons.text.StringEscapeUtils.escapeJava(log);
 	}
 
-	public static Date getGitCommitDate(File repo) throws Exception {
+	private static Date getGitCommitDate(File repo) throws Exception {
 		return new Date(Long.parseLong(execCmd("git log -1 --format=%at", repo).trim())*1000);
 	}
 
@@ -111,10 +108,8 @@ public class GenerationUtils {
 		return new FileInputStream(new File(repo, "IMC.xml"));
 	}
 
-	public static Map<String, Integer> getImcAddresses(File repo) throws IOException {
-		FileInputStream fis = new FileInputStream(new File(repo, "IMC_Addresses.xml"));
-		IMCAddressResolver resolver = new IMCAddressResolver(fis);
-		fis.close();
+	public static Map<String, Integer> getImcAddresses() {
+		IMCAddressResolver resolver = new IMCAddressResolver();
 		return resolver.getAddresses();
 	}
 }
