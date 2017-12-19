@@ -1,9 +1,9 @@
 /*
  * Below is the copyright agreement for IMCJava.
- * 
+ *
  * Copyright (c) 2010-2016, Laboratório de Sistemas e Tecnologia Subaquática
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     - Redistributions of source code must retain the above copyright
@@ -11,21 +11,21 @@
  *     - Redistributions in binary form must reproduce the above copyright
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
- *     - Neither the names of IMC, LSTS, IMCJava nor the names of its 
- *       contributors may be used to endorse or promote products derived from 
+ *     - Neither the names of IMC, LSTS, IMCJava nor the names of its
+ *       contributors may be used to endorse or promote products derived from
  *       this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL LABORATORIO DE SISTEMAS E TECNOLOGIA SUBAQUATICA
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE 
- * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT 
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+ * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *  
+ *
  * $Id:: IMCDefinition.java 389 2013-02-26 14:03:03Z zepinto@gmail.com         $:
  */
 package pt.lsts.imc;
@@ -63,7 +63,7 @@ import pt.lsts.neptus.messages.IMessageProtocol;
 /**
  * This class loads and holds an IMC definition (XML) and allows creation of
  * compatible messages (factory), parsing and serialization
- * 
+ *
  * @author zp
  */
 public class IMCDefinition implements IMessageProtocol<IMCMessage> {
@@ -78,18 +78,18 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 	protected long syncWord, swappedWord;
 	protected IMCMessageType headerType, footerType;
 
-	protected LinkedHashMap<Integer, String> id_Abbrev = new LinkedHashMap<Integer, String>();
-	protected LinkedHashMap<String, Integer> abbrev_Id = new LinkedHashMap<String, Integer>();
-	protected LinkedHashMap<String, IMCMessageType> types = new LinkedHashMap<String, IMCMessageType>();
-	protected LinkedHashMap<String, LinkedHashMap<Long, String>> globalEnumerations = new LinkedHashMap<String, LinkedHashMap<Long, String>>();
-	protected LinkedHashMap<String, String> globalEnumPrefixes = new LinkedHashMap<String, String>();
-	protected LinkedHashMap<String, Vector<String>> subTypes = new LinkedHashMap<String, Vector<String>>();
-	
+	protected LinkedHashMap<Integer, String> id_Abbrev = new LinkedHashMap<>();
+	protected LinkedHashMap<String, Integer> abbrev_Id = new LinkedHashMap<>();
+	protected LinkedHashMap<String, IMCMessageType> types = new LinkedHashMap<>();
+	protected LinkedHashMap<String, LinkedHashMap<Long, String>> globalEnumerations = new LinkedHashMap<>();
+	protected LinkedHashMap<String, String> globalEnumPrefixes = new LinkedHashMap<>();
+	protected LinkedHashMap<String, Vector<String>> subTypes = new LinkedHashMap<>();
+
 	protected String specification = null;
-	
+
 	/**
 	 * Create a new IMCDefinition, loading the definitions from <b>f</b>
-	 * 
+	 *
 	 * @param f
 	 *            The file from where to read the definitions.
 	 * @throws Exception
@@ -110,7 +110,7 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 	/**
 	 * Create a new IMCDefinition, loading the XML definitions from the given
 	 * {@link InputStream}
-	 * 
+	 *
 	 * @param is
 	 * @throws Exception
 	 */
@@ -131,7 +131,7 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 
 	/**
 	 * Retrieve (possibly reusing) default definitions
-	 * 
+	 *
 	 * @return Default IMC definitions
 	 */
 	public static IMCDefinition getInstance() {
@@ -141,7 +141,7 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 	/**
 	 * Load the XML on the given {@link InputStream} and changes the default
 	 * instance to this
-	 * 
+	 *
 	 * @param isDefinitions
 	 *            {@link InputStream} holding the XML definitions
 	 * @return new IMCDefinition, loading the XML definitions from the given
@@ -165,7 +165,7 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 
 	/**
 	 * Retrieve the header length in this IMC version
-	 * 
+	 *
 	 * @return the header length in this IMC version
 	 */
 	public int headerLength() {
@@ -174,7 +174,7 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 
 	/**
 	 * Create a new header compatible with these definitions
-	 * 
+	 *
 	 * @return a new header compatible with these definitions
 	 */
 	public Header createHeader() {
@@ -185,9 +185,9 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 	public final IMCMessageType getHeaderType() {
 		return headerType;
 	}
-	
-	
-	
+
+
+
 
 	protected void readDefs(InputStream is) throws Exception {
 		DefaultProtocolParser parser = new DefaultProtocolParser();
@@ -228,7 +228,7 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 
 	/**
 	 * Retrieve the message type of given message id
-	 * 
+	 *
 	 * @param id
 	 *            a (numeric) message id
 	 * @return The corresponding {@link IMCMessageType} or <strong>null</strong>
@@ -240,7 +240,7 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 
 	/**
 	 * Retrieve the message type of given message abbreviated name
-	 * 
+	 *
 	 * @param name
 	 *            the abbreviated name of the wanted message type
 	 * @return The corresponding {@link IMCMessageType} or <strong>null</strong>
@@ -252,7 +252,7 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 
 	/**
 	 * Retrieve the Synchronization word of this IMC definition
-	 * 
+	 *
 	 * @return Synchronization word of this IMC definition
 	 */
 	public long getSyncWord() {
@@ -262,7 +262,7 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 	/**
 	 * Retrieve the swapped (little endian) synchronization word of this IMC
 	 * definition
-	 * 
+	 *
 	 * @return Swapped synchronization word of this IMC definition
 	 */
 	public long getSwappedWord() {
@@ -298,7 +298,7 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 
 	/**
 	 * Retrieve the definitions' name found on the XML
-	 * 
+	 *
 	 * @return the definitions' name found on the XML
 	 */
 	public String getName() {
@@ -335,7 +335,7 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 
 	/**
 	 * Create and retrieve an IMCMessage that is serialized in an array of bytes
-	 * 
+	 *
 	 * @param data
 	 *            Where to read the message from
 	 * @return The deserialized IMCMessage
@@ -354,7 +354,7 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 	/**
 	 * Retrieve the next message of given type from current position in the
 	 * buffer
-	 * 
+	 *
 	 * @param type
 	 *            The type of the message to be retrieved
 	 * @param buff
@@ -389,7 +389,7 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 
 	/**
 	 * Retrieve the next message from the buffer
-	 * 
+	 *
 	 * @param buff
 	 *            The buffer where to read the message from
 	 * @return The next message in the buffer
@@ -435,7 +435,7 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 
 	/**
 	 * Read a message header from the given IMCInputStream
-	 * 
+	 *
 	 * @param header
 	 *            Where to store the read data
 	 * @param iis
@@ -448,7 +448,7 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 
 	/**
 	 * Retrieve the next message from the given IMCInputStream
-	 * 
+	 *
 	 * @param input
 	 *            where to read the message from
 	 * @return The next message in the input
@@ -471,7 +471,7 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 				throw new IOException("Unrecognized Sync word: "
                     + String.format("%02X", syncFirstByte) + "??");
 		}
-		
+
 		long sync = ((syncFirstByte & 0xFF) << 8) + input.readUnsignedByte(); // input.readUnsignedShort();
 		if (sync == syncWord)
 			input.setBigEndian(true);
@@ -504,7 +504,7 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 	/**
 	 * Retrieve the next message in the given InputStream. This is done by
 	 * converting the InputStream in an IMCInputStream.
-	 * 
+	 *
 	 * @param in
 	 *            Where to read the message from
 	 * @return The next message in the input
@@ -902,7 +902,7 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 	/**
 	 * Verify if a message with given abbreviated name exists in these
 	 * definitions
-	 * 
+	 *
 	 * @param name
 	 *            The name to be searched for
 	 * @return Whether that message exists in this definition or not
@@ -928,20 +928,20 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 	public Collection<String> getMessageNames() {
 		return types.keySet();
 	}
-	
+
 	public Collection<String> getConcreteMessages() {
 		return id_Abbrev.values();
 	}
-	
+
 	public Collection<String> getAbstractMessages() {
 		LinkedHashSet<String> allMessages = new LinkedHashSet<String>();
 		allMessages.addAll(getMessageNames());
 		allMessages.removeAll(getConcreteMessages());
-		
+
 		return allMessages;
 	}
-	
-	
+
+
 
 	@Override
 	public IMCMessage newMessage(int id) throws Exception {
@@ -970,13 +970,13 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 
 	/**
 	 * Create a new message and fills it with given values
-	 * 
+	 *
 	 * @param name
 	 *            The abbreviated name of the message to be created
 	 * @param values
 	 *            A list of pairs &lt;field,value&gt; for initializing the
 	 *            message. Example:
-	 * 
+	 *
 	 *            <pre>
 	 * IMCMessage estimatedState = new IMCMessage(&quot;EstimatedState&quot;, &quot;x&quot;, 10.0, &quot;lat&quot;,
 	 * 		0.71, &quot;ref&quot;, &quot;NED&quot;);
@@ -1022,7 +1022,7 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 
 	/**
 	 * Serialize the given message to an IMCOutputStream
-	 * 
+	 *
 	 * @param m
 	 *            The message to be serialized
 	 * @param os
@@ -1047,7 +1047,7 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 
 	/**
 	 * Retrieve this definition's address resolver
-	 * 
+	 *
 	 * @return This definition's address resolver
 	 */
 	public final IMCAddressResolver getResolver() {
@@ -1063,7 +1063,7 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 	/**
 	 * Utility method to retrieve the IMC version of a given file with XML
 	 * defitions
-	 * 
+	 *
 	 * @param f
 	 *            The XML file of the IMC definitions (IMC.xml)
 	 * @return The version found on the file
@@ -1083,6 +1083,6 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 	}
 
 	public static void main(String[] args) throws Exception {
-		System.out.println(IMCDefinition.getInstance().getSpecification());		
+		System.out.println(IMCDefinition.getInstance().getSpecification());
 	}
 }

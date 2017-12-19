@@ -31,9 +31,9 @@ package pt.lsts.imc;
 
 public class ImcStringDefs {
 
-	public static final String IMC_SHA = "c7684510537d0f930582e7eef08eaea0dbd098b1";
-	public static final String IMC_BRANCH = "2017-03-07 c768451 (HEAD, tag: imc-5.4.16)";
-	public static final String IMC_COMMIT = "José Braga (eejbraga@gmail.com), Tue Mar 07 20:00:12 WET 2017, Revert \"IMC: modified Alignment maneuver to have start and end locations.\"\n\nThis reverts commit 78dc7dc5bcbf8b7fd0373432cb337fb9b56e0013.";
+	public static final String IMC_SHA = "915fc4d4896e34a3561809c65aa2a52eae426241";
+	public static final String IMC_BRANCH = "2017-10-31 915fc4d (HEAD -> master, origin/master, origin/HEAD)";
+	public static final String IMC_COMMIT = "Ricardo Martins (rasm@oceanscan-mst.com), Tue Oct 31 15:15:38 WET 2017, Removed unneeded files.";
 
 	public static java.util.Map<String, Integer> IMC_ADDRESSES = new java.util.LinkedHashMap<String, Integer>();
 

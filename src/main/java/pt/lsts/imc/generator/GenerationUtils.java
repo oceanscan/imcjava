@@ -100,8 +100,6 @@ public class GenerationUtils {
 
 		if (!new File(repo, "IMC.xml").canRead())
 			throw new Exception("Could not find "+new File(repo, "IMC.xml").getCanonicalPath());
-		if (!new File(repo, "IMC_Addresses.xml").canRead())
-			throw new Exception("Could not find "+new File(repo, "IMC_Addresses.xml").getCanonicalPath());
 	}
 
 	public static InputStream getImcXml(File repo) throws IOException {
