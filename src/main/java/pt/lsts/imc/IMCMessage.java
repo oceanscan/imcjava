@@ -33,7 +33,6 @@ package pt.lsts.imc;
 
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
-import com.eclipsesource.json.JsonObject.Member;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -53,7 +52,6 @@ import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -1278,53 +1276,6 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
         for (int i = 0; i < result.length; i++) {
             System.out.printf("%02X ", result[i]);
         }
-    }
-
-    private static IMCMessage parseJsonObject(JsonObject obj) {
-        IMCMessage msg = IMCDefinition.getInstance().create(obj.getString("abbrev", null));
-        for (Member m : obj) {
-            if (m.getName().equals("abbrev"))
-                continue;
-
-            IMCFieldType type = msg.getMessageType().getFieldType(m.getName());
-            if (type == null)
-                type = msg.getHeader().getMessageType().getFieldType(m.getName());
-
-            switch (type) {
-                case TYPE_PLAINTEXT:
-                    msg.setValue(m.getName(), m.getValue().asString());
-                    break;
-                case TYPE_RAWDATA:
-                    msg.setValue(m.getName(), Base64.decode(m.getValue().asString()));
-                    break;
-                case TYPE_MESSAGE:
-                    msg.setValue(m.getName(), parseJsonObject(m.getValue().asObject()));
-                    break;
-                case TYPE_MESSAGELIST:
-                    JsonArray arr = m.getValue().asArray();
-                    ArrayList<IMCMessage> msgs = new ArrayList<IMCMessage>();
-                    for (int i = 0; i < arr.size(); i++) {
-                        msgs.add(parseJsonObject(arr.get(i).asObject()));
-                    }
-                    msg.setValue(m.getName(), msgs);
-                    break;
-                case TYPE_FP32:
-                    msg.setValue(m.getName(), m.getValue().asFloat());
-                    break;
-                case TYPE_FP64:
-                    msg.setValue(m.getName(), m.getValue().asDouble());
-                    break;
-                default:
-                    msg.setValue(m.getName(), m.getValue().asLong());
-                    break;
-            }
-        }
-        return msg;
-    }
-
-    public static IMCMessage parseJson(String json) {
-        JsonObject obj = JsonObject.readFrom(json);
-        return parseJsonObject(obj);
     }
 
     private JsonObject asJsonObject(boolean includeHeader) {
