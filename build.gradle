@@ -1,0 +1,33 @@
+apply plugin: 'java'
+
+group 'pt.lsts'
+version '2017.12.00'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'com.eclipsesource.minimal-json', name: 'minimal-json', version: '0.9.5'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java', 'src/generated/java']
+        }
+
+        resources {
+            srcDirs = ['src/main/resources', 'src/generated/resources']
+        }
+    }
+}
+
+task generate(type: JavaExec) {
+    classpath sourceSets.main.runtimeClasspath
+    if (!project.hasProperty("imcDir"))
+        ext.imcDir = rootProject.file("../imc").absolutePath
+    main = "pt.lsts.imc.generator.ClassGenerator"
+    args ext.imcDir, rootProject.file('src/generated').absolutePath
+}

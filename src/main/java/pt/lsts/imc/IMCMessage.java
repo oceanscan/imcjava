@@ -1,9 +1,9 @@
 /*
  * Below is the copyright agreement for IMCJava.
- * 
+ *
  * Copyright (c) 2010-2016, Laboratório de Sistemas e Tecnologia Subaquática
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     - Redistributions of source code must retain the above copyright
@@ -11,21 +11,21 @@
  *     - Redistributions in binary form must reproduce the above copyright
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
- *     - Neither the names of IMC, LSTS, IMCJava nor the names of its 
- *       contributors may be used to endorse or promote products derived from 
+ *     - Neither the names of IMC, LSTS, IMCJava nor the names of its
+ *       contributors may be used to endorse or promote products derived from
  *       this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL LABORATORIO DE SISTEMAS E TECNOLOGIA SUBAQUATICA
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE 
- * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT 
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+ * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *  
+ *
  * $Id:: IMCMessage.java 393 2013-03-03 10:40:48Z zepinto@gmail.com            $:
  */
 package pt.lsts.imc;
@@ -71,9 +71,9 @@ import pt.lsts.neptus.messages.listener.MessageInfo;
  * This class holds a message structure, including header and payload.<br/>
  * The message structure can be accessed with {@link #getMessageType()} and
  * header with {@link #getHeader()}
- * 
+ *
  * @author zp
- * 
+ *
  */
 public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
@@ -95,7 +95,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Creates a new IMCMessage given its type and using default IMC definitions
-	 * 
+	 *
 	 * @param type
 	 *            The {@link IMCMessageType} of the message to be created
 	 */
@@ -106,7 +106,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 	/**
 	 * Creates a new message based on an existing header and using default IMC
 	 * definitions
-	 * 
+	 *
 	 * @param header
 	 *            The header of the message, which will define its type
 	 */
@@ -117,7 +117,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 	/**
 	 * Uses the default IMC definitions and calls
 	 * {@link #IMCMessage(IMCDefinition, Integer)}
-	 * 
+	 *
 	 * @param type
 	 *            The type (mgid) of the message to be created
 	 */
@@ -128,7 +128,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 	/**
 	 * Resolves the type, given an abbreviated name and creates a corresponding
 	 * message using default IMC definitions
-	 * 
+	 *
 	 * @param abbreviatedName
 	 *            The abbreviated name of the message to be created
 	 */
@@ -139,13 +139,13 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 	/**
 	 * Creates a new message given its abbreviated name and fills it with given
 	 * values
-	 * 
+	 *
 	 * @param abbreviatedName
 	 *            The message's abbreviated name
 	 * @param values
 	 *            A list of objects which will be parse in pairs. <br/>
 	 *            Example:
-	 * 
+	 *
 	 *            <pre>
 	 * IMCMessage state = new IMCMessage(&quot;EstimatedState&quot;, &quot;ref&quot;, &quot;NED_ONLY&quot;, &quot;x&quot;,
 	 * 		10.343, y, -100);
@@ -159,7 +159,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Create a new message tied to given IMC definitions
-	 * 
+	 *
 	 * @param defs
 	 *            The definitions used to generate header of this message
 	 */
@@ -171,7 +171,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Creates a new message based on an existing header
-	 * 
+	 *
 	 * @param defs
 	 *            IMC definitions to be used
 	 * @param header
@@ -186,7 +186,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 	/**
 	 * Class constructor that creates a message with given numeric type and
 	 * initializes its fields with the values
-	 * 
+	 *
 	 * @param type
 	 *            The numeric id of this message (mgid)
 	 * @param values
@@ -205,7 +205,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 	/**
 	 * Resolves the message type given its abbreviated name and then calls
 	 * {@link #IMCMessage(IMCMessageType)}
-	 * 
+	 *
 	 * @param abbreviatedName
 	 *            The message's abbreviated name
 	 */
@@ -216,7 +216,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 	/**
 	 * Creates a new message given its type. <br/>
 	 * If it's not an header, an empty header will be added.
-	 * 
+	 *
 	 * @param type
 	 *            The type for this message.
 	 */
@@ -238,12 +238,12 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 	/**
 	 * Resolves the message type, given its message identification number and
 	 * then calls {@link #IMCMessage(IMCMessageType)}
-	 * 
+	 *
 	 * @param defs
 	 *            IMC definitions to be used
 	 * @param type
 	 *            The id of the message type (field mgid in IMC)
-	 * 
+	 *
 	 */
 	protected IMCMessage(IMCDefinition defs, Integer type) {
 		this(defs, defs.getType(type));
@@ -265,7 +265,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 	/**
 	 * Retrieves the header of this message, stored as an inner IMC Message
 	 * (payload fields match header fields and header is NULL)
-	 * 
+	 *
 	 * @return The header of this message
 	 */
 	public Header getHeader() {
@@ -274,7 +274,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Change the header of this message
-	 * 
+	 *
 	 * @param header
 	 *            The new header for this message
 	 */
@@ -284,7 +284,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Set all values from another message of same type
-	 * 
+	 *
 	 * @param otherMessage
 	 *            Message where to read values from
 	 * @throws Exception
@@ -305,7 +305,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 	/**
 	 * All the values in the given hashtable will be copied to this message
 	 * without any conversions
-	 * 
+	 *
 	 * @param values
 	 */
 	public void setValues(Map<String, Object> values) {
@@ -316,7 +316,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 	 * Returns all the values in this message. The returned map may not be
 	 * modified, otherwise a {@link UnsupportedOperationException} will be
 	 * thrown
-	 * 
+	 *
 	 * @return All the values in this message
 	 */
 	public Map<String, Object> getValues() {
@@ -326,7 +326,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 	/**
 	 * Change the type of the message. Bear in mind that values are preserved
 	 * but may not match the new type's fields
-	 * 
+	 *
 	 * @param type
 	 *            The new type for this message
 	 */
@@ -337,7 +337,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 	/**
 	 * Create a copy of this message using the given definitions. If some fields
 	 * changed between IMC definitions the clone may loose some fields
-	 * 
+	 *
 	 * @param defs
 	 *            The definitions to be used when cloning the message
 	 * @return A message with same values and type
@@ -359,7 +359,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Creates a cloned message with copied values
-	 * 
+	 *
 	 * @return A clone of this instance
 	 */
 	@Override
@@ -374,7 +374,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Retrieve IMC id of this message source (header field "src")
-	 * 
+	 *
 	 * @return The IMC identifier of this message source (system)
 	 */
 	public int getSrc() {
@@ -391,7 +391,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * The numeric id of this message destination (header field "dst")
-	 * 
+	 *
 	 * @return The IMC identifier of this message destination (system)
 	 */
 	public int getDst() {
@@ -400,7 +400,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Retrieve IMC id of this message source entity (header field "src_ent")
-	 * 
+	 *
 	 * @return The IMC identifier of this message source entity
 	 */
 	public short getSrcEnt() {
@@ -410,7 +410,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 	/**
 	 * Retrieve IMC id of this message destination entity (header field
 	 * "dst_ent")
-	 * 
+	 *
 	 * @return The IMC identifier of this message destination entity
 	 */
 	public short getDstEnt() {
@@ -420,7 +420,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 	/**
 	 * Retrieve the size indicated on the header of this message (header field
 	 * "size")
-	 * 
+	 *
 	 * @return The indicated size
 	 */
 	public int getSize() {
@@ -429,7 +429,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Set the source of this message (header field "src")
-	 * 
+	 *
 	 * @param src
 	 *            The new source of this message
 	 */
@@ -439,7 +439,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Set the destination of this message (header field "dst")
-	 * 
+	 *
 	 * @param src
 	 *            The destination of this message
 	 */
@@ -449,7 +449,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Set the source entity of this message (header field "src_ent")
-	 * 
+	 *
 	 * @param src
 	 *            The source entity of this message
 	 */
@@ -459,7 +459,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Set the destination entity of this message (header field "dst_ent")
-	 * 
+	 *
 	 * @param src
 	 *            The destination entity of this message
 	 */
@@ -527,7 +527,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Sets a field value
-	 * 
+	 *
 	 * @param field
 	 *            The field to be set
 	 * @param value
@@ -651,7 +651,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Retrieve a value from the header
-	 * 
+	 *
 	 * @param field
 	 *            The name of the field to retrieve
 	 * @return The value of the field in the header or null if the field does
@@ -663,7 +663,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Retrieve a value in the message
-	 * 
+	 *
 	 * @param field
 	 *            The name of the field to be retrieved
 	 * @return The value of the field in the payload or in the header if it
@@ -683,7 +683,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 	/**
 	 * Given a map of Strings to Objects, encodes a tuplelist in the type:
 	 * name1=value1;name2=value2 ...
-	 * 
+	 *
 	 * @param map
 	 *            A map from Strings (var names) to Objects (values)
 	 * @return The encoded tuplelist
@@ -697,7 +697,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Reverse from {@link #encodeTupleList(LinkedHashMap)}
-	 * 
+	 *
 	 * @param tupleList
 	 *            An encoded tuplelist
 	 * @return A map from Strings to Strings
@@ -715,7 +715,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Returns the value of a field as an hash map
-	 * 
+	 *
 	 * @param field
 	 *            The name of the field (should be a tuplelist)
 	 * @return An hash map with all the values of the tuplelist already parsed
@@ -729,7 +729,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Retrieves the value of a Bitmask as map of booleans
-	 * 
+	 *
 	 * @param field
 	 *            The name of the field (should be a Bitmask)
 	 * @return The value of the Bitmask field as map of booleans
@@ -760,7 +760,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 	/**
 	 * Retrives the value of a field as a double value. <br/>
 	 * If the field is not numeric, returns <i>Double.NaN</i>
-	 * 
+	 *
 	 * @param field
 	 *            The name of the field (should be numeric)
 	 * @return The value of the field as double or <i>Double.NaN</i> if the
@@ -778,7 +778,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 	/**
 	 * Retrives the value of a field as a float value. <br/>
 	 * If the field is not numeric, returns <i>Float.NaN</i>
-	 * 
+	 *
 	 * @param field
 	 *            The name of the field (should be numeric)
 	 * @return The value of the field as float or <i>Float.NaN</i> if the field
@@ -796,7 +796,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 	/**
 	 * Retrives the value of a field as an integer value. <br/>
 	 * If the field is not numeric, returns <i>0</i>
-	 * 
+	 *
 	 * @param field
 	 *            The name of the field (should be numeric)
 	 * @return The value of the field as integer or <i>0</i> if the field is not
@@ -815,7 +815,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 	/**
 	 * Retrives the value of a field as a long value. <br/>
 	 * If the field is not numeric, returns <i>0</i>
-	 * 
+	 *
 	 * @param field
 	 *            The name of the field (should be numeric)
 	 * @return The value of the field as long or <i>0</i> if the field is not
@@ -905,7 +905,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Returns a String representation for the value in the given field
-	 * 
+	 *
 	 * @param field
 	 *            The field to be returned as String
 	 * @return A String representation of the value in the given field
@@ -916,7 +916,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Returns a byte array from a rawdata field
-	 * 
+	 *
 	 * @param field
 	 *            The field whose value is to be returned
 	 * @return The value of the rawdata as a byte array or <i>null</i> if an
@@ -938,7 +938,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Retrieves an IMCMesssage from a field (used for inline messages)
-	 * 
+	 *
 	 * @param field
 	 *            The field whose value is to be returned
 	 * @return The IMCMessage in the field or <i>null</i> if the value is not a
@@ -954,11 +954,11 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 	/**
 	 * Retrieves an IMCMessage from a field and converts it to a chosen type.<br/>
 	 * Example:
-	 * 
+	 *
 	 * <pre>
 	 * PlanSpecification plan = planControl.getMessage(PlanSpecification.class, &quot;arg&quot;);
 	 * </pre>
-	 * 
+	 *
 	 * @param clazz
 	 *            The expected class of the inline message
 	 * @param field
@@ -981,7 +981,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Retrieve all the messages in a MessageList as a Vector
-	 * 
+	 *
 	 * @param field
 	 *            The name of the field in this message which is of type
 	 *            MessageList
@@ -1029,7 +1029,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 	/**
 	 * This method receives a vector of messages and sets a field with a
 	 * MessageList of those messages
-	 * 
+	 *
 	 * @param messages
 	 *            The messages in the MessageList
 	 * @param field
@@ -1061,7 +1061,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Retrieve a message list from this message using a given type
-	 * 
+	 *
 	 * @param field
 	 *            The field from where to retrieve the message list
 	 * @param clazz
@@ -1122,7 +1122,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Writes this message to an OutputStream
-	 * 
+	 *
 	 * @param out
 	 *            The OutputStream to write to
 	 * @return The number of bytes written
@@ -1152,7 +1152,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Serialize this message to an IMCOutputStream
-	 * 
+	 *
 	 * @return The number of bytes writen
 	 */
 	public int serialize(IMCOutputStream out) throws IOException {
@@ -1161,7 +1161,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Change the timestamp of this message (stored in the header field "time")
-	 * 
+	 *
 	 * @param time
 	 *            The new unix time (seconds since 1970)
 	 */
@@ -1293,7 +1293,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Check in this is a null inline message
-	 * 
+	 *
 	 * @return <strong>true</strong> if the type of this message is -1
 	 */
 	public boolean isNull() {
@@ -1302,12 +1302,12 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Write this message as text into the given OutputStream. Example:
-	 * 
+	 *
 	 * <pre>
 	 * IMCMessage estate = new IMCMessage(&quot;EstimatedState&quot;);
 	 * estate.dump(System.out);
 	 * </pre>
-	 * 
+	 *
 	 * @param err
 	 *            Where to write this message to.
 	 */
@@ -1336,7 +1336,6 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 		for (int i = 0; i < result.length; i++) {
 			System.out.printf("%02X ", result[i]);
 		}
-
 	}
 
 	private static IMCMessage parseJsonObject(JsonObject obj) {
@@ -1344,11 +1343,11 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 		for (Member m : obj) {
 			if (m.getName().equals("abbrev"))
 				continue;
-			
+
 			IMCFieldType type = msg.getMessageType().getFieldType(m.getName());
 			if (type == null)
 				type = msg.getHeader().getMessageType().getFieldType(m.getName());
-			
+
 			switch (type) {
 			case TYPE_PLAINTEXT:
 				msg.setValue(m.getName(), m.getValue().asString());
@@ -1374,7 +1373,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 				msg.setValue(m.getName(), m.getValue().asDouble());
 				break;
 			default:
-				msg.setValue(m.getName(), m.getValue().asLong());				
+				msg.setValue(m.getName(), m.getValue().asLong());
 				break;
 			}
 		}
@@ -1398,7 +1397,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 				else if (fieldName.equals("timestamp"))
 					obj.add(fieldName, getDouble(fieldName));
 				else
-					obj.add(fieldName, getLong(fieldName));				
+					obj.add(fieldName, getLong(fieldName));
 			}
 		}
 
@@ -1413,8 +1412,8 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 			case TYPE_RAWDATA:
 				byte[] bytes = getRawData(fieldName);
 				if (bytes == null) {
-					obj.add(fieldName, "");					
-				} 
+					obj.add(fieldName, "");
+				}
 				else {
 					obj.add(fieldName, Base64.encode(bytes));
 				}
@@ -1443,7 +1442,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 				break;
 			case TYPE_FP64:
 				obj.add(fieldName, getDouble(fieldName));
-				break;				
+				break;
 			default:
 				obj.add(fieldName, getLong(fieldName));
 				break;
@@ -1457,17 +1456,17 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Retrieve this message as a JSON string
-	 * 
+	 *
 	 * @return this message as a JSON string
 	 */
 	public String asJSON() {
 		return asJSON(true);
 	}
-	
-	public String asJSON(boolean includeHeader) {		
+
+	public String asJSON(boolean includeHeader) {
 		return asJsonObject(includeHeader).toString();
 	}
-	
+
 	public String asXmlStripped(int tabAmount, boolean isInline) {
 		StringBuilder sb = new StringBuilder();
 		String tabs = "";
@@ -1656,7 +1655,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Compute this message's payload MD5
-	 * 
+	 *
 	 * @return The computed MD5 of this message's payload
 	 */
 	public byte[] payloadMD5() {
@@ -1782,7 +1781,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
 	/**
 	 * Parse an IMC-XML file and retrieve the messages found on the file
-	 * 
+	 *
 	 * @param xml
 	 *            The xml to be parsed
 	 * @return The messages that exist in the file
@@ -1814,7 +1813,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 	/**
 	 * Calculates the difference between current time and the timestamp in this
 	 * message
-	 * 
+	 *
 	 * @return The difference between current time and the timestamp in this
 	 *         message, in seconds
 	 */
@@ -1852,7 +1851,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 		destination.position(offset);
 		return 0;
 	}
-		
+
 	/**
 	 * This method will copy this message to system clipboard (as XML)
 	 */
@@ -1861,7 +1860,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 		Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
 		clpbrd.setContents(stringSelection, null);
 	}
-	
+
 	/**
 	 * This method will try to get a message from the system clipboard
 	 * @return The message in the system clipboard. Both IMC-XML and JSON formats are accepted.
@@ -1870,21 +1869,21 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 	public static IMCMessage pasteFromClipoard() throws Exception {
 		Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
 		String txt = clpbrd.getData(DataFlavor.stringFlavor).toString();
-		
+
 		try {
 			if (txt.startsWith("<?xml"))
 				return IMCMessage.parseXml(txt);
-			
+
 			if (txt.startsWith("{"))
 				return IMCMessage.parseJson(txt);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		throw new Exception("Invalid clipboard contents");
 	}
-	
+
 	/**
 	 * @param messageInfo
 	 *            the messageInfo to set
@@ -1892,15 +1891,15 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 	public final void setMessageInfo(MessageInfo messageInfo) {
 		this.messageInfo = messageInfo;
 	}
-	
+
 	/**
 	 * Serialize this message to byte array using current IMC definitions
 	 * @return Byte array with message serialized
 	 */
 	public byte[] toByteArray() {
-		return toByteArray(IMCDefinition.getInstance());		
+		return toByteArray(IMCDefinition.getInstance());
 	}
-	
+
 	/**
 	 * Serialize this message to byte array using provided IMC definitions
 	 * @param def The IMC definitions to use to serialize the message
@@ -1916,7 +1915,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 		catch (Exception e) {
 			e.printStackTrace();
 			return new byte[0];
-		}		
+		}
 		return baos.toByteArray();
 	}
 }
