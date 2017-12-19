@@ -1207,6 +1207,8 @@ public class ClassGenerator {
 		final Path genJava = FileSystems.getDefault().getPath(args[1], "java");
 		final Path genResources = FileSystems.getDefault().getPath(args[1], "resources", "xml", "IMC.xml");
 
+		System.err.format("IMC XML: %s\n", imcXml.toString());
+
 		String sha = "N/A";
 		String branch = "N/A";
 		String commitDetails = "Not a GIT repository";
