@@ -67,14 +67,12 @@ import java.util.Vector;
  * @author zp
  */
 public class IMCMessage implements IMessage, Comparable<IMCMessage> {
-
-    protected Map<String, Object> values = new LinkedHashMap<String, Object>();
+    protected Map<String, Object> values = new LinkedHashMap<>();
     protected IMCMessageType type;
     private Header header = null;
     public static final int DEFAULT_ENTITY_ID = 255;
     public static final int DEFAULT_SYSTEM_ID = 65535;
     protected IMCDefinition definitions = null;
-
     private MessageInfo messageInfo = null;
 
     /**
@@ -231,10 +229,6 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
         if (type == null && this instanceof Header)
             type = definitions.getHeaderType();
         return type;
-    }
-
-    void setMessageType(IMCMessageType type) {
-        this.type = type;
     }
 
     /**
@@ -435,15 +429,6 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
     protected void setSize(int size) {
         getHeader().set_size(size);
-    }
-
-    protected void fillHeader() {
-        setTimestamp(System.currentTimeMillis() / 1000.0);
-        setSize(getPayloadSize());
-        setDst(65535);
-        setDstEnt((short) 255);
-        setSrc(65535);
-        setSrcEnt((short) 255);
     }
 
     /**
@@ -663,7 +648,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
      * @return A map from Strings to Strings
      */
     public static LinkedHashMap<String, String> decodeTupleList(String tupleList) {
-        LinkedHashMap<String, String> values = new LinkedHashMap<String, String>();
+        LinkedHashMap<String, String> values = new LinkedHashMap<>();
         String[] parts = tupleList.split(";");
         for (String p : parts) {
             String[] ps = p.split("=");
@@ -682,8 +667,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
     public LinkedHashMap<String, String> getTupleList(String field) {
         if (getMessageType().getFieldUnits(field).equalsIgnoreCase("tuplelist"))
             return IMCMessage.decodeTupleList(getAsString(field));
-
-        return new LinkedHashMap<String, String>();
+        return new LinkedHashMap<>();
     }
 
     /**
@@ -693,7 +677,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
      * @return The value of the Bitmask field as map of booleans
      */
     public LinkedHashMap<String, Boolean> getBitmask(String field) {
-        LinkedHashMap<String, Boolean> bitmask = new LinkedHashMap<String, Boolean>();
+        LinkedHashMap<String, Boolean> bitmask = new LinkedHashMap<>();
         long value = getLong(field);
         for (String key : getMessageType().getFieldMeanings(field).keySet()) {
             bitmask.put(key, (value & getMessageType().getFieldMeanings(field)
@@ -716,7 +700,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
     }
 
     /**
-     * Retrives the value of a field as a double value. <br/>
+     * Retrieves the value of a field as a double value. <br/>
      * If the field is not numeric, returns <i>Double.NaN</i>
      *
      * @param field The name of the field (should be numeric)
@@ -733,7 +717,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
     }
 
     /**
-     * Retrives the value of a field as a float value. <br/>
+     * Retrieves the value of a field as a float value. <br/>
      * If the field is not numeric, returns <i>Float.NaN</i>
      *
      * @param field The name of the field (should be numeric)
@@ -750,7 +734,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
     }
 
     /**
-     * Retrives the value of a field as an integer value. <br/>
+     * Retrieves the value of a field as an integer value. <br/>
      * If the field is not numeric, returns <i>0</i>
      *
      * @param field The name of the field (should be numeric)
@@ -768,7 +752,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
     }
 
     /**
-     * Retrives the value of a field as a long value. <br/>
+     * Retrieves the value of a field as a long value. <br/>
      * If the field is not numeric, returns <i>0</i>
      *
      * @param field The name of the field (should be numeric)
@@ -788,9 +772,6 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
     protected DecimalFormat doubleFormat = new DecimalFormat("0.00000000");
 
     public String getString(String field, boolean addUnits) {
-        // if (field.equals("timestamp"))
-        // return format.format(getDouble("timestamp"));
-
         Object o = getValue(field);
         if (o == null)
             return null;
@@ -826,7 +807,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
                 sb.append("...");
             return sb.toString();
         } else if (o instanceof Double) {
-            return doubleFormat.format((Double) o);
+            return doubleFormat.format(o);
         } else if (o instanceof IMCMessage) {
             return "%INLINE{"
                     + (((IMCMessage) o).getMessageType() != null ? ((IMCMessage) o)
@@ -936,7 +917,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
      * @return all the messages in a MessageList as a Vector
      */
     public Vector<IMCMessage> getMessageList(String field) {
-        Vector<IMCMessage> ret = new Vector<IMCMessage>();
+        Vector<IMCMessage> ret = new Vector<>();
 
         if (type.getFieldType(field) == IMCFieldType.TYPE_MESSAGE) {
             IMCMessage list = getMessage(field);
@@ -1259,25 +1240,6 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
         }
     }
 
-    protected byte[] getBytes() {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try {
-            serialize(new IMCOutputStream(baos));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return baos.toByteArray();
-    }
-
-    public void hexdump(OutputStream err) {
-        byte[] result = getBytes();
-
-        for (int i = 0; i < result.length; i++) {
-            System.out.printf("%02X ", result[i]);
-        }
-    }
-
     private JsonObject asJsonObject(boolean includeHeader) {
         JsonObject obj = new JsonObject();
         obj.add("abbrev", getMessageType().getShortName());
@@ -1356,70 +1318,25 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
         return asJsonObject(includeHeader).toString();
     }
 
-    public Map<String, Object> asMap(boolean inner) {
-        LinkedHashMap<String, Object> map = new LinkedHashMap<String, Object>();
-
-        if (!inner) {
-            map.put("timestamp", getTimestamp());
-            map.put("src", getSrc());
-            map.put("src_ent", getSrcEnt());
-            map.put("dst", getDst());
-            map.put("dst_ent", getDstEnt());
-        }
-
-        for (String fieldName : getMessageType().getFieldNames()) {
-            switch (getMessageType().getFieldType(fieldName)) {
-                case TYPE_FP32:
-                case TYPE_FP64:
-                case TYPE_INT16:
-                case TYPE_INT32:
-                case TYPE_INT64:
-                case TYPE_INT8:
-                case TYPE_UINT16:
-                case TYPE_UINT32:
-                case TYPE_UINT8:
-                case TYPE_PLAINTEXT:
-                case TYPE_RAWDATA:
-                    map.put(fieldName, getValue(fieldName));
-                    break;
-                case TYPE_MESSAGE:
-                    IMCMessage innerMsg = getMessage(fieldName);
-                    if (innerMsg != null)
-                        map.put(fieldName, innerMsg.asMap(true));
-                    else
-                        map.put(fieldName, null);
-                case TYPE_MESSAGELIST:
-                    Vector<Map<String, Object>> msgs = new Vector<Map<String, Object>>();
-                    for (IMCMessage m : getMessageList(fieldName)) {
-                        msgs.add(m.asMap(true));
-                    }
-                    map.put(fieldName, msgs);
-            }
-        }
-
-        return map;
-
-    }
-
     public String asXml(boolean isInline) {
         StringBuilder sb = new StringBuilder();
         if (!isInline)
             sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 
-        sb.append("<" + getAbbrev());
+        sb.append("<").append(getAbbrev());
 
         if (!isInline) {
-            sb.append(" imcv=\"" + definitions.getVersion() + "\"");
-            sb.append(" time=\"" + getTimestamp() + "\"");
-            sb.append(" src=\"" + getSrc() + "\"");
-            sb.append(" dst=\"" + getDst() + "\"");
-            sb.append(" src_ent=\"" + getSrcEnt() + "\"");
-            sb.append(" dst_ent=\"" + getDstEnt() + "\"");
+            sb.append(" imcv=\"").append(definitions.getVersion()).append("\"");
+            sb.append(" time=\"").append(getTimestamp()).append("\"");
+            sb.append(" src=\"").append(getSrc()).append("\"");
+            sb.append(" dst=\"").append(getDst()).append("\"");
+            sb.append(" src_ent=\"").append(getSrcEnt()).append("\"");
+            sb.append(" dst_ent=\"").append(getDstEnt()).append("\"");
         }
         sb.append(">\n");
 
         for (String fieldName : getMessageType().getFieldNames()) {
-            sb.append("<" + fieldName + ">");
+            sb.append("<").append(fieldName).append(">");
             switch (getMessageType().getFieldType(fieldName)) {
                 case TYPE_FP32:
                 case TYPE_FP64:
@@ -1442,7 +1359,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
                 case TYPE_MESSAGE:
                     IMCMessage msg = getMessage(fieldName);
                     if (msg != null)
-                        sb.append("\n" + msg.asXml(true));
+                        sb.append("\n").append(msg.asXml(true));
                     break;
                 case TYPE_RAWDATA:
                     if (getRawData(fieldName) != null)
@@ -1454,10 +1371,10 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
                         sb.append(m.asXml(true));
                     break;
             }
-            sb.append("</" + fieldName + ">\n");
+            sb.append("</").append(fieldName).append(">\n");
         }
 
-        sb.append("</" + getAbbrev() + ">\n");
+        sb.append("</").append(getAbbrev()).append(">\n");
 
         return sb.toString();
     }
@@ -1629,34 +1546,10 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
     }
 
     /**
-     * This method enforces all values in this message as immutable. Will give
-     * run time exceptions if someone tries to change the values.
-     */
-    public void makeImmutable() {
-        if (header != null)
-            header.makeImmutable();
-        values = Collections.unmodifiableMap(values);
-    }
-
-    /**
      * @return the messageInfo
      */
     public final MessageInfo getMessageInfo() {
         return messageInfo;
-    }
-
-    public int serialize(ByteBuffer destination, int offset) {
-        destination.position(offset);
-        int size = header.serializePayload(destination, offset);
-        size += serializePayload(destination, offset + size);
-        int crc = IMCUtil.computeCrc16(destination.array(), offset, size, 0);
-        destination.putShort((short) crc);
-        return size + 2;
-    }
-
-    public int serializePayload(ByteBuffer destination, int offset) {
-        destination.position(offset);
-        return 0;
     }
 
     /**
@@ -1664,33 +1557,5 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
      */
     public final void setMessageInfo(MessageInfo messageInfo) {
         this.messageInfo = messageInfo;
-    }
-
-    /**
-     * Serialize this message to byte array using current IMC definitions
-     *
-     * @return Byte array with message serialized
-     */
-    public byte[] toByteArray() {
-        return toByteArray(IMCDefinition.getInstance());
-    }
-
-    /**
-     * Serialize this message to byte array using provided IMC definitions
-     *
-     * @param def The IMC definitions to use to serialize the message
-     * @return Byte array with message serialized
-     */
-    public byte[] toByteArray(IMCDefinition def) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        IMCOutputStream out = new IMCOutputStream(def, baos);
-        try {
-            out.writeMessage(this);
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new byte[0];
-        }
-        return baos.toByteArray();
     }
 }
