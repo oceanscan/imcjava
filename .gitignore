@@ -1,6 +1,4 @@
-/bin
+/.gradle
+/.idea
+/out
 /build
-/dist
-/doc
-/log/
-/samples*

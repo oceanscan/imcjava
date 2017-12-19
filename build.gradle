@@ -1,0 +1,61 @@
+apply plugin: 'java'
+
+group 'pt.lsts'
+version '5.4.16-SNAPSHOT'
+
+ext
+{
+   imcDir = project.hasProperty('imcDir') ? project.getProperty('imcDir') : rootProject.file("../imc").absolutePath
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'com.eclipsesource.minimal-json', name: 'minimal-json', version: '0.9.5'
+    compile group: 'org.apache.commons', name: 'commons-text', version: '1.2'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java', 'src/generated/java']
+        }
+
+        resources {
+            srcDirs = ['src/main/resources', 'src/generated/resources']
+        }
+    }
+}
+
+//******************************************************************************
+//* Generator.                                                                 *
+//******************************************************************************
+
+task generate(type: JavaExec) {
+    classpath sourceSets.main.runtimeClasspath
+    main = "pt.lsts.imc.generator.ClassGenerator"
+    args rootProject.ext.imcDir, rootProject.file('src/generated').absolutePath
+}
+
+//******************************************************************************
+//* Publishing.                                                                *
+//******************************************************************************
+
+apply plugin: 'maven-publish'
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            url "file://" + System.getProperty("user.home") + "/maven"
+        }
+    }
+}
