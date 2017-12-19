@@ -1,7 +1,12 @@
 apply plugin: 'java'
 
 group 'pt.lsts'
-version '2017.12.00'
+version '5.4.16'
+
+ext
+{
+   imcDir = project.hasProperty('imcDir') ? project.getProperty('imcDir') : rootProject.file("../imc").absolutePath
+}
 
 repositories {
     mavenCentral()
@@ -26,8 +31,6 @@ sourceSets {
 
 task generate(type: JavaExec) {
     classpath sourceSets.main.runtimeClasspath
-    if (!project.hasProperty("imcDir"))
-        ext.imcDir = rootProject.file("../imc").absolutePath
     main = "pt.lsts.imc.generator.ClassGenerator"
-    args ext.imcDir, rootProject.file('src/generated').absolutePath
+    args rootProject.ext.imcDir, rootProject.file('src/generated').absolutePath
 }
