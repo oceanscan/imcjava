@@ -10,7 +10,7 @@
           xsi:noNamespaceSchemaLocation="IMC.xsd"
           name="IMC"
           long-name="Inter Module Communication"
-          version="5.4.16">
+          version="5.4.17">
 
   <description>
     This document describes the communications protocol associated
@@ -3365,7 +3365,7 @@
     </description>
     <field name="Actions" abbrev="actions" type="plaintext" unit="TupleList">
       <description>
-        List of values for each remote action (e.g: "Propeler=0.6,PanTilt=0.75,Lights=1").
+        List of values for each remote action (e.g: "Propeller=0.6,PanTilt=0.75,Lights=1").
       </description>
     </field>
   </message>
@@ -4165,6 +4165,8 @@
       <value id="0" name="Not Aligned" abbrev="NOT_ALIGNED"/>
       <value id="1" name="Aligned" abbrev="ALIGNED"/>
       <value id="2" name="Not Supported" abbrev="NOT_SUPPORTED"/>
+      <value id="3" name="Aligning" abbrev="ALIGNING"/>
+      <value id="4" name="Wrong Medium" abbrev="WRONG_MEDIUM"/>
     </field>
   </message>
 
