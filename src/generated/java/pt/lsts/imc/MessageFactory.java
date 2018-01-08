@@ -640,6 +640,8 @@ public class MessageFactory {
 				return new ColoredDissolvedOrganicMatter(defs);
 			case FluorescentDissolvedOrganicMatter.ID_STATIC:
 				return new FluorescentDissolvedOrganicMatter(defs);
+			case IridiumMsgTxExtended.ID_STATIC:
+				return new IridiumMsgTxExtended(defs);
 			default:
 				return new IMCMessage(defs);
 		}
