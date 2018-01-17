@@ -10,7 +10,7 @@
           xsi:noNamespaceSchemaLocation="IMC.xsd"
           name="IMC"
           long-name="Inter Module Communication"
-          version="5.4.18">
+          version="5.4.19">
 
   <description>
     This document describes the communications protocol associated
@@ -6289,6 +6289,8 @@
       <value abbrev="FAR" name="Far from the destination" id="0x01"/>
       <value abbrev="XY_NEAR" name="Near in the horizontal plane" id="0x02"/>
       <value abbrev="Z_NEAR" name="Near in the vertical plane" id="0x04"/>
+      <value abbrev="XY_UNREACHABLE" name="Unreachable in the horizontal plane" id="0x08"/>
+      <value abbrev="Z_UNREACHABLE" name="Unreachable in the vertical plane" id="0x10"/>
     </field>
   </message>
 
