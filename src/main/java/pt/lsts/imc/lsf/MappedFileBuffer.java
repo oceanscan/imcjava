@@ -1,9 +1,9 @@
 /*
  * Below is the copyright agreement for IMCJava.
- * 
+ *
  * Copyright (c) 2010-2016, Laboratório de Sistemas e Tecnologia Subaquática
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     - Redistributions of source code must retain the above copyright
@@ -11,23 +11,22 @@
  *     - Redistributions in binary form must reproduce the above copyright
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
- *     - Neither the names of IMC, LSTS, IMCJava nor the names of its 
- *       contributors may be used to endorse or promote products derived from 
+ *     - Neither the names of IMC, LSTS, IMCJava nor the names of its
+ *       contributors may be used to endorse or promote products derived from
  *       this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL LABORATORIO DE SISTEMAS E TECNOLOGIA SUBAQUATICA
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE 
- * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT 
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+ * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *  
- * $Id:: MappedFileBuffer.java 334 2013-01-02 11:20:47Z zepinto                $:
  */
+
 package pt.lsts.imc.lsf;
 
 import java.io.File;
@@ -63,9 +62,8 @@ public class MappedFileBuffer implements Cloneable {
 
     /**
      * Opens and memory-maps the specified file for read-only access, using the maximum segment size.
-     * 
+     *
      * @param file The file to open; must be accessible to user.
-     * 
      * @throws IllegalArgumentException if <code>segmentSize</code> is > 1GB.
      */
     public MappedFileBuffer(File file) throws IOException {
@@ -74,11 +72,10 @@ public class MappedFileBuffer implements Cloneable {
 
     /**
      * Opens and memory-maps the specified file for read-only or read-write access, using the maximum segment size.
-     * 
-     * @param file The file to open; must be accessible to user.
+     *
+     * @param file      The file to open; must be accessible to user.
      * @param readWrite Pass <code>true</code> to open the file with read-write access, <code>false</code> to open with
-     *            read-only access.
-     * 
+     *                  read-only access.
      * @throws IllegalArgumentException if <code>segmentSize</code> is > 1GB.
      */
     public MappedFileBuffer(File file, boolean readWrite) throws IOException {
@@ -87,13 +84,12 @@ public class MappedFileBuffer implements Cloneable {
 
     /**
      * Opens and memory-maps the specified file, for read-only or read-write access, with a specified segment size.
-     * 
-     * @param file The file to open; must be accessible to user.
+     *
+     * @param file        The file to open; must be accessible to user.
      * @param segmentSize The largest contiguous sub-buffer that can be created using {@link #slice}. The maximum size
-     *            is 2^30 - 1.
-     * @param readWrite Pass <code>true</code> to open the file with read-write access, <code>false</code> to open with
-     *            read-only access.
-     * 
+     *                    is 2^30 - 1.
+     * @param readWrite   Pass <code>true</code> to open the file with read-write access, <code>false</code> to open with
+     *                    read-only access.
      * @throws IllegalArgumentException if <code>segmentSize</code> is > 1GB.
      */
     public MappedFileBuffer(File file, int segmentSize, boolean readWrite) throws IOException {
@@ -123,8 +119,7 @@ public class MappedFileBuffer implements Cloneable {
                 long thisSegmentSize = Math.min(2L * segmentSize, remainingFileSize);
                 _buffers[bufIdx++] = channel.map(mapMode, offset, thisSegmentSize);
             }
-        }
-        finally {
+        } finally {
             mappedFile.close();
         }
     }
@@ -281,7 +276,7 @@ public class MappedFileBuffer implements Cloneable {
     /**
      * Retrieves <code>len</code> bytes starting at the specified index, storing them in a newly created
      * <code>byte[]</code>. Will span segments if necessary to retrieve the requested number of bytes.
-     * 
+     *
      * @throws IndexOutOfBoundsException if the request would read past the end of file.
      */
     public byte[] getBytes(long index, int len) {
@@ -292,7 +287,7 @@ public class MappedFileBuffer implements Cloneable {
     /**
      * Retrieves <code>len</code> bytes starting at the specified index, storing them in an existing <code>byte[]</code>
      * at the specified offset. Returns the array as a convenience. Will span segments as needed.
-     * 
+     *
      * @throws IndexOutOfBoundsException if the request would read past the end of file.
      */
     public byte[] getBytes(long index, byte[] array, int off, int len) {
@@ -309,7 +304,7 @@ public class MappedFileBuffer implements Cloneable {
 
     /**
      * Stores the contents of the passed byte array, starting at the given index. Will span segments as needed.
-     * 
+     *
      * @throws IndexOutOfBoundsException if the request would write past the end of file.
      */
     public void putBytes(long index, byte[] value) {
@@ -319,7 +314,7 @@ public class MappedFileBuffer implements Cloneable {
     /**
      * Stores a section of the passed byte array, defined by <code>off</code> and <code>len</code>, starting at the
      * given index. Will span segments as needed.
-     * 
+     *
      * @throws IndexOutOfBoundsException if the request would write past the end of file.
      */
     public void putBytes(long index, byte[] value, int off, int len) {
@@ -365,8 +360,7 @@ public class MappedFileBuffer implements Cloneable {
                     that._buffers[ii] = (MappedByteBuffer) _buffers[ii].duplicate();
             }
             return that;
-        }
-        catch (CloneNotSupportedException ex) {
+        } catch (CloneNotSupportedException ex) {
             throw new RuntimeException("unreachable code", ex);
         }
     }
