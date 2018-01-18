@@ -42,9 +42,7 @@ import java.util.Vector;
  *
  */
 public class IMCMessageType {
-
     public static final int UNKNOWN_SIZE = -1;
-
     private int id = -1;
     private String fullName;
     private String shortName;
@@ -52,17 +50,17 @@ public class IMCMessageType {
     private int computedLength = 0;
     private String imcVersion = "Unknown";
     private String description;
-    private Vector<String> flags = new Vector<String>();
-    private LinkedHashMap<String, IMCFieldType> fields = new LinkedHashMap<String, IMCFieldType>();
-    private LinkedHashMap<String, String> units = new LinkedHashMap<String, String>();
-    private LinkedHashMap<String, Integer> offsets = new LinkedHashMap<String, Integer>();
-    private LinkedHashMap<String, LinkedHashMap<Long, String>> fieldPossibleValues = new LinkedHashMap<String, LinkedHashMap<Long, String>>();
-    private LinkedHashMap<String, LinkedHashMap<String, Long>> fieldPossibleValuesInverse = new LinkedHashMap<String, LinkedHashMap<String, Long>>();
-    private LinkedHashMap<String, String> fieldPrefixes = new LinkedHashMap<String, String>();
-    private LinkedHashMap<String, Object> defaultValues = new LinkedHashMap<String, Object>();
-    private LinkedHashMap<String, String> descriptions = new LinkedHashMap<String, String>();
-    private LinkedHashMap<String, String> fullnames = new LinkedHashMap<String, String>();
-    private LinkedHashMap<String, String> subtypes = new LinkedHashMap<String, String>();
+    private Vector<String> flags = new Vector<>();
+    private LinkedHashMap<String, IMCFieldType> fields = new LinkedHashMap<>();
+    private LinkedHashMap<String, String> units = new LinkedHashMap<>();
+    private LinkedHashMap<String, Integer> offsets = new LinkedHashMap<>();
+    private LinkedHashMap<String, LinkedHashMap<Long, String>> fieldPossibleValues = new LinkedHashMap<>();
+    private LinkedHashMap<String, LinkedHashMap<String, Long>> fieldPossibleValuesInverse = new LinkedHashMap<>();
+    private LinkedHashMap<String, String> fieldPrefixes = new LinkedHashMap<>();
+    private LinkedHashMap<String, Object> defaultValues = new LinkedHashMap<>();
+    private LinkedHashMap<String, String> descriptions = new LinkedHashMap<>();
+    private LinkedHashMap<String, String> fullnames = new LinkedHashMap<>();
+    private LinkedHashMap<String, String> subtypes = new LinkedHashMap<>();
     private IMCMessageType superType = null;
 
     public IMCMessageType() {
@@ -204,7 +202,7 @@ public class IMCMessageType {
 
     public void setFieldPossibleValues(String abbrev, LinkedHashMap<Long, String> possibleValues) {
         fieldPossibleValues.put(abbrev, possibleValues);
-        LinkedHashMap<String, Long> inverse = new LinkedHashMap<String, Long>();
+        LinkedHashMap<String, Long> inverse = new LinkedHashMap<>();
 
         for (Long key : possibleValues.keySet())
             inverse.put(possibleValues.get(key),key);
@@ -346,7 +344,7 @@ public class IMCMessageType {
         return superType;
     }
 
-    public void setSuperType(IMCMessageType msgType) throws Exception {
+    public void setSuperType(IMCMessageType msgType) {
     	this.superType = msgType;
     }
 
