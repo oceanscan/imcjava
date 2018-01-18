@@ -25,15 +25,9 @@
  * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
  */
 
-package pt.lsts.imc.net;
-
-import pt.lsts.imc.IMCDefinition;
-import pt.lsts.imc.IMCMessage;
-import pt.lsts.imc.IMCOutputStream;
-import pt.lsts.imc.MessagePart;
+package pt.lsts.imc;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -135,7 +129,7 @@ public class IMCFragmentHandler {
         byte[] data = baos.toByteArray();
         int part = 0;
         int pos = 0;
-        Vector<MessagePart> parts = new Vector<MessagePart>();
+        Vector<MessagePart> parts = new Vector<>();
         int numfrags = (int) Math.ceil(data.length / (double) dataFragLength);
 
         while (pos < data.length) {
