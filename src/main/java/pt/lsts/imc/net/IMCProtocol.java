@@ -1,9 +1,9 @@
 /*
  * Below is the copyright agreement for IMCJava.
- * 
+ *
  * Copyright (c) 2010-2016, Laboratório de Sistemas e Tecnologia Subaquática
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     - Redistributions of source code must retain the above copyright
@@ -11,21 +11,21 @@
  *     - Redistributions in binary form must reproduce the above copyright
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
- *     - Neither the names of IMC, LSTS, IMCJava nor the names of its 
- *       contributors may be used to endorse or promote products derived from 
+ *     - Neither the names of IMC, LSTS, IMCJava nor the names of its
+ *       contributors may be used to endorse or promote products derived from
  *       this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL LABORATORIO DE SISTEMAS E TECNOLOGIA SUBAQUATICA
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE 
- * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT 
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+ * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *  
+ *
  * $Id:: IMCProtocol.java 333 2013-01-02 11:11:44Z zepinto                     $:
  */
 package pt.lsts.imc.net;
@@ -43,7 +43,6 @@ import java.util.TimerTask;
 import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.regex.Pattern;
 
 import pt.lsts.imc.Announce;
@@ -58,7 +57,6 @@ import pt.lsts.imc.IMCMessage;
 import pt.lsts.imc.lsf.LsfIndex;
 import pt.lsts.imc.lsf.LsfMessageLogger;
 import pt.lsts.imc.state.ImcSystemState;
-import pt.lsts.neptus.messages.listener.ImcConsumer;
 import pt.lsts.neptus.messages.listener.MessageInfo;
 import pt.lsts.neptus.messages.listener.MessageInfoImpl;
 import pt.lsts.neptus.messages.listener.MessageListener;
@@ -69,7 +67,7 @@ import pt.lsts.util.WGS84Utilities;
 
 /** This class implements the IMC protocol allowing sending / receiving messages and also discovery
  * of IMC peers
- * 
+ *
  * @author zp */
 public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IMCMessage> {
     protected UDPTransport discovery;
@@ -87,10 +85,10 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     private Timer beater = new Timer();
     private IMessageLogger logger = null;
     private ExecutorService logExec = Executors.newSingleThreadExecutor();
-    
+
     private final long initialTimeMillis = System.currentTimeMillis();
     private final long initialTimeNanos = System.nanoTime();
-    
+
     private EstimatedState estState = null;
 
     public IMCProtocol(String localName, int localPort) {
@@ -106,10 +104,10 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
             this.localId = 0x4000 + new Random().nextInt(0x1FFF);
         else
         	this.localId = localId;
-        
+
         if (sysType != null)
             this.sysType = sysType;
-        
+
         IMCDefinition.getInstance();
         this.bindPort = localPort;
         comms = new UDPTransport(bindPort, 1);
@@ -144,7 +142,7 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     }
 
     /** Create a new IMCProtocol instance and bind it to given local port
-     * 
+     *
      * @param bindPort
      *            The port where to bind for listening to incoming messages (also advertised using
      *            multicast) */
@@ -238,7 +236,7 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
         IMCDefinition.getInstance().getResolver().setEntityName(el.getSrc(), el.getId(),
                 el.getLabel());
     }
-    
+
     private void on(Heartbeat msg) {
     	if (connectOnHeartBeat) {
     		String name = msg.getSourceName();
@@ -246,8 +244,8 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     			boolean wasPeer = nodes.get(name).isPeer();
     			nodes.get(name).setPeer(true);
     			if (!wasPeer)
-    				System.out.println("Activating transmission to "+name+".");    			
-    		}    			    			
+    				System.out.println("Activating transmission to "+name+".");
+    		}
     	}
     }
 
@@ -258,7 +256,7 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     public int getLocalId() {
         return localId;
     }
-    
+
     public SYS_TYPE getSysType() {
         return sysType;
     }
@@ -284,10 +282,10 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
             announce.setLon(Math.toRadians(pos[1]));
             announce.setHeight(-pos[2]);
         }
-        
+
         String services = "imcjava://0.0.0.0/uid/" + getUID() + "/;";
         services += "imc+info://0.0.0.0/version/" + IMCDefinition.getInstance().getVersion() + "/;";
-        
+
         Collection<String> netInt = NetworkUtilities.getNetworkInterfaces(includeLoopback);
         for (String itf : netInt) {
             services += "imc+udp://" + itf + ":" + bindPort + "/;";
@@ -354,7 +352,7 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     };
 
     /** Retrieve time elapsed since last announce of given system name
-     * 
+     *
      * @param name
      *            The name of the system
      * @return Time, in milliseconds since last announce has been received from the given system.
@@ -389,7 +387,7 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     }
 
     /** Send a message to all known (via received announces) systems.
-     * 
+     *
      * @param msg
      *            The message to be sent.
      * @return <code>true</code> if the message was tentatively sent to at least one system. */
@@ -410,7 +408,7 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     }
 
     /** Send a message to the peers that this proto should auto-connect to.
-     * 
+     *
      * @param msg
      *            The message to be sent
      * @return <code>true</code> if the message was tentatively sent to at least one peer. */
@@ -429,7 +427,7 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     }
 
     /** Send message to a remote system, specifying its name.
-     * 
+     *
      * @param sysName
      *            The name of the system where to send the message
      * @param msg
@@ -459,7 +457,7 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
         msg.setValue("src", localId);
         msg.setTimestamp(System.currentTimeMillis() / 1000.0);
         msg.setValue("dst", IMCDefinition.getInstance().getResolver().resolve(dst));
-        
+
         if (msg instanceof EstimatedState) {
             estState = (EstimatedState) msg;
         }
@@ -468,7 +466,7 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     private LinkedHashMap<Object, ImcConsumer> pojoSubscribers = new LinkedHashMap<Object, ImcConsumer>();
 
     /** Register a POJO consumer.
-     * 
+     *
      * @see ImcConsumer */
     public void register(Object consumer) {
         unregister(consumer);
@@ -497,7 +495,7 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     }
 
     /** Add a listener to be called whenever messages of certain types are received
-     * 
+     *
      * @param listener
      *            The listener to be added
      * @param typesToListen
@@ -508,7 +506,7 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     }
 
     /** Add a listener to be called whenever messages of certain types are received
-     * 
+     *
      * @param l
      *            The listener to be added
      * @param typesToListen
@@ -520,7 +518,7 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     }
 
     /** Remove a previously added message listener
-     * 
+     *
      * @param l
      *            The listener to be removed from the observers */
     public void removeMessageListener(MessageListener<MessageInfo, IMCMessage> l) {
@@ -529,7 +527,7 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     }
 
     /** Add a global message listener that will be call on <strong>ALL</strong> incoming messages
-     * 
+     *
      * @param l
      *            The global listener to be added to the list of observers */
     public void addMessageListener(MessageListener<MessageInfo, IMCMessage> l) {
@@ -538,7 +536,7 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     }
 
     /** Add a listener that will be called once and then removed from the list of observers
-     * 
+     *
      * @param listener
      *            The listener to be added as a single-shot listener
      * @param typeToListen
@@ -560,7 +558,7 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     }
 
     /** Retrieve a list of known system names (from which an announce has been received)
-     * 
+     *
      * @return list of known system names */
     public String[] systems() {
         return sysStates.keySet().toArray(new String[0]);
@@ -577,7 +575,7 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     }
 
     /** Retrieve the continuously updated state of the given system
-     * 
+     *
      * @param name
      *            The system for which to retrieve the state
      * @return The existing system state or a newly created state (inactive) if that system is not
@@ -592,7 +590,7 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     protected Thread replayThread = null;
 
     /** Replay an LSF log folder
-     * 
+     *
      * @param dirToReplay
      *            The folder where the files Data.lsf and IMC.xml can be found
      * @param speed
@@ -676,17 +674,17 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
 
         this.autoConnect = autoConnect;
     }
-    
+
     public void setConnectOnHeartBeat() {
     	autoConnect = null;
     	connectOnHeartBeat = true;
     	for (IMCNode node : nodes.values())
-    		node.setPeer(false);    	
+    		node.setPeer(false);
     }
 
     /** This method blocks until a system whose name matches a regular expression is found on the
      * network or <code>null</code> if time has expired.
-     * 
+     *
      * @param systemExpr
      *            The regular expression to look for
      * @param timeoutMillis
@@ -709,7 +707,7 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     }
 
     /** Change the active message logger (no logger is activated by default)
-     * 
+     *
      * @param logger
      *            The logger that will handle all sent / received messages.
      * @see #setLsfMessageLogger() */
@@ -718,7 +716,7 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     }
 
     /** Activate Lsf message logging
-     * 
+     *
      * @see #setMessageLogger(IMessageLogger) */
     public void setLsfMessageLogger() {
         logger = new IMessageLogger() {
