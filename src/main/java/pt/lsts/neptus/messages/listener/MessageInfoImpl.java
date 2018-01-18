@@ -29,7 +29,6 @@
 
 package pt.lsts.neptus.messages.listener;
 
-import java.io.PrintStream;
 import java.util.Hashtable;
 
 /**
