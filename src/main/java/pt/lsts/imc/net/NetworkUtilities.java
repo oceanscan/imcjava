@@ -26,6 +26,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package pt.lsts.imc.net;
 
 import java.net.Inet4Address;
@@ -36,37 +37,30 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 public class NetworkUtilities {
-	public static Collection<String> getNetworkInterfaces() {
-		Collection<String> itfs = getNetworkInterfaces(true);
-		return itfs;
-	}
+    public static Collection<String> getNetworkInterfaces(boolean includeLoopback) {
+        Vector<String> itfs = new Vector<>();
+        try {
+            Enumeration<NetworkInterface> nis = NetworkInterface.getNetworkInterfaces();
+            while (nis.hasMoreElements()) {
+                NetworkInterface ni = nis.nextElement();
+                try {
+                    if (ni.isLoopback() && !includeLoopback)
+                        continue;
+                } catch (Exception e) {
+                    continue;
+                }
 
-	public static Collection<String> getNetworkInterfaces(
-			boolean includeLoopback) {
-		Vector<String> itfs = new Vector<>();
-		try {
-			Enumeration<NetworkInterface> nis = NetworkInterface
-					.getNetworkInterfaces();
-			while (nis.hasMoreElements()) {
-				NetworkInterface ni = nis.nextElement();
-				try {
-					if (ni.isLoopback() && !includeLoopback)
-						continue;
-				} catch (Exception e) {
-					continue;
-				}
+                Enumeration<InetAddress> adrs = ni.getInetAddresses();
+                while (adrs.hasMoreElements()) {
+                    InetAddress addr = adrs.nextElement();
+                    if (addr instanceof Inet4Address)
+                        itfs.add(addr.getHostAddress());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-				Enumeration<InetAddress> adrs = ni.getInetAddresses();
-				while (adrs.hasMoreElements()) {
-					InetAddress addr = adrs.nextElement();
-					if (addr instanceof Inet4Address)
-						itfs.add(addr.getHostAddress());
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return itfs;
-	}
+        return itfs;
+    }
 }
