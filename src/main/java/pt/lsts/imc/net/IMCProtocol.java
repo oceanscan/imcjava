@@ -25,8 +25,6 @@
  * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * $Id:: IMCProtocol.java 333 2013-01-02 11:11:44Z zepinto                     $:
  */
 
 package pt.lsts.imc.net;
@@ -36,7 +34,6 @@ import pt.lsts.imc.Announce.SYS_TYPE;
 import pt.lsts.imc.EntityInfo;
 import pt.lsts.imc.EntityList;
 import pt.lsts.imc.EntityList.OP;
-import pt.lsts.imc.EstimatedState;
 import pt.lsts.imc.Heartbeat;
 import pt.lsts.imc.IMCDefinition;
 import pt.lsts.imc.IMCMessage;
@@ -46,9 +43,7 @@ import pt.lsts.imc.state.ImcSystemState;
 import pt.lsts.neptus.messages.listener.MessageInfo;
 import pt.lsts.neptus.messages.listener.MessageInfoImpl;
 import pt.lsts.neptus.messages.listener.MessageListener;
-import pt.lsts.neptus.messages.listener.Periodic;
 import pt.lsts.neptus.messages.listener.PeriodicCallbacks;
-import pt.lsts.util.WGS84Utilities;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -89,8 +84,6 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     private ExecutorService logExec = Executors.newSingleThreadExecutor();
     private final long initialTimeMillis = System.currentTimeMillis();
     private final long initialTimeNanos = System.nanoTime();
-
-    private EstimatedState estState = null;
 
     public IMCProtocol(String localName, int localPort) {
         this(localName, localPort, 0x4000 + new Random().nextInt(0x1FFF), null);
@@ -277,14 +270,6 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
         announce.setSysName(localName);
         announce.setSrc(localId);
 
-        if (estState != null) {
-            EstimatedState es = estState;
-            double[] pos = WGS84Utilities.toLatLonDepth(es);
-            announce.setLat(Math.toRadians(pos[0]));
-            announce.setLon(Math.toRadians(pos[1]));
-            announce.setHeight(-pos[2]);
-        }
-
         StringBuilder services = new StringBuilder("imcjava://0.0.0.0/uid/" + getUID() + "/;");
         services.append("imc+info://0.0.0.0/version/").append(IMCDefinition.getInstance().getVersion()).append("/;");
 
@@ -460,10 +445,6 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
         msg.setValue("src", localId);
         msg.setTimestamp(System.currentTimeMillis() / 1000.0);
         msg.setValue("dst", IMCDefinition.getInstance().getResolver().resolve(dst));
-
-        if (msg instanceof EstimatedState) {
-            estState = (EstimatedState) msg;
-        }
     }
 
     private LinkedHashMap<Object, ImcConsumer> pojoSubscribers = new LinkedHashMap<>();
