@@ -29,8 +29,6 @@
 
 package pt.lsts.neptus.messages;
 
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Collection;
 
 public interface IMessageProtocol<T extends IMessage> {
@@ -38,19 +36,11 @@ public interface IMessageProtocol<T extends IMessage> {
 
     String version();
 
-    int serializationSize(T msg);
-
-    void serialize(T m, OutputStream os) throws Exception;
-
-    T unserialize(InputStream is) throws Exception;
-
     T newMessage(int id) throws Exception;
 
     T newMessage(String name) throws Exception;
 
     Collection<String> getMessageNames();
-
-    int getMessageCount();
 
     String getMessageName(int id) throws Exception;
 
