@@ -130,13 +130,4 @@ public class MessageInfoImpl implements MessageInfo {
     public void setPublisherPort(int value) {
         setProperty(PUBLISHER_PORT_KEY, value);
     }
-
-    @Override
-    public void dump(PrintStream out) {
-        out.println("__MessageInfo Properties_______");
-        for (String key : properties.keySet()) {
-            out.println("  " + key + " :: " + getProperty(key));
-        }
-        out.println("_______________________________");
-    }
 }

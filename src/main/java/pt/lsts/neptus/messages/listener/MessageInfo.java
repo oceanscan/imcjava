@@ -29,8 +29,6 @@
 
 package pt.lsts.neptus.messages.listener;
 
-import java.io.PrintStream;
-
 /**
  * @author pdias
  */
@@ -83,6 +81,4 @@ public interface MessageInfo {
     int getPublisherPort();
 
     void setPublisherPort(int value);
-
-    void dump(PrintStream out);
 }
