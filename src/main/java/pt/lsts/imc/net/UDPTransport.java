@@ -25,8 +25,6 @@
  * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * $Id:: UDPTransport.java 333 2013-01-02 11:11:44Z zepinto                    $:
  */
 
 package pt.lsts.imc.net;
@@ -150,11 +148,6 @@ public class UDPTransport {
         initialize();
     }
 
-    /**
-     * @param multicastAddress
-     * @param bindPort
-     * @param numberOfSenderThreads
-     */
     public UDPTransport(boolean isBroadcastEnable, boolean isMulticastEnable,
                         int bindPort, int numberOfSenderThreads) {
         setNumberOfSenderThreads(numberOfSenderThreads);
@@ -167,166 +160,95 @@ public class UDPTransport {
         initialize();
     }
 
-    /**
-     * @param multicastAddress
-     * @param bindPort
-     */
     public UDPTransport(String multicastAddress, int bindPort) {
         this(multicastAddress, bindPort, 1);
     }
 
-    /**
-     *
-     */
     private void initialize() {
         createReceivers();
         createSenders();
     }
 
-    /**
-     * @return the isOnBindError
-     */
     public boolean isOnBindError() {
         return isOnBindError;
     }
 
-    /**
-     * @param isOnBindError the isOnBindError to set
-     */
     private void setOnBindError(boolean isOnBindError) {
         this.isOnBindError = isOnBindError;
     }
 
-    /**
-     * @return
-     */
     public int getBindPort() {
         return bindPort;
     }
 
-    /**
-     * @param bindPort
-     */
     public void setBindPort(int bindPort) {
         this.bindPort = bindPort;
     }
 
-    /**
-     * @return the multicastAddress
-     */
     public String getMulticastAddress() {
         return multicastAddress;
     }
 
-    /**
-     * @param multicastAddress the multicastAddress to set
-     */
     public void setMulticastAddress(String multicastAddress) {
         this.multicastAddress = multicastAddress;
     }
 
-    /**
-     * @return the multicastEnable
-     */
     public boolean isMulticastEnable() {
         return multicastEnable;
     }
 
-    /**
-     * @param multicastEnable the multicastEnable to set
-     */
     public void setMulticastEnable(boolean multicastEnable) {
         this.multicastEnable = multicastEnable;
     }
 
-    /**
-     * @return the multicastActive
-     */
     protected boolean isMulticastActive() {
         return multicastActive;
     }
 
-    /**
-     * @param multicastActive the multicastActive to set
-     */
     protected void setMulticastActive(boolean multicastActive) {
         this.multicastActive = multicastActive;
     }
 
-    /**
-     * @return the broadcastEnable
-     */
     public boolean isBroadcastEnable() {
         return broadcastEnable;
     }
 
-    /**
-     * @param broadcastEnable the broadcastEnable to set
-     */
     public void setBroadcastEnable(boolean broadcastEnable) {
         this.broadcastEnable = broadcastEnable;
     }
 
-    /**
-     * @return the broadcastActive
-     */
     protected boolean isBroadcastActive() {
         return broadcastActive;
     }
 
-    /**
-     * @param broadcastActive the broadcastActive to set
-     */
     protected void setBroadcastActive(boolean broadcastActive) {
         this.broadcastActive = broadcastActive;
     }
 
-    /**
-     * @return the numberOfSenderThreads
-     */
     public int getNumberOfSenderThreads() {
         return numberOfSenderThreads;
     }
 
-    /**
-     * @param numberOfSenderThreads the numberOfSenderThreads to set
-     */
     public void setNumberOfSenderThreads(int numberOfSenderThreads) {
         this.numberOfSenderThreads = numberOfSenderThreads;
     }
 
-    /**
-     * @return the timeoutMillis
-     */
     public int getTimeoutMillis() {
         return timeoutMillis;
     }
 
-    /**
-     * @param timeoutMillis the timeoutMillis to set
-     */
     public void setTimeoutMillis(int timeoutMillis) {
         this.timeoutMillis = timeoutMillis;
     }
 
-    /**
-     * @return the maxBufferSize
-     */
     public int getMaxBufferSize() {
         return maxBufferSize;
     }
 
-    /**
-     * @param maxBufferSize the maxBufferSize to set
-     */
     public void setMaxBufferSize(int maxBufferSize) {
         this.maxBufferSize = maxBufferSize;
     }
 
-    /**
-     * @param multicastAddress
-     * @return
-     */
     protected InetAddress resolveAddress(String multicastAddress)
             throws UnknownHostException {
         if (!solvedAddresses.containsKey(multicastAddress)) {
@@ -336,9 +258,6 @@ public class UDPTransport {
         return solvedAddresses.get(multicastAddress);
     }
 
-    /**
-     * @return
-     */
     public boolean reStart() {
         if (!(!isStopping() && !isRunning()))
             return false;
@@ -398,9 +317,6 @@ public class UDPTransport {
         stop();
     }
 
-    /**
-     * @return
-     */
     public boolean isRunning() {
         if (senderThreads.size() > 0)
             return true;
@@ -410,13 +326,8 @@ public class UDPTransport {
         return true;
     }
 
-    /**
-     * @return
-     */
     public boolean isStopping() {
-        if (isRunning() && purging)
-            return true;
-        return false;
+        return isRunning() && purging;
     }
 
     /**
@@ -439,13 +350,8 @@ public class UDPTransport {
         setOnBindError(false);
         getSocketListenerThread();
         getDispacherThread();
-
-        //addMessageListener(acksAggregator, Arrays.asList(AckedMessage.ID_STATIC));
     }
 
-    /**
-     * @return
-     */
     private Thread getSocketListenerThread() {
         if (sockedListenerThread == null) {
             Thread listenerThread = new Thread(UDPTransport.class.getSimpleName() + ": Listener Thread " + this.hashCode()) {
@@ -551,33 +457,23 @@ public class UDPTransport {
         return sockedListenerThread;
     }
 
-    /**
-     * @param req
-     * @param info
-     * @return
-     */
     public void dispatchMessage(IMCMessage req, MessageInfo info) {
-        Vector<MessageListener<MessageInfo, IMCMessage>> listeners = new Vector<MessageListener<MessageInfo, IMCMessage>>();
+        Vector<MessageListener<MessageInfo, IMCMessage>> listeners = new Vector<>();
         listeners.addAll(messageListeners.keySet());
         for (MessageListener<MessageInfo, IMCMessage> lst : listeners) {
             try {
                 if (messageListeners.containsKey(lst) && (messageListeners.get(lst).isEmpty() || messageListeners.get(lst).contains(req.getHeader().getInteger("mgid"))))
                     lst.onMessage(info, req);
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            } catch (Error e) {
+            } catch (Exception | Error e) {
                 e.printStackTrace();
             }
         }
     }
 
-    /**
-     * @return
-     */
     private Thread getDispacherThread() {
         if (dispacherThread == null) {
-            Thread listenerThread = new Thread(UDPTransport.class.getSimpleName() + ": Dispacher Thread " + this.hashCode()) {
+            Thread listenerThread = new Thread(UDPTransport.class.getSimpleName() + ": Dispatcher Thread " + this.hashCode()) {
                 @Override
                 public void run() {
                     try {
@@ -621,9 +517,6 @@ public class UDPTransport {
         return dispacherThread;
     }
 
-    /**
-     * @return
-     */
     private Thread getSenderThread(final DatagramSocket sockToUseAlreadyOpen) {
         Thread senderThread = new Thread(UDPTransport.class.getSimpleName() + ": Sender Thread " + this.hashCode()) {
 
@@ -696,12 +589,12 @@ public class UDPTransport {
     }
 
     public void addMessageListener(MessageListener<MessageInfo, IMCMessage> l, Collection<Integer> typesToListen) {
-        HashSet<Integer> types = new HashSet<Integer>();
+        HashSet<Integer> types = new HashSet<>();
         types.addAll(typesToListen);
 
         for (int id : typesToListen) {
             if (!messagesListened.containsKey(id))
-                messagesListened.put(id, new HashSet<MessageListener<MessageInfo, IMCMessage>>());
+                messagesListened.put(id, new HashSet<>());
             messagesListened.get(id).add(l);
         }
 
@@ -709,7 +602,7 @@ public class UDPTransport {
     }
 
     public void addListener(MessageListener<MessageInfo, IMCMessage> l, Collection<String> typesToListen) {
-        Vector<Integer> types = new Vector<Integer>();
+        Vector<Integer> types = new Vector<>();
         for (String s : typesToListen) {
             try {
                 types.add(getDefinition().getMessageId(s));
@@ -721,12 +614,12 @@ public class UDPTransport {
     }
 
     public void addMessageListener(MessageListener<MessageInfo, IMCMessage> l) {
-        messageListeners.put(l, new HashSet<Integer>()); // empty means all
+        messageListeners.put(l, new HashSet<>()); // empty means all
         for (String s : getDefinition().getMessageNames()) {
             try {
                 int id = getDefinition().getMessageId(s);
                 if (!messagesListened.containsKey(id))
-                    messagesListened.put(id, new HashSet<MessageListener<MessageInfo, IMCMessage>>());
+                    messagesListened.put(id, new HashSet<>());
                 messagesListened.get(id).add(l);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -776,9 +669,6 @@ public class UDPTransport {
         anonymousSocket.send(dgram);
     }
 
-    /**
-     * @return the imc_id
-     */
     public int getImcId() {
         return imc_id;
     }
