@@ -25,9 +25,8 @@
  * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * $Id:: IMCMessageType.java 372 2013-01-28 17:22:07Z zepinto                  $:
  */
+
 package pt.lsts.imc;
 
 import java.util.Collection;
@@ -38,11 +37,11 @@ import java.util.Vector;
 /**
  * When parsing the messages definition file, an hashtable is filled with the supported message structures.
  * This class holds information about a message like its size, name and fields.
- * @author ZP
  *
+ * @author ZP
  */
 public class IMCMessageType {
-    public static final int UNKNOWN_SIZE = -1;
+    private static final int UNKNOWN_SIZE = -1;
     private int id = -1;
     private String fullName;
     private String shortName;
@@ -68,16 +67,16 @@ public class IMCMessageType {
     }
 
     public IMCMessageType(IMCMessageType superType) {
-    	fields.putAll(superType.fields);
-    	units.putAll(superType.units);
-    	offsets.putAll(superType.offsets);
-    	fieldPossibleValues.putAll(superType.fieldPossibleValues);
-    	fieldPossibleValuesInverse.putAll(superType.fieldPossibleValuesInverse);
-    	fieldPrefixes.putAll(superType.fieldPrefixes);
-    	defaultValues.putAll(superType.defaultValues);
-    	descriptions.putAll(superType.descriptions);
-    	fullnames.putAll(superType.fullnames);
-    	subtypes.putAll(superType.subtypes);
+        fields.putAll(superType.fields);
+        units.putAll(superType.units);
+        offsets.putAll(superType.offsets);
+        fieldPossibleValues.putAll(superType.fieldPossibleValues);
+        fieldPossibleValuesInverse.putAll(superType.fieldPossibleValuesInverse);
+        fieldPrefixes.putAll(superType.fieldPrefixes);
+        defaultValues.putAll(superType.defaultValues);
+        descriptions.putAll(superType.descriptions);
+        fullnames.putAll(superType.fullnames);
+        subtypes.putAll(superType.subtypes);
     }
 
     public Vector<String> getFlags() {
@@ -85,7 +84,7 @@ public class IMCMessageType {
     }
 
     public boolean hasFlag(String flag) {
-    	return getFlags().contains(flag);
+        return getFlags().contains(flag);
     }
 
     public Object getDefaultValue(String field) {
@@ -94,7 +93,7 @@ public class IMCMessageType {
 
     public int getOffsetOf(String field) {
         Integer offset = offsets.get(field);
-        return (offset == null)? -1 : offset;
+        return (offset == null) ? -1 : offset;
     }
 
     public static boolean isNumericType(String type) {
@@ -126,7 +125,7 @@ public class IMCMessageType {
         if (computedLength != IMCMessageType.UNKNOWN_SIZE) {
             offsets.put(abbrv, computedLength);
             if (IMCFieldType.TYPES.get(fieldType) == null) {
-                System.err.println("Field type not recognized: "+fieldType);
+                System.err.println("Field type not recognized: " + fieldType);
                 return;
             }
             int incSize = IMCFieldType.TYPES.get(fieldType).getSizeInBytes();
@@ -134,13 +133,11 @@ public class IMCMessageType {
                 computedLength += incSize;
             else
                 computedLength = IMCMessageType.UNKNOWN_SIZE;
-        }
-        else {
+        } else {
             offsets.put(abbrv, IMCMessageType.UNKNOWN_SIZE);
         }
         if (unit != null)
             units.put(abbrv, unit.toLowerCase());
-
 
         if (fieldType.toLowerCase().startsWith("uint") ||
                 fieldType.toLowerCase().startsWith("int")) {
@@ -155,8 +152,7 @@ public class IMCMessageType {
                     if (min.startsWith("0x") || min.startsWith("0X")) {
                         min = min.substring(2);
                         minVal = Long.parseLong(min, 16);
-                    }
-                    else
+                    } else
                         minVal = Long.parseLong(min);
                 }
 
@@ -164,8 +160,7 @@ public class IMCMessageType {
                     if (max.startsWith("0x") || max.startsWith("0X")) {
                         max = max.substring(2);
                         maxVal = Long.parseLong(max, 16);
-                    }
-                    else
+                    } else
                         maxVal = Long.parseLong(max);
                 }
 
@@ -176,8 +171,7 @@ public class IMCMessageType {
 
                 defaultValues.put(abbrv, defaultValue);
 
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -185,8 +179,8 @@ public class IMCMessageType {
         if (fieldType.toLowerCase().startsWith("fp")) {
             Object defaultValue = 0;
 
-            double minVal = (min != null)? Double.parseDouble(min) : 0;
-            double maxVal = (max != null)? Double.parseDouble(max) : 0;
+            double minVal = (min != null) ? Double.parseDouble(min) : 0;
+            double maxVal = (max != null) ? Double.parseDouble(max) : 0;
 
             if (minVal > 0)
                 defaultValue = minVal;
@@ -205,7 +199,7 @@ public class IMCMessageType {
         LinkedHashMap<String, Long> inverse = new LinkedHashMap<>();
 
         for (Long key : possibleValues.keySet())
-            inverse.put(possibleValues.get(key),key);
+            inverse.put(possibleValues.get(key), key);
         fieldPossibleValuesInverse.put(abbrev, inverse);
 
         if (possibleValues.keySet().iterator().hasNext())
@@ -234,6 +228,7 @@ public class IMCMessageType {
     public IMCFieldType getFieldType(String field) {
         return fields.get(field);
     }
+
     public String getFieldUnits(String field) {
         return units.get(field);
     }
@@ -247,7 +242,7 @@ public class IMCMessageType {
     }
 
     public boolean isAbstract() {
-    	return getId() == -1;
+        return getId() == -1;
     }
 
     public int getId() {
@@ -345,7 +340,7 @@ public class IMCMessageType {
     }
 
     public void setSuperType(IMCMessageType msgType) {
-    	this.superType = msgType;
+        this.superType = msgType;
     }
 
     @Override
@@ -356,7 +351,7 @@ public class IMCMessageType {
             ret.append("\t").append(field.getKey()).append(":");
             ret.append("\t").append(field.getValue().toString());
             if (getFieldSubtype(field.getKey()) != null)
-                ret.append("<"+getFieldSubtype(field.getKey())+">");
+                ret.append("<" + getFieldSubtype(field.getKey()) + ">");
             ret.append("\n");
         }
         ret.append("}\n");
