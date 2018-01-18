@@ -36,7 +36,6 @@ package pt.lsts.neptus.messages;
  * @author Eduardo Marques
  */
 public class InvalidMessageException extends java.lang.RuntimeException {
-
     private static final long serialVersionUID = 1L;
 
     /**
