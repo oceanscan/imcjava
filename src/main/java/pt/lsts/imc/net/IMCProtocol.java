@@ -62,7 +62,6 @@ import pt.lsts.neptus.messages.listener.MessageInfoImpl;
 import pt.lsts.neptus.messages.listener.MessageListener;
 import pt.lsts.neptus.messages.listener.Periodic;
 import pt.lsts.neptus.messages.listener.PeriodicCallbacks;
-import pt.lsts.util.NetworkUtilities;
 import pt.lsts.util.WGS84Utilities;
 
 /** This class implements the IMC protocol allowing sending / receiving messages and also discovery
