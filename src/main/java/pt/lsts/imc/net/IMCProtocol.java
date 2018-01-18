@@ -28,22 +28,8 @@
  *
  * $Id:: IMCProtocol.java 333 2013-01-02 11:11:44Z zepinto                     $:
  */
-package pt.lsts.imc.net;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.Vector;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.regex.Pattern;
+package pt.lsts.imc.net;
 
 import pt.lsts.imc.Announce;
 import pt.lsts.imc.Announce.SYS_TYPE;
@@ -64,45 +50,61 @@ import pt.lsts.neptus.messages.listener.Periodic;
 import pt.lsts.neptus.messages.listener.PeriodicCallbacks;
 import pt.lsts.util.WGS84Utilities;
 
-/** This class implements the IMC protocol allowing sending / receiving messages and also discovery
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.Vector;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.regex.Pattern;
+
+/**
+ * This class implements the IMC protocol allowing sending / receiving messages and also discovery
  * of IMC peers
  *
- * @author zp */
+ * @author zp
+ */
 public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IMCMessage> {
-    protected UDPTransport discovery;
+    private UDPTransport discovery;
     protected UDPTransport comms;
-    protected LinkedHashMap<String, IMCNode> nodes = new LinkedHashMap<String, IMCNode>();
-    protected int bindPort = 7001;
-    protected LinkedHashMap<String, ImcSystemState> sysStates = new LinkedHashMap<String, ImcSystemState>();
-    protected String localName = "imcj_" + System.currentTimeMillis() / 500;
-    protected int localId;
-    protected SYS_TYPE sysType = SYS_TYPE.CCU;
-    private HashSet<String> services = new HashSet<String>();
+    private LinkedHashMap<String, IMCNode> nodes = new LinkedHashMap<>();
+    private int bindPort = 7001;
+    private LinkedHashMap<String, ImcSystemState> sysStates = new LinkedHashMap<>();
+    private String localName = "imcj_" + System.currentTimeMillis() / 500;
+    private int localId;
+    private SYS_TYPE sysType = SYS_TYPE.CCU;
+    private HashSet<String> services = new HashSet<>();
     private boolean quiet = false;
     private String autoConnect = null;
     private boolean connectOnHeartBeat = false;
     private Timer beater = new Timer();
     private IMessageLogger logger = null;
     private ExecutorService logExec = Executors.newSingleThreadExecutor();
-
     private final long initialTimeMillis = System.currentTimeMillis();
     private final long initialTimeNanos = System.nanoTime();
 
     private EstimatedState estState = null;
 
     public IMCProtocol(String localName, int localPort) {
-        this(localName, localPort, 0x4000 + new Random().nextInt(0x1FFF), (SYS_TYPE) null);
+        this(localName, localPort, 0x4000 + new Random().nextInt(0x1FFF), null);
     }
 
     public IMCProtocol(String localName, int localPort, int localId) {
-        this(localName, localPort, localId, (SYS_TYPE) null);
+        this(localName, localPort, localId, null);
     }
 
     public IMCProtocol(String localName, int localPort, int localId, SYS_TYPE sysType) {
         if (localId <= 0)
             this.localId = 0x4000 + new Random().nextInt(0x1FFF);
         else
-        	this.localId = localId;
+            this.localId = localId;
 
         if (sysType != null)
             this.sysType = sysType;
@@ -118,7 +120,7 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
         beater.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                ArrayList<IMCNode> peers = new ArrayList<IMCNode>();
+                ArrayList<IMCNode> peers = new ArrayList<>();
                 peers.addAll(nodes.values());
                 for (IMCNode node : peers) {
                     if (node.isPeer()) {
@@ -140,11 +142,12 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
         addMessageListener(this);
     }
 
-    /** Create a new IMCProtocol instance and bind it to given local port
+    /**
+     * Create a new IMCProtocol instance and bind it to given local port
      *
-     * @param bindPort
-     *            The port where to bind for listening to incoming messages (also advertised using
-     *            multicast) */
+     * @param bindPort The port where to bind for listening to incoming messages (also advertised using
+     *                 multicast)
+     */
     public IMCProtocol(int bindPort) {
         this("imcj_" + System.currentTimeMillis() / 500, bindPort);
     }
@@ -158,21 +161,21 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
         msg.setMessageInfo(info);
         logMessage(msg);
         switch (msg.getMgid()) {
-        case Announce.ID_STATIC:
-            on((Announce) msg);
-            break;
-        case EntityInfo.ID_STATIC:
-            on((EntityInfo) msg);
-            break;
-        case EntityList.ID_STATIC:
-            on((EntityList) msg);
-            break;
-        case Heartbeat.ID_STATIC:
-        	on((Heartbeat) msg);
-        	break;
-        default:
-            msgReceived(msg);
-            break;
+            case Announce.ID_STATIC:
+                on((Announce) msg);
+                break;
+            case EntityInfo.ID_STATIC:
+                on((EntityInfo) msg);
+                break;
+            case EntityList.ID_STATIC:
+                on((EntityList) msg);
+                break;
+            case Heartbeat.ID_STATIC:
+                on((Heartbeat) msg);
+                break;
+            default:
+                msgReceived(msg);
+                break;
         }
     }
 
@@ -237,15 +240,15 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     }
 
     private void on(Heartbeat msg) {
-    	if (connectOnHeartBeat) {
-    		String name = msg.getSourceName();
-    		if (nodes.containsKey(name)) {
-    			boolean wasPeer = nodes.get(name).isPeer();
-    			nodes.get(name).setPeer(true);
-    			if (!wasPeer)
-    				System.out.println("Activating transmission to "+name+".");
-    		}
-    	}
+        if (connectOnHeartBeat) {
+            String name = msg.getSourceName();
+            if (nodes.containsKey(name)) {
+                boolean wasPeer = nodes.get(name).isPeer();
+                nodes.get(name).setPeer(true);
+                if (!wasPeer)
+                    System.out.println("Activating transmission to " + name + ".");
+            }
+        }
     }
 
     public final String getLocalName() {
@@ -265,7 +268,7 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     }
 
     private String getUID() {
-        return ""+(initialTimeMillis * 1000000 + (initialTimeNanos % 1000000));
+        return "" + (initialTimeMillis * 1000000 + (initialTimeNanos % 1000000));
     }
 
     protected Announce buildAnnounce(boolean includeLoopback) {
@@ -282,20 +285,20 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
             announce.setHeight(-pos[2]);
         }
 
-        String services = "imcjava://0.0.0.0/uid/" + getUID() + "/;";
-        services += "imc+info://0.0.0.0/version/" + IMCDefinition.getInstance().getVersion() + "/;";
+        StringBuilder services = new StringBuilder("imcjava://0.0.0.0/uid/" + getUID() + "/;");
+        services.append("imc+info://0.0.0.0/version/").append(IMCDefinition.getInstance().getVersion()).append("/;");
 
         Collection<String> netInt = NetworkUtilities.getNetworkInterfaces(includeLoopback);
         for (String itf : netInt) {
-            services += "imc+udp://" + itf + ":" + bindPort + "/;";
+            services.append("imc+udp://").append(itf).append(":").append(bindPort).append("/;");
         }
         for (String s : this.services)
-            services += s + ";";
+            services.append(s).append(";");
 
         if (services.length() > 0)
-            services = services.substring(0, services.length() - 1);
+            services = new StringBuilder(services.substring(0, services.length() - 1));
 
-        announce.setServices(services);
+        announce.setServices(services.toString());
 
         return announce;
     }
@@ -350,13 +353,14 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
         }
     };
 
-    /** Retrieve time elapsed since last announce of given system name
+    /**
+     * Retrieve time elapsed since last announce of given system name
      *
-     * @param name
-     *            The name of the system
+     * @param name The name of the system
      * @return Time, in milliseconds since last announce has been received from the given system.
-     *         <br/>
-     *         In the case the system has not announced itself yet, -1 is returned. */
+     * <br/>
+     * In the case the system has not announced itself yet, -1 is returned.
+     */
     public long announceAgeMillis(String name) {
         IMCNode node = getNode(name);
         if (node == null)
@@ -385,19 +389,18 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
         return result;
     }
 
-    /** Send a message to all known (via received announces) systems.
+    /**
+     * Send a message to all known (via received announces) systems.
      *
-     * @param msg
-     *            The message to be sent.
-     * @return <code>true</code> if the message was tentatively sent to at least one system. */
+     * @param msg The message to be sent.
+     * @return <code>true</code> if the message was tentatively sent to at least one system.
+     */
     public boolean broadcast(IMCMessage msg) {
         msg.setValue("src", localId);
         boolean sent = false;
         for (IMCNode nd : nodes.values()) {
             if (nd.address != null) {
                 fillUp(msg, nd.getSysName());
-//                msg.setValue("dst", nd.getImcId());
-//                msg.setTimestamp(System.currentTimeMillis() / 1000.0);
                 comms.sendMessage(nd.address, nd.port, msg);
                 logMessage(msg);
             }
@@ -406,11 +409,12 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
         return sent;
     }
 
-    /** Send a message to the peers that this proto should auto-connect to.
+    /**
+     * Send a message to the peers that this proto should auto-connect to.
      *
-     * @param msg
-     *            The message to be sent
-     * @return <code>true</code> if the message was tentatively sent to at least one peer. */
+     * @param msg The message to be sent
+     * @return <code>true</code> if the message was tentatively sent to at least one peer.
+     */
     public boolean sendToPeers(IMCMessage msg) {
         msg.setValue("src", localId);
         boolean sent = false;
@@ -425,14 +429,14 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
         return sent;
     }
 
-    /** Send message to a remote system, specifying its name.
+    /**
+     * Send message to a remote system, specifying its name.
      *
-     * @param sysName
-     *            The name of the system where to send the message
-     * @param msg
-     *            The message to be sent to the system
+     * @param sysName The name of the system where to send the message
+     * @param msg     The message to be sent to the system
      * @return <strong>true</strong> if the message was sent or <strong>false</strong> if no such
-     *         system is known yet. */
+     * system is known yet.
+     */
     public boolean sendMessage(String sysName, IMCMessage msg) {
 
         fillUp(msg, sysName);
@@ -462,11 +466,13 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
         }
     }
 
-    private LinkedHashMap<Object, ImcConsumer> pojoSubscribers = new LinkedHashMap<Object, ImcConsumer>();
+    private LinkedHashMap<Object, ImcConsumer> pojoSubscribers = new LinkedHashMap<>();
 
-    /** Register a POJO consumer.
+    /**
+     * Register a POJO consumer.
      *
-     * @see ImcConsumer */
+     * @see ImcConsumer
+     */
     public void register(Object consumer) {
         unregister(consumer);
 
@@ -475,7 +481,7 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
         ImcConsumer listener = ImcConsumer.create(consumer);
 
         if (listener.getTypesToListen() == null)
-            addMessageListener(listener, new ArrayList<String>());
+            addMessageListener(listener, new ArrayList<>());
         else if (listener.getTypesToListen().isEmpty())
             return;
         else
@@ -493,55 +499,57 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
         PeriodicCallbacks.unregister(consumer);
     }
 
-    /** Add a listener to be called whenever messages of certain types are received
+    /**
+     * Add a listener to be called whenever messages of certain types are received
      *
-     * @param listener
-     *            The listener to be added
-     * @param typesToListen
-     *            The list of message abbreviated names to be observed by this listener */
+     * @param listener      The listener to be added
+     * @param typesToListen The list of message abbreviated names to be observed by this listener
+     */
     public void addMessageListener(MessageListener<MessageInfo, IMCMessage> listener,
-            String... typesToListen) {
+                                   String... typesToListen) {
         addMessageListener(listener, Arrays.asList(typesToListen));
     }
 
-    /** Add a listener to be called whenever messages of certain types are received
+    /**
+     * Add a listener to be called whenever messages of certain types are received
      *
-     * @param l
-     *            The listener to be added
-     * @param typesToListen
-     *            Collection of abbreviated names to be observed by this listener */
+     * @param l             The listener to be added
+     * @param typesToListen Collection of abbreviated names to be observed by this listener
+     */
     public void addMessageListener(MessageListener<MessageInfo, IMCMessage> l,
-            Collection<String> typesToListen) {
+                                   Collection<String> typesToListen) {
         comms.addListener(l, typesToListen);
         discovery.addListener(l, typesToListen);
     }
 
-    /** Remove a previously added message listener
+    /**
+     * Remove a previously added message listener
      *
-     * @param l
-     *            The listener to be removed from the observers */
+     * @param l The listener to be removed from the observers
+     */
     public void removeMessageListener(MessageListener<MessageInfo, IMCMessage> l) {
         comms.removeMessageListener(l);
         discovery.removeMessageListener(l);
     }
 
-    /** Add a global message listener that will be call on <strong>ALL</strong> incoming messages
+    /**
+     * Add a global message listener that will be call on <strong>ALL</strong> incoming messages
      *
-     * @param l
-     *            The global listener to be added to the list of observers */
+     * @param l The global listener to be added to the list of observers
+     */
     public void addMessageListener(MessageListener<MessageInfo, IMCMessage> l) {
         comms.addMessageListener(l);
         discovery.addMessageListener(l);
     }
 
-    /** Add a listener that will be called once and then removed from the list of observers
+    /**
+     * Add a listener that will be called once and then removed from the list of observers
      *
-     * @param listener
-     *            The listener to be added as a single-shot listener
-     * @param typeToListen
-     *            The type of message to be listen to */
+     * @param listener     The listener to be added as a single-shot listener
+     * @param typeToListen The type of message to be listen to
+     */
     public void addSingleShotListener(MessageListener<MessageInfo, IMCMessage> listener,
-            String typeToListen) {
+                                      String typeToListen) {
 
         final MessageListener<MessageInfo, IMCMessage> list = listener;
         MessageListener<MessageInfo, IMCMessage> singleShot = new MessageListener<MessageInfo, IMCMessage>() {
@@ -556,15 +564,17 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
         discovery.addListener(singleShot, Arrays.asList(typeToListen));
     }
 
-    /** Retrieve a list of known system names (from which an announce has been received)
+    /**
+     * Retrieve a list of known system names (from which an announce has been received)
      *
-     * @return list of known system names */
+     * @return list of known system names
+     */
     public String[] systems() {
         return sysStates.keySet().toArray(new String[0]);
     }
 
     public String[] lookupService(String serviceName) {
-        Vector<String> systems = new Vector<String>();
+        Vector<String> systems = new Vector<>();
 
         for (String sys : systems()) {
             Announce last = state(sys).last(Announce.class);
@@ -573,12 +583,13 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
         return systems.toArray(new String[0]);
     }
 
-    /** Retrieve the continuously updated state of the given system
+    /**
+     * Retrieve the continuously updated state of the given system
      *
-     * @param name
-     *            The system for which to retrieve the state
+     * @param name The system for which to retrieve the state
      * @return The existing system state or a newly created state (inactive) if that system is not
-     *         yet known */
+     * yet known
+     */
     public ImcSystemState state(String name) {
         if (!sysStates.containsKey(name)) {
             sysStates.put(name, new ImcSystemState(IMCDefinition.getInstance()));
@@ -586,52 +597,47 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
         return sysStates.get(name);
     }
 
-    protected Thread replayThread = null;
+    private Thread replayThread = null;
 
-    /** Replay an LSF log folder
+    /**
+     * Replay an LSF log folder
      *
-     * @param dirToReplay
-     *            The folder where the files Data.lsf and IMC.xml can be found
-     * @param speed
-     *            The time multiplier (1.0 = real time)
-     * @throws Exception
-     *             In the case the folder cannot be read or any other IO errors */
+     * @param dirToReplay The folder where the files Data.lsf and IMC.xml can be found
+     * @param speed       The time multiplier (1.0 = real time)
+     * @throws Exception In the case the folder cannot be read or any other IO errors
+     */
     public void startReplay(String dirToReplay, double speed) throws Exception {
 
         final LsfIndex index = new LsfIndex(new File(dirToReplay, "Data.lsf"),
                 IMCDefinition.getInstance(new FileInputStream(new File(dirToReplay, "IMC.xml"))));
 
         final double sec = 1000.0 * speed;
-        replayThread = new Thread() {
-            @Override
-            public void run() {
+        replayThread = new Thread(() -> {
+            int src = index.sourceOf(0);
+            double start = index.timeOf(0);
+            long startMillis = System.currentTimeMillis();
 
-                int src = index.sourceOf(0);
-                double start = index.timeOf(0);
-                long startMillis = System.currentTimeMillis();
-
-                for (int i = 0; i < index.getNumberOfMessages(); i++) {
-                    double curTime = (System.currentTimeMillis() - startMillis) / sec + start;
-                    IMCMessage m = index.getMessage(i);
-                    if (m.getSrc() == src) {
-                        while (m.getTimestamp() > curTime) {
-                            try {
-                                Thread.sleep(10);
-                            } catch (InterruptedException e) {
-                                return;
-                            }
-                            curTime = (System.currentTimeMillis() - startMillis) / sec + start;
+            for (int i = 0; i < index.getNumberOfMessages(); i++) {
+                double curTime = (System.currentTimeMillis() - startMillis) / sec + start;
+                IMCMessage m = index.getMessage(i);
+                if (m.getSrc() == src) {
+                    while (m.getTimestamp() > curTime) {
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException e) {
+                            return;
                         }
+                        curTime = (System.currentTimeMillis() - startMillis) / sec + start;
                     }
-                    MessageInfoImpl mi = new MessageInfoImpl();
-                    mi.setTimeSentSec(m.getTimestamp());
-                    mi.setTimeReceivedSec(System.currentTimeMillis() / 1000.0);
-                    mi.setPublisherInetAddress("");
-                    mi.setPublisherPort(-1);
-                    onMessage(mi, m);
                 }
+                MessageInfoImpl mi = new MessageInfoImpl();
+                mi.setTimeSentSec(m.getTimestamp());
+                mi.setTimeReceivedSec(System.currentTimeMillis() / 1000.0);
+                mi.setPublisherInetAddress("");
+                mi.setPublisherPort(-1);
+                onMessage(mi, m);
             }
-        };
+        });
         replayThread.start();
     }
 
@@ -659,8 +665,9 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
         logExec.shutdown();
     }
 
-    /** @param autoConnect
-     *            the autoConnect to set */
+    /**
+     * @param autoConnect the autoConnect to set
+     */
     public void setAutoConnect(String autoConnect) {
 
         if (autoConnect != null) {
@@ -675,20 +682,20 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     }
 
     public void setConnectOnHeartBeat() {
-    	autoConnect = null;
-    	connectOnHeartBeat = true;
-    	for (IMCNode node : nodes.values())
-    		node.setPeer(false);
+        autoConnect = null;
+        connectOnHeartBeat = true;
+        for (IMCNode node : nodes.values())
+            node.setPeer(false);
     }
 
-    /** This method blocks until a system whose name matches a regular expression is found on the
+    /**
+     * This method blocks until a system whose name matches a regular expression is found on the
      * network or <code>null</code> if time has expired.
      *
-     * @param systemExpr
-     *            The regular expression to look for
-     * @param timeoutMillis
-     *            The maximum amount of time to block
-     * @return The name of the system found */
+     * @param systemExpr    The regular expression to look for
+     * @param timeoutMillis The maximum amount of time to block
+     * @return The name of the system found
+     */
     public String waitFor(String systemExpr, long timeoutMillis) {
         long start = System.currentTimeMillis();
         while (System.currentTimeMillis() - start < timeoutMillis) {
@@ -705,22 +712,25 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
         return null;
     }
 
-    /** Change the active message logger (no logger is activated by default)
+    /**
+     * Change the active message logger (no logger is activated by default)
      *
-     * @param logger
-     *            The logger that will handle all sent / received messages.
-     * @see #setLsfMessageLogger() */
+     * @param logger The logger that will handle all sent / received messages.
+     * @see #setLsfMessageLogger()
+     */
     public void setMessageLogger(IMessageLogger logger) {
         this.logger = logger;
     }
 
-    /** Activate Lsf message logging
+    /**
+     * Activate Lsf message logging
      *
-     * @see #setMessageLogger(IMessageLogger) */
+     * @see #setMessageLogger(IMessageLogger)
+     */
     public void setLsfMessageLogger() {
         logger = new IMessageLogger() {
             @Override
-            public void logMessage(IMCMessage message) throws Exception {
+            public void logMessage(IMCMessage message) {
                 LsfMessageLogger.log(message);
             }
         };
@@ -732,74 +742,19 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
         if (curLogger == null)
             return;
 
-        logExec.submit(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    curLogger.logMessage(msg);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        logExec.submit(() -> {
+            try {
+                curLogger.logMessage(msg);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
     }
 
     /**
-	 * @return the autoConnect
-	 */
-	public String getAutoConnect() {
-		return autoConnect;
-	}
-
-	public static void main(String[] args) throws Exception {
-
-        final IMCProtocol proto = new IMCProtocol(7001);
-        proto.connect("lauv-seacon-1");
-        Object o = new Object() {
-
-            @Consume
-            public void on(EstimatedState msg) {
-                System.out.println("STATE: " + msg.getAbbrev());
-            }
-
-            @Consume
-            public void on(Announce msg) {
-                System.out.println("ANNOUNCE: " + msg.getAbbrev());
-            }
-
-            @Periodic(1000)
-            private void periodic2() {
-                System.out.println("PERIODIC 2 " + System.currentTimeMillis());
-
-            }
-
-            @Periodic(500)
-            private void periodic() {
-                System.out.println("PERIODIC START " + System.currentTimeMillis());
-                try {
-                    Thread.sleep(2000);
-                } catch (Exception e) {
-
-                }
-                System.out.println("PERIODIC END " + System.currentTimeMillis());
-            }
-        };
-
-        Object o2 = new Object() {
-            @Periodic(1000)
-            private void periodic2() {
-                proto.broadcast(new Heartbeat());
-                System.out.println("OBJECT 2 " + System.currentTimeMillis());
-            }
-        };
-        System.out.println("Registering");
-        proto.register(o);
-        proto.register(o2);
-        Thread.sleep(30000);
-        System.out.println("Unregistering");
-        proto.unregister(o);
-        Thread.sleep(30000);
-        System.out.println("Stopping");
-        proto.stop();
+     * @return the autoConnect
+     */
+    public String getAutoConnect() {
+        return autoConnect;
     }
 }
