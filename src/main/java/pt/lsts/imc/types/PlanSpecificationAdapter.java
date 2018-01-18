@@ -1,9 +1,9 @@
 /*
  * Below is the copyright agreement for IMCJava.
- * 
+ *
  * Copyright (c) 2010-2016, Laboratório de Sistemas e Tecnologia Subaquática
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     - Redistributions of source code must retain the above copyright
@@ -11,24 +11,27 @@
  *     - Redistributions in binary form must reproduce the above copyright
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
- *     - Neither the names of IMC, LSTS, IMCJava nor the names of its 
- *       contributors may be used to endorse or promote products derived from 
+ *     - Neither the names of IMC, LSTS, IMCJava nor the names of its
+ *       contributors may be used to endorse or promote products derived from
  *       this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL LABORATORIO DE SISTEMAS E TECNOLOGIA SUBAQUATICA
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE 
- * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT 
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+ * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *  
- * $Id:: CsvExporter.java 149 2012-05-29 18:24:53Z zepinto                     $:
  */
+
 package pt.lsts.imc.types;
+
+import pt.lsts.imc.IMCDefinition;
+import pt.lsts.imc.IMCMessage;
+import pt.lsts.imc.PlanSpecification;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -36,27 +39,21 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Vector;
 
-import pt.lsts.imc.Goto;
-import pt.lsts.imc.Goto.Z_UNITS;
-import pt.lsts.imc.IMCDefinition;
-import pt.lsts.imc.IMCMessage;
-import pt.lsts.imc.PlanSpecification;
-
 /**
  * This class holds a PlanSpecification data structure that is independent of IMC version
+ *
  * @author zp
  */
 public class PlanSpecificationAdapter implements IMessageAdapter {
-
     protected IMCMessage data = null;
-    protected LinkedHashMap<String, IMCMessage> maneuvers = new LinkedHashMap<String, IMCMessage>();
-    protected Vector<Transition> transitions = new Vector<Transition>();
-    protected Vector<IMCMessage> variables = new Vector<IMCMessage>();
-    protected Vector<IMCMessage> planStartActions = new Vector<IMCMessage>();
-    protected Vector<IMCMessage> planEndActions = new Vector<IMCMessage>();
-    protected LinkedHashMap<String, Vector<IMCMessage>> maneuverStartActions = new LinkedHashMap<String, Vector<IMCMessage>>();
-    protected LinkedHashMap<String, Vector<IMCMessage>> maneuverEndActions = new LinkedHashMap<String, Vector<IMCMessage>>();
-    protected String planId = "", description = "", firstManeuverId = "", vnamespace = "";
+    private LinkedHashMap<String, IMCMessage> maneuvers = new LinkedHashMap<>();
+    private Vector<Transition> transitions = new Vector<>();
+    private Vector<IMCMessage> variables = new Vector<>();
+    private Vector<IMCMessage> planStartActions = new Vector<>();
+    private Vector<IMCMessage> planEndActions = new Vector<>();
+    private LinkedHashMap<String, Vector<IMCMessage>> maneuverStartActions = new LinkedHashMap<>();
+    private LinkedHashMap<String, Vector<IMCMessage>> maneuverEndActions = new LinkedHashMap<>();
+    private String planId = "", description = "", firstManeuverId = "", vnamespace = "";
 
     @Override
     public Collection<String> getCompatibleMessages() {
@@ -65,6 +62,7 @@ public class PlanSpecificationAdapter implements IMessageAdapter {
 
     /**
      * Create a new Plan by parsing the IMC message (PlanSpecification)
+     *
      * @param data A PlanSpecification or MissionSpecification message
      */
     public PlanSpecificationAdapter(IMCMessage data) {
@@ -137,14 +135,14 @@ public class PlanSpecificationAdapter implements IMessageAdapter {
                     continue;
                 IMCMessage t = (IMCMessage) ob;
 
-                transitions.add(new Transition(t.getString("source_man"), t.getString("dest_man"), 
+                transitions.add(new Transition(t.getString("source_man"), t.getString("dest_man"),
                         t.getString("conditions"), t.getMessageList("actions")));
             }
         }
     }
 
     protected IMCMessage generateTransitionsPreImc5(IMCDefinition defs, Vector<Transition> manTransitions) {
-        Vector<IMCMessage> result = new Vector<IMCMessage>();
+        Vector<IMCMessage> result = new Vector<>();
         for (Transition t : manTransitions) {
             IMCMessage maneuverTransition = defs.create("ManeuverTransition");
             maneuverTransition.setValue("source_man", t.source_man);
@@ -155,15 +153,15 @@ public class PlanSpecificationAdapter implements IMessageAdapter {
         }
 
         // link all messages
-        for (int i = 0; i < result.size()-1; i++)
-            result.get(i).setValue("next", result.get(i+1));        
+        for (int i = 0; i < result.size() - 1; i++)
+            result.get(i).setValue("next", result.get(i + 1));
         if (!result.isEmpty())
             return result.firstElement();
         return null;
     }
 
     protected IMCMessage generateManeuversPreImc5(IMCDefinition defs) {
-        Vector<IMCMessage> result = new Vector<IMCMessage>();
+        Vector<IMCMessage> result = new Vector<>();
 
         for (String manId : maneuvers.keySet()) {
             IMCMessage manSpec = defs.create("ManeuverSpecification", "maneuver_id", manId);
@@ -174,8 +172,7 @@ public class PlanSpecificationAdapter implements IMessageAdapter {
                     manSpec.setMessageList(maneuverStartActions.get(manId), "start_actions");
                 if (maneuverEndActions.containsKey(manId))
                     manSpec.setMessageList(maneuverEndActions.get(manId), "end_actions");
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -186,16 +183,16 @@ public class PlanSpecificationAdapter implements IMessageAdapter {
         }
 
         // link all messages
-        for (int i = 0; i < result.size()-1; i++)
-            result.get(i).setValue("next", result.get(i+1));        
+        for (int i = 0; i < result.size() - 1; i++)
+            result.get(i).setValue("next", result.get(i + 1));
 
         if (!result.isEmpty())
             return result.firstElement();
-        return null;    
+        return null;
     }
 
     protected Vector<IMCMessage> generateTransitions(IMCDefinition defs) {
-        Vector<IMCMessage> result = new Vector<IMCMessage>();
+        Vector<IMCMessage> result = new Vector<>();
 
         for (Transition t : transitions) {
             IMCMessage planTransition = defs.create("PlanTransition");
@@ -210,7 +207,7 @@ public class PlanSpecificationAdapter implements IMessageAdapter {
     }
 
     protected Vector<IMCMessage> generateManeuvers(IMCDefinition defs) {
-        Vector<IMCMessage> result = new Vector<IMCMessage>();
+        Vector<IMCMessage> result = new Vector<>();
 
         for (String manId : maneuvers.keySet()) {
             IMCMessage planManeuver = defs.create("PlanManeuver", "maneuver_id", manId);
@@ -222,29 +219,29 @@ public class PlanSpecificationAdapter implements IMessageAdapter {
             result.add(planManeuver);
         }
         return result;
-    }      
-    
+    }
+
     public final Vector<IMCMessage> getManeuverStartActions(String manId) {
         return maneuverStartActions.get(manId);
     }
-    
+
     public final Vector<IMCMessage> getManeuverEndActions(String manId) {
         return maneuverEndActions.get(manId);
     }
-    
+
     public void setManeuverStartActions(String manId, Vector<IMCMessage> messages) {
         maneuverStartActions.put(manId, messages);
     }
-    
+
     public void setManeuverEndActions(String manId, Vector<IMCMessage> messages) {
         maneuverEndActions.put(manId, messages);
     }
-    
+
     protected void generateMessage(IMCDefinition defs) {
         boolean preIMC4 = defs.getMessageId("MissionSpecification") != -1;
         boolean preIMC5 = defs.getMessageId("PlanManeuver") == -1;
 
-        IMCMessage result = null;
+        IMCMessage result;
 
         if (preIMC4)
             result = defs.create("MissionSpecification");
@@ -259,15 +256,14 @@ public class PlanSpecificationAdapter implements IMessageAdapter {
 
         if (preIMC5) {
             result.setValue("num_maneuvers", maneuvers.size());
-            result.setValue("maneuvers", generateManeuversPreImc5(defs));             
-        }
-        else {
+            result.setValue("maneuvers", generateManeuversPreImc5(defs));
+        } else {
             result.setValue("variables", variables);
             result.setValue("maneuvers", generateManeuvers(defs));
             result.setValue("transitions", generateTransitions(defs));
         }
 
-        data = result;         
+        data = result;
     }
 
     /**
@@ -344,22 +340,24 @@ public class PlanSpecificationAdapter implements IMessageAdapter {
 
     /**
      * Add a transition to this plan
+     *
      * @param source_man The id of the source maneuver
-     * @param dest_man The id of the target maneuver
+     * @param dest_man   The id of the target maneuver
      * @param conditions The conditions for the transition to take place
-     * @param actions The actions triggered on transition
+     * @param actions    The actions triggered on transition
      */
     public void addTransition(String source_man, String dest_man, String conditions, String actions) {
         transitions.add(new Transition(source_man, dest_man, conditions, actions));
     }
 
     /**
-     * Retrieve all transitions going out of maneuver with given id 
+     * Retrieve all transitions going out of maneuver with given id
+     *
      * @param source_man The id of the source maneuver
      * @return All the transitions whose source maneuver matches the given parameter
      */
     public final Vector<Transition> getOutgoingTransitions(String source_man) {
-        Vector<Transition> ret = new Vector<PlanSpecificationAdapter.Transition>();
+        Vector<Transition> ret = new Vector<>();
         for (Transition t : transitions) {
             if (t.source_man.equals(source_man))
                 ret.add(t);
@@ -367,11 +365,10 @@ public class PlanSpecificationAdapter implements IMessageAdapter {
         return ret;
     }
 
-
-
     /**
      * Add a maneuver to this plan
-     * @param id The id of the maneuver to be added
+     *
+     * @param id       The id of the maneuver to be added
      * @param maneuver The maneuver data (IMCMessage)
      */
     public void addManeuver(String id, IMCMessage maneuver) {
@@ -382,6 +379,7 @@ public class PlanSpecificationAdapter implements IMessageAdapter {
 
     /**
      * Retrieve a maneuver from this plan
+     *
      * @param maneuver_id The id of the maneuver to be retrieved
      * @return The maneuver with given id or <b>null</b> if no such maneuver exists
      */
@@ -396,7 +394,6 @@ public class PlanSpecificationAdapter implements IMessageAdapter {
     public final Collection<Transition> getAllTransitions() {
         return transitions;
     }
-
 
     /**
      * @return the variables
@@ -439,35 +436,6 @@ public class PlanSpecificationAdapter implements IMessageAdapter {
     public final void setPlanEndActions(Vector<IMCMessage> planEndActions) {
         this.planEndActions = planEndActions;
     }
-    
-    
-
-    public static void main(String[] args) {
-
-        PlanSpecificationAdapter plan = new PlanSpecificationAdapter();
-        plan.setDescription("Plan generated");
-        plan.setPlanId("the_plan_id");
-        plan.addManeuver("Goto1", 
-                new Goto()
-        			.setSpeed(1000) 
-        			.setLat(Math.toRadians(41)) 
-        			.setLon(Math.toRadians(-8)) 
-        			.setZ(2f)
-        			.setZUnits(Z_UNITS.DEPTH)
-        			.setSpeedUnits(pt.lsts.imc.Goto.SPEED_UNITS.METERS_PS)
-        		);
-        plan.addManeuver("Goto2", 
-        		new Goto()
-	        		.setSpeed(1000) 
-	    			.setLat(Math.toRadians(41)) 
-	    			.setLon(Math.toRadians(-8)) 
-	    			.setZ(5f)
-	    			.setZUnits(Z_UNITS.DEPTH)
-	    			.setSpeedUnits(pt.lsts.imc.Goto.SPEED_UNITS.METERS_PS)
-        		);
-    			plan.addTransition("Goto1", "Goto2", "ManeuverIsDone", null);
-
-    }
 
     public class Transition {
         protected String source_man, dest_man, conditions, stringActions;
@@ -489,13 +457,13 @@ public class PlanSpecificationAdapter implements IMessageAdapter {
 
         public void setActions(String actions) {
             this.stringActions = actions;
-            this.msgActions = new Vector<IMCMessage>();
+            this.msgActions = new Vector<>();
         }
 
         public void setActions(Vector<IMCMessage> actions) {
             this.stringActions = "";
             for (IMCMessage m : actions)
-                stringActions += m.toString();            
+                stringActions += m.toString();
             this.msgActions = actions;
         }
 
