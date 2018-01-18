@@ -37,16 +37,11 @@ import pt.lsts.imc.EntityList.OP;
 import pt.lsts.imc.Heartbeat;
 import pt.lsts.imc.IMCDefinition;
 import pt.lsts.imc.IMCMessage;
-import pt.lsts.imc.lsf.LsfIndex;
-import pt.lsts.imc.lsf.LsfMessageLogger;
 import pt.lsts.imc.state.ImcSystemState;
 import pt.lsts.neptus.messages.listener.MessageInfo;
-import pt.lsts.neptus.messages.listener.MessageInfoImpl;
 import pt.lsts.neptus.messages.listener.MessageListener;
 import pt.lsts.neptus.messages.listener.PeriodicCallbacks;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -580,48 +575,6 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
 
     private Thread replayThread = null;
 
-    /**
-     * Replay an LSF log folder
-     *
-     * @param dirToReplay The folder where the files Data.lsf and IMC.xml can be found
-     * @param speed       The time multiplier (1.0 = real time)
-     * @throws Exception In the case the folder cannot be read or any other IO errors
-     */
-    public void startReplay(String dirToReplay, double speed) throws Exception {
-
-        final LsfIndex index = new LsfIndex(new File(dirToReplay, "Data.lsf"),
-                IMCDefinition.getInstance(new FileInputStream(new File(dirToReplay, "IMC.xml"))));
-
-        final double sec = 1000.0 * speed;
-        replayThread = new Thread(() -> {
-            int src = index.sourceOf(0);
-            double start = index.timeOf(0);
-            long startMillis = System.currentTimeMillis();
-
-            for (int i = 0; i < index.getNumberOfMessages(); i++) {
-                double curTime = (System.currentTimeMillis() - startMillis) / sec + start;
-                IMCMessage m = index.getMessage(i);
-                if (m.getSrc() == src) {
-                    while (m.getTimestamp() > curTime) {
-                        try {
-                            Thread.sleep(10);
-                        } catch (InterruptedException e) {
-                            return;
-                        }
-                        curTime = (System.currentTimeMillis() - startMillis) / sec + start;
-                    }
-                }
-                MessageInfoImpl mi = new MessageInfoImpl();
-                mi.setTimeSentSec(m.getTimestamp());
-                mi.setTimeReceivedSec(System.currentTimeMillis() / 1000.0);
-                mi.setPublisherInetAddress("");
-                mi.setPublisherPort(-1);
-                onMessage(mi, m);
-            }
-        });
-        replayThread.start();
-    }
-
     /** Stop replaying */
     public void stopReplay() {
         if (replayThread != null)
@@ -701,20 +654,6 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
      */
     public void setMessageLogger(IMessageLogger logger) {
         this.logger = logger;
-    }
-
-    /**
-     * Activate Lsf message logging
-     *
-     * @see #setMessageLogger(IMessageLogger)
-     */
-    public void setLsfMessageLogger() {
-        logger = new IMessageLogger() {
-            @Override
-            public void logMessage(IMCMessage message) {
-                LsfMessageLogger.log(message);
-            }
-        };
     }
 
     private void logMessage(final IMCMessage msg) {
