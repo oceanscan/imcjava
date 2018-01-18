@@ -75,7 +75,6 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     private String autoConnect = null;
     private boolean connectOnHeartBeat = false;
     private Timer beater = new Timer();
-    private IMessageLogger logger = null;
     private ExecutorService logExec = Executors.newSingleThreadExecutor();
     private final long initialTimeMillis = System.currentTimeMillis();
     private final long initialTimeNanos = System.nanoTime();
@@ -114,7 +113,6 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
                     if (node.isPeer()) {
                         IMCMessage hbeat = new Heartbeat();
                         sendMessage(node.getSysName(), hbeat);
-                        logMessage(hbeat);
                     }
                 }
             }
@@ -147,7 +145,7 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
     @Override
     public void onMessage(MessageInfo info, IMCMessage msg) {
         msg.setMessageInfo(info);
-        logMessage(msg);
+
         switch (msg.getMgid()) {
             case Announce.ID_STATIC:
                 on((Announce) msg);
@@ -313,7 +311,6 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
             long lastSent = System.currentTimeMillis();
             while (true) {
                 Announce announce = buildAnnounce(true);
-                logMessage(announce);
 
                 for (int p = 30100; p < 30105; p++) {
                     discovery.sendMessage("224.0.75.69", p, announce);
@@ -364,9 +361,7 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
         Heartbeat msg = IMCDefinition.getInstance().create(Heartbeat.class, "src", localId, "dst",
                 node.getImcId(), "timestamp", System.currentTimeMillis() / 1000.0);
 
-        boolean result = comms.sendMessage(node.getAddress(), node.getPort(), msg);
-        logMessage(msg);
-        return result;
+        return comms.sendMessage(node.getAddress(), node.getPort(), msg);
     }
 
     /**
@@ -382,7 +377,6 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
             if (nd.address != null) {
                 fillUp(msg, nd.getSysName());
                 comms.sendMessage(nd.address, nd.port, msg);
-                logMessage(msg);
             }
             sent = true;
         }
@@ -402,7 +396,6 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
             if (nd.address != null && nd.isPeer()) {
                 fillUp(msg, nd.getSysName());
                 comms.sendMessage(nd.address, nd.port, msg);
-                logMessage(msg);
             }
             sent = true;
         }
@@ -426,7 +419,6 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
                 if (nd.address != null) {
                     msg.setValue("dst", nd.getImcId());
                     comms.sendMessage(nd.getAddress(), nd.getPort(), msg);
-                    logMessage(msg);
                     return true;
                 } else
                     return false;
@@ -644,31 +636,6 @@ public class IMCProtocol implements IMessageBus, MessageListener<MessageInfo, IM
             }
         }
         return null;
-    }
-
-    /**
-     * Change the active message logger (no logger is activated by default)
-     *
-     * @param logger The logger that will handle all sent / received messages.
-     * @see #setLsfMessageLogger()
-     */
-    public void setMessageLogger(IMessageLogger logger) {
-        this.logger = logger;
-    }
-
-    private void logMessage(final IMCMessage msg) {
-        final IMessageLogger curLogger = logger;
-
-        if (curLogger == null)
-            return;
-
-        logExec.submit(() -> {
-            try {
-                curLogger.logMessage(msg);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
     }
 
     /**
