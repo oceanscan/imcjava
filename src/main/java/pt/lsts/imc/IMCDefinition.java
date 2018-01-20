@@ -34,7 +34,6 @@ package pt.lsts.imc;
 import pt.lsts.imc.def.DefaultProtocolParser;
 import pt.lsts.imc.def.ProtocolDefinition;
 import pt.lsts.imc.gz.MultiMemberGZIPInputStream;
-import pt.lsts.neptus.messages.IMessageProtocol;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInput;
@@ -57,7 +56,7 @@ import java.util.Vector;
  *
  * @author zp
  */
-public class IMCDefinition implements IMessageProtocol<IMCMessage> {
+public class IMCDefinition {
     private static IMCDefinition instance;
     private IMCAddressResolver resolver = new IMCAddressResolver();
     private String name;
@@ -240,7 +239,6 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
     /**
      * Retrieve the version found on these definitions' XML
      */
-    @Override
     public String version() {
         return getVersion();
     }
@@ -252,7 +250,6 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
         return version;
     }
 
-    @Override
     public String name() {
         return getName() + " v" + getVersion();
     }
@@ -801,17 +798,14 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
         return types.containsKey(name);
     }
 
-    @Override
     public int getMessageId(String name) {
         return abbrev_Id.getOrDefault(name, -1);
     }
 
-    @Override
     public String getMessageName(int id) {
         return id_Abbrev.get(id);
     }
 
-    @Override
     public Collection<String> getMessageNames() {
         return types.keySet();
     }
@@ -820,13 +814,11 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
         return id_Abbrev.values();
     }
 
-    @Override
     public IMCMessage newMessage(int id) {
         return MessageFactory.getInstance().createTypedMessage(
                 getMessageName(id), this);
     }
 
-    @Override
     public IMCMessage newMessage(String name) {
         int id = getMessageId(name);
         return newMessage(id);
