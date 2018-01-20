@@ -36,21 +36,10 @@ public interface MessageInfo {
     String PUBLISHER_KEY = "Publisher";
     String PUBLISHER_INET_ADDRESS_KEY = "PublisherInetAddress";
     String PUBLISHER_PORT_KEY = "PublisherPort";
-    String SUBSCRIBER_KEY = "Subscriber";
-    String NOT_TO_LOG_MSG_KEY = "NotToLogMessage";
-    String ENVELOPED_MSG_KEY = "Enveloped";
-    String WEB_FETCH_MSG_KEY = "Web Fetch";
-    String TRANSPORT_MSG_KEY = "Transport";
-
-    double getTimeSentSec();
-
-    void setTimeSentSec(double timeSent);
 
     long getTimeSentNanos();
 
     void setTimeSentNanos(long timeSent);
-
-    double getTimeReceivedSec();
 
     void setTimeReceivedSec(double timeReceived);
 
@@ -62,16 +51,6 @@ public interface MessageInfo {
 
     void setProperty(String name, String value);
 
-    /**
-     * @return the publisher of the message. Should be the same
-     * as {@link #getProperty(String)} with name {@value #PUBLISHER_KEY}
-     */
-    String getPublisher();
-
-    /**
-     * Sets the publisher of the message. Should be the same
-     * as {@link #setProperty(String, String))} with name {@value #PUBLISHER_KEY}
-     */
     void setPublisher(String value);
 
     String getPublisherInetAddress();

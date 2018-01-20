@@ -93,23 +93,9 @@ public class IMCDefinition {
     /**
      * Create a new IMCDefinition, loading the XML definitions from the given
      * {@link InputStream}
-     *
-     * @param is
-     * @throws Exception
      */
     public IMCDefinition(InputStream is) throws Exception {
         readDefs(is);
-    }
-
-    public static void writeDefaultDefinitions(File destination)
-            throws IOException {
-        InputStream is = new ByteArrayInputStream(ImcStringDefs
-                .getDefinitions().getBytes());
-        FileOutputStream fos = new FileOutputStream(destination);
-        byte[] buffer = new byte[1024];
-        while (is.read(buffer) > 0)
-            fos.write(buffer);
-        fos.close();
     }
 
     /**
@@ -160,15 +146,14 @@ public class IMCDefinition {
      * @return a new header compatible with these definitions
      */
     public Header createHeader() {
-        Header h = new Header(this);
-        return h;
+        return new Header(this);
     }
 
     public final IMCMessageType getHeaderType() {
         return headerType;
     }
 
-    protected void readDefs(InputStream is) throws Exception {
+    private void readDefs(InputStream is) throws Exception {
         DefaultProtocolParser parser = new DefaultProtocolParser();
         ProtocolDefinition def = parser.parseDefinitions(is);
         specification = parser.getSpecification();
@@ -271,13 +256,6 @@ public class IMCDefinition {
     }
 
     /**
-     * Retrieve the generated MD5 hash for these definitions
-     */
-    public String getMd5String() {
-        return md5String;
-    }
-
-    /**
      * @return the specification
      */
     public String getSpecification() {
@@ -297,39 +275,6 @@ public class IMCDefinition {
                     new ByteArrayInputStream(data), this));
         } catch (Exception e) {
             throw new IOException(e);
-        }
-    }
-
-    /**
-     * Retrieve the next message of given type from current position in the
-     * buffer
-     *
-     * @param type The type of the message to be retrieved
-     * @param buff The buffer where to read the message from
-     * @return The next IMCMessage of given type
-     * @throws Exception if end of the buffer is reached
-     */
-    public IMCMessage nextMessageOfType(int type, ByteBuffer buff)
-            throws Exception {
-        IMCMessage header = new IMCMessage(this, headerType);
-        while (true) {
-            long sync = buff.getShort() & 0xFFFF;
-            if (sync == swappedWord)
-                buff.order(ByteOrder.LITTLE_ENDIAN);
-
-            header.setValue("sync", syncWord);
-
-            deserializeAllFieldsBut(header, buff, "sync");
-
-            if (type == header.getInteger("mgid")) {
-                IMCMessage message = new IMCMessage(this, type);
-                message.setHeader((Header) header.cloneMessage(this));
-                deserializeFields(message, buff);
-                deserialize(IMCFieldType.TYPE_UINT16, buff); // footer
-                return message;
-            } else {
-                buff.position(buff.position() + header.getInteger("size") + 2);
-            }
         }
     }
 
@@ -378,24 +323,13 @@ public class IMCDefinition {
     }
 
     /**
-     * Read a message header from the given IMCInputStream
-     *
-     * @param header Where to store the read data
-     * @param iis    Where to read the header from
-     */
-    public void readHeader(IMCInputStream iis, IMCMessage header)
-            throws IOException {
-        deserializeFields(header, iis);
-    }
-
-    /**
      * Retrieve the next message from the given IMCInputStream
      *
      * @param input where to read the message from
      * @return The next message in the input
      * @throws IOException In case of any IO error (like end of input)
      */
-    public IMCMessage nextMessage(IMCInputStream input) throws IOException {
+    private IMCMessage nextMessage(IMCInputStream input) throws IOException {
         Header header = createHeader();
         input.resetCrc();
 
@@ -453,14 +387,13 @@ public class IMCDefinition {
         return nextMessage(new IMCInputStream(in, this));
     }
 
-    public Object deserialize(IMCFieldType type, DataInput in, String context)
+    private Object deserialize(IMCFieldType type, DataInput in, String context)
             throws IOException {
         switch (type) {
             case TYPE_UINT8:
                 return 0xFF & in.readByte();
             case TYPE_UINT16:
-                int v = 0xFFFF & in.readShort();
-                return v;
+                return 0xFFFF & in.readShort();
             case TYPE_UINT32:
                 return 0xFFFFFFFFL & in.readInt();
             case TYPE_INT8:
@@ -476,8 +409,7 @@ public class IMCDefinition {
             case TYPE_FP64:
                 return in.readDouble();
             case TYPE_RAWDATA:
-                int size = (Integer) deserialize(IMCFieldType.TYPE_UINT16, in,
-                        context);
+                int size = (Integer) deserialize(IMCFieldType.TYPE_UINT16, in, context);
                 byte[] data = new byte[size];
                 in.readFully(data);
                 return data;
@@ -501,11 +433,9 @@ public class IMCDefinition {
                 return message;
             case TYPE_MESSAGELIST:
                 Vector<IMCMessage> vec = new Vector<IMCMessage>();
-                int numMessages = (Integer) deserialize(IMCFieldType.TYPE_UINT16,
-                        in, context);
+                int numMessages = (Integer) deserialize(IMCFieldType.TYPE_UINT16, in, context);
                 for (int i = 0; i < numMessages; i++) {
-                    int mgid = (Integer) deserialize(IMCFieldType.TYPE_UINT16, in,
-                            context + "[" + i + "]");
+                    int mgid = (Integer) deserialize(IMCFieldType.TYPE_UINT16, in,context + "[" + i + "]");
                     if (mgid == 65535)
                         vec.add(null);
                     else {
@@ -525,7 +455,7 @@ public class IMCDefinition {
         return null;
     }
 
-    protected Object deserialize(IMCFieldType type, ByteBuffer in)
+    private Object deserialize(IMCFieldType type, ByteBuffer in)
             throws IOException {
         switch (type) {
             case TYPE_UINT8:
@@ -606,7 +536,7 @@ public class IMCDefinition {
         }
     }
 
-    protected void deserializeFields(IMCMessage message, ByteBuffer in)
+    private void deserializeFields(IMCMessage message, ByteBuffer in)
             throws IOException {
         for (String field : message.getMessageType().getFieldNames()) {
             Object o = deserialize(
@@ -624,8 +554,7 @@ public class IMCDefinition {
         }
     }
 
-    protected void deserializeAllFieldsBut(IMCMessage message, DataInput in,
-                                           String fieldToSkip) throws IOException {
+    protected void deserializeAllFieldsBut(IMCMessage message, DataInput in, String fieldToSkip) throws IOException {
         for (String field : message.getMessageType().getFieldNames()) {
             if (field.equals(fieldToSkip))
                 continue;
@@ -637,8 +566,7 @@ public class IMCDefinition {
         }
     }
 
-    private void deserializeAllFieldsBut(IMCMessage message, ByteBuffer in,
-                                         String fieldToSkip) throws IOException {
+    private void deserializeAllFieldsBut(IMCMessage message, ByteBuffer in, String fieldToSkip) throws IOException {
         for (String field : message.getMessageType().getFieldNames()) {
             if (field.equals(fieldToSkip))
                 continue;
@@ -794,7 +722,7 @@ public class IMCDefinition {
      * @param name The name to be searched for
      * @return Whether that message exists in this definition or not
      */
-    public boolean messageExists(String name) {
+    private boolean messageExists(String name) {
         return types.containsKey(name);
     }
 
@@ -889,11 +817,5 @@ public class IMCDefinition {
      */
     public final IMCAddressResolver getResolver() {
         return resolver;
-    }
-
-    public Collection<String> subtypesOf(String msgAbbrev) {
-        if (!subTypes.containsKey(msgAbbrev))
-            return new ArrayList<>();
-        return subTypes.get(msgAbbrev);
     }
 }
