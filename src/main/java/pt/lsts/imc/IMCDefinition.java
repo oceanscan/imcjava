@@ -39,13 +39,11 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInput;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Vector;
@@ -57,12 +55,12 @@ import java.util.Vector;
  * @author zp
  */
 public class IMCDefinition {
+    /** Logger instance. */
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(IMCDefinition.class);
     private static IMCDefinition instance;
     private IMCAddressResolver resolver = new IMCAddressResolver();
     private String name;
-    private String md5String;
     protected IMCMessageType headerType;
-    private IMCMessageType footerType;
     private LinkedHashMap<Integer, String> id_Abbrev = new LinkedHashMap<>();
     private LinkedHashMap<String, Integer> abbrev_Id = new LinkedHashMap<>();
     private LinkedHashMap<String, Vector<String>> subTypes = new LinkedHashMap<>();
@@ -160,10 +158,8 @@ public class IMCDefinition {
         this.version = def.getVersion();
         this.syncWord = def.getSyncWord();
         this.swappedWord = (syncWord & 0xFF) << 8 | ((syncWord & 0xFF00) >> 8);
-        this.md5String = def.getDefinitionMD5();
         this.name = def.getName();
         this.headerType = def.getHeader();
-        this.footerType = def.getFooter();
 
         for (IMCMessageType msgType : def.getMessageDefinitions()) {
             if (!msgType.isAbstract()) {
@@ -294,9 +290,7 @@ public class IMCDefinition {
         else if (sync == syncWord)
             header.setValue("sync", syncWord);
         else {
-            System.err.printf(
-                    "Found a message with invalid sync (%X) was skipped\n",
-                    sync);
+            LOG.debug("message with invalid sync {} was discarded\n", String.format("%04X", sync));
             byte[] tmp = new byte[header.getInteger("size") + 2];
             buff.get(tmp);
             return nextMessage(buff);
@@ -314,8 +308,7 @@ public class IMCDefinition {
             deserialize(IMCFieldType.TYPE_UINT16, buff); // footer
             return message;
         } else {
-            System.err.println("Unknown message type was skipped: "
-                    + header.getInteger("mgid"));
+            LOG.debug("message with unknown id was discarded: {}", header.getInteger("mgid"));
             byte[] tmp = new byte[header.getInteger("size") + 2];
             buff.get(tmp);
             return nextMessage(buff);
@@ -342,18 +335,16 @@ public class IMCDefinition {
             if (input.available() == 0 && syncFirstByte == 0xFF)
                 return null;
             else
-                throw new IOException("Unrecognized Sync word: "
-                        + String.format("%02X", syncFirstByte) + "??");
+                throw new IOException(String.format("Unrecognized first sync byte %02X",  syncFirstByte));
         }
 
-        long sync = ((syncFirstByte & 0xFF) << 8) + input.readUnsignedByte(); // input.readUnsignedShort();
+        long sync = ((syncFirstByte & 0xFF) << 8) + input.readUnsignedByte();
         if (sync == syncWord)
             input.setBigEndian(true);
         else if (sync == swappedWord)
             input.setBigEndian(false);
         else
-            throw new IOException("Unrecognized Sync word: "
-                    + String.format("%02X", sync));
+            throw new IOException(String.format("Unrecognized sync word: %02X", sync));
 
         header.setValue("sync", syncWord);
 
@@ -368,8 +359,7 @@ public class IMCDefinition {
                     + ".footer"); // footer
             return message;
         } else {
-            System.err.println("Unknown message type was skipped: "
-                    + header.getInteger("mgid"));
+            LOG.debug("message with unknown id was discarded: {}", header.getInteger("mgid"));
             input.skip(header.getInteger("size") + 2);
             return nextMessage(input);
         }
@@ -432,10 +422,10 @@ public class IMCDefinition {
                 deserializeFields(message, in);
                 return message;
             case TYPE_MESSAGELIST:
-                Vector<IMCMessage> vec = new Vector<IMCMessage>();
+                Vector<IMCMessage> vec = new Vector<>();
                 int numMessages = (Integer) deserialize(IMCFieldType.TYPE_UINT16, in, context);
                 for (int i = 0; i < numMessages; i++) {
-                    int mgid = (Integer) deserialize(IMCFieldType.TYPE_UINT16, in,context + "[" + i + "]");
+                    int mgid = (Integer) deserialize(IMCFieldType.TYPE_UINT16, in, context + "[" + i + "]");
                     if (mgid == 65535)
                         vec.add(null);
                     else {
@@ -495,8 +485,7 @@ public class IMCDefinition {
                 return message;
             case TYPE_MESSAGELIST:
                 Vector<IMCMessage> vec = new Vector<>();
-                int numMessages = (Integer) deserialize(IMCFieldType.TYPE_UINT16,
-                        in);
+                int numMessages = (Integer) deserialize(IMCFieldType.TYPE_UINT16, in);
                 for (int i = 0; i < numMessages; i++) {
                     int mgid = (Integer) deserialize(IMCFieldType.TYPE_UINT16, in);
                     if (mgid == 65535)
@@ -768,9 +757,9 @@ public class IMCDefinition {
      *               message. Example:
      *               <p>
      *               <pre>
-     *                                           IMCMessage estimatedState = new IMCMessage(&quot;EstimatedState&quot;, &quot;x&quot;, 10.0, &quot;lat&quot;,
-     *                                           		0.71, &quot;ref&quot;, &quot;NED&quot;);
-     *                                           </pre>
+     *                                                         IMCMessage estimatedState = new IMCMessage(&quot;EstimatedState&quot;, &quot;x&quot;, 10.0, &quot;lat&quot;,
+     *                                                         		0.71, &quot;ref&quot;, &quot;NED&quot;);
+     *                                                         </pre>
      * @return The created message or <strong>null</strong> if the given name is
      * not valid
      */

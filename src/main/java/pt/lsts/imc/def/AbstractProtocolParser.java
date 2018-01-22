@@ -56,11 +56,6 @@ public abstract class AbstractProtocolParser implements ProtocolDefinition {
     }
 
     @Override
-    public String getDefinitionMD5() {
-        return md5;
-    }
-
-    @Override
     public String getName() {
         return name;
     }
@@ -73,21 +68,6 @@ public abstract class AbstractProtocolParser implements ProtocolDefinition {
     @Override
     public IMCMessageType getHeader() {
         return header;
-    }
-
-    @Override
-    public IMCMessageType getFooter() {
-        return footer;
-    }
-
-    @Override
-    public Collection<ValueDescriptor> getGlobalBitfields() {
-        return bitfields.values();
-    }
-
-    @Override
-    public Collection<ValueDescriptor> getGlobalEnumerations() {
-        return enums.values();
     }
 
     @Override

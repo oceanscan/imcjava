@@ -51,11 +51,28 @@ public enum IMCFieldType {
 	TYPE_MESSAGE("message", -1, IMCMessage.class),
 	TYPE_MESSAGELIST("message-list", -1, IMCMessage[].class);
 
+	public static final LinkedHashMap<String, IMCFieldType> TYPES = new LinkedHashMap<>();
 	private String name;
 	private int size;
 	private Class<?> javaType;
 
-	private IMCFieldType(String name, int size, Class<?> javaType) {
+	static {
+		TYPES.put("uint8_t", IMCFieldType.TYPE_UINT8);
+		TYPES.put("uint16_t", IMCFieldType.TYPE_UINT16);
+		TYPES.put("uint32_t", IMCFieldType.TYPE_UINT32);
+		TYPES.put("int8_t", IMCFieldType.TYPE_INT8);
+		TYPES.put("int16_t", IMCFieldType.TYPE_INT16);
+		TYPES.put("int32_t", IMCFieldType.TYPE_INT32);
+		TYPES.put("int64_t", IMCFieldType.TYPE_INT64);
+		TYPES.put("fp32_t", IMCFieldType.TYPE_FP32);
+		TYPES.put("fp64_t", IMCFieldType.TYPE_FP64);
+		TYPES.put("message", IMCFieldType.TYPE_MESSAGE);
+		TYPES.put("plaintext", IMCFieldType.TYPE_PLAINTEXT);
+		TYPES.put("rawdata", IMCFieldType.TYPE_RAWDATA);
+		TYPES.put("message-list", IMCFieldType.TYPE_MESSAGELIST);
+	}
+
+	IMCFieldType(String name, int size, Class<?> javaType) {
 		this.name = name;
 		this.size = size;
 		this.javaType = javaType;
@@ -79,24 +96,6 @@ public enum IMCFieldType {
 
 	public Class<?> getJavaType() {
 	    return javaType;
-	}
-
-	public static final LinkedHashMap<String, IMCFieldType> TYPES = new LinkedHashMap<>();
-
-	static {
-		TYPES.put("uint8_t", IMCFieldType.TYPE_UINT8);
-		TYPES.put("uint16_t", IMCFieldType.TYPE_UINT16);
-		TYPES.put("uint32_t", IMCFieldType.TYPE_UINT32);
-		TYPES.put("int8_t", IMCFieldType.TYPE_INT8);
-		TYPES.put("int16_t", IMCFieldType.TYPE_INT16);
-		TYPES.put("int32_t", IMCFieldType.TYPE_INT32);
-		TYPES.put("int64_t", IMCFieldType.TYPE_INT64);
-		TYPES.put("fp32_t", IMCFieldType.TYPE_FP32);
-		TYPES.put("fp64_t", IMCFieldType.TYPE_FP64);
-		TYPES.put("message", IMCFieldType.TYPE_MESSAGE);
-		TYPES.put("plaintext", IMCFieldType.TYPE_PLAINTEXT);
-		TYPES.put("rawdata", IMCFieldType.TYPE_RAWDATA);
-		TYPES.put("message-list", IMCFieldType.TYPE_MESSAGELIST);
 	}
 
 	public static IMCFieldType getType(String typeName) {

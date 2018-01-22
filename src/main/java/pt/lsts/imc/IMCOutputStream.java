@@ -25,8 +25,6 @@
  * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * $Id:: IMCOutputStream.java 333 2013-01-02 11:11:44Z zepinto                 $:
  */
 
 package pt.lsts.imc;
@@ -35,7 +33,6 @@ import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.math.BigInteger;
 
 public class IMCOutputStream implements DataOutput {
     private int crc = 0;
@@ -61,20 +58,8 @@ public class IMCOutputStream implements DataOutput {
         return crc;
     }
 
-    public void resetCount() {
-        count = 0;
-    }
-
     public long getCount() {
         return count;
-    }
-
-    public boolean isBigEndian() {
-        return bigEndian;
-    }
-
-    public void setBigEndian(boolean bigEndian) {
-        this.bigEndian = bigEndian;
     }
 
     @Override
@@ -104,7 +89,6 @@ public class IMCOutputStream implements DataOutput {
 
     @Override
     public void writeByte(int v) throws IOException {
-        //output.writeByte(v);
         write(v);
     }
 
@@ -149,10 +133,6 @@ public class IMCOutputStream implements DataOutput {
         }
     }
 
-    public void writeUnsignedInt(long v) throws IOException {
-        writeInt((int) v);
-    }
-
     @Override
     public void writeInt(int v) throws IOException {
         if (!bigEndian)
@@ -164,10 +144,6 @@ public class IMCOutputStream implements DataOutput {
     }
 
     private byte writeBuffer[] = new byte[8];
-
-    public void writeUnsignedLong(BigInteger val) throws IOException {
-        writeLong(val.longValue());
-    }
 
     @Override
     public void writeLong(long v) throws IOException {
@@ -191,27 +167,6 @@ public class IMCOutputStream implements DataOutput {
             v = Short.reverseBytes((short) v);
         write((v >>> 8) & 0xFF);
         write((v >>> 0) & 0xFF);
-    }
-
-    public void writeUnsignedShort(int v) throws IOException {
-        writeShort(v);
-    }
-
-    public void writeRawdata(byte[] data) throws IOException {
-        writeShort(data.length);
-        write(data);
-    }
-
-    public void writePlaintext(String t) throws IOException {
-        writeRawdata(t.getBytes("UTF-8"));
-    }
-
-    public void writeInlineMessage(IMCMessage message) throws IOException {
-        writeShort((short) message.getInteger("mgid"));
-        if (def != null)
-            def.serializeFields(message, this);
-        else
-            IMCDefinition.getInstance().serializeFields(message, this);
     }
 
     public void writeMessage(IMCMessage message) throws IOException {

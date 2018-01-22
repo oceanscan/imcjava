@@ -46,80 +46,13 @@ import java.util.LinkedHashMap;
  */
 public class ImcSystemState {
     protected IMCDefinition definitions;
-    private LinkedHashMap<String, IMCMessage> lastMessages = new LinkedHashMap<>();
-    private LinkedHashMap<Integer, String> entities = new LinkedHashMap<>();
-    private LinkedHashMap<String, Integer> entitiesInverted = new LinkedHashMap<>();
-    private HashSet<String> receivedMessages = new HashSet<>();
+    private final LinkedHashMap<String, IMCMessage> lastMessages = new LinkedHashMap<>();
+    private final LinkedHashMap<Integer, String> entities = new LinkedHashMap<>();
+    private final LinkedHashMap<String, Integer> entitiesInverted = new LinkedHashMap<>();
+    private final HashSet<String> receivedMessages = new HashSet<>();
     private boolean gotData = false;
     private long lastReceivedTimestamp = 0;
     private boolean ignoreEntities = false;
-
-    /**
-     * This method waits (blocks) and retrieves the next message of given type
-     *
-     * @param messageType   The abbreviated name of the message to be retrieved
-     * @param timeoutMillis The maximum number of milliseconds to block
-     * @return The received IMCMessage or <strong>null</strong> if no message
-     * has been received for <strong>timeoutMillis</strong> milliseconds
-     */
-    public IMCMessage poll(String messageType, long timeoutMillis) {
-        long timeout = System.currentTimeMillis() + timeoutMillis;
-
-        long lastTime = System.currentTimeMillis();
-        IMCMessage msg = get(messageType);
-        if (msg != null)
-            lastTime = msg.getTimestampMillis();
-
-        while (System.currentTimeMillis() < timeout) {
-            IMCMessage m = get(messageType);
-
-            if (m != null && m.getTimestampMillis() != lastTime)
-                return m;
-            try {
-                Thread.sleep(50);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-    /**
-     * This method waits (blocks) and retrieves the next message of given type
-     *
-     * @param messageType   The abbreviated name of the message to be retrieved
-     * @param timeoutMillis The maximum number of milliseconds to block
-     * @return The received IMCMessage or <strong>null</strong> if no message
-     * has been received for <strong>timeoutMillis</strong> milliseconds
-     */
-    public IMCMessage poll(String messageType, String entityName,
-                           long timeoutMillis) {
-        long timeout = System.currentTimeMillis() + timeoutMillis;
-
-        int msgId = definitions.getMessageId(messageType);
-
-        if (msgId == -1)
-            return null;
-
-        long lastTime = System.currentTimeMillis();
-        IMCMessage msg = get(messageType);
-        if (msg != null)
-            lastTime = msg.getTimestampMillis();
-
-        while (System.currentTimeMillis() < timeout) {
-            IMCMessage m = get(messageType);
-
-            if (m != null && m.getTimestampMillis() != lastTime
-                    && m.getSrcEnt() == entitiesInverted.get(entityName))
-                return m;
-            try {
-                Thread.sleep(50);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
 
     /**
      * Retrieve the last received message of a certain type
@@ -163,49 +96,6 @@ public class ImcSystemState {
     }
 
     /**
-     * Wait for the next message of a certain type
-     *
-     * @param msgType       The type to be expected
-     * @param timeoutMillis The maximum amount of time to wait for the message
-     * @return The newly received message or
-     * <code>null</null> if no such message was received.
-     */
-    public <T extends IMCMessage> T poll(Class<T> msgType, long timeoutMillis) {
-        IMCMessage m = poll(msgType.getSimpleName(), timeoutMillis);
-        if (m != null)
-            try {
-                T msg = IMCDefinition.getInstance().create(msgType);
-                msg.copyFrom(m);
-                return msg;
-            } catch (Exception e) {
-            }
-        return null;
-    }
-
-    /**
-     * Wait for the next message of a certain type, coming from a specific
-     * entity
-     *
-     * @param msgType       The type to be expected
-     * @param entityName    The name of the entity that should be producing the message
-     * @param timeoutMillis The maximum amount of time to wait for the message
-     * @return The newly received message or
-     * <code>null</null> if no such message was received.
-     */
-    public <T extends IMCMessage> T poll(Class<T> msgType, String entityName,
-                                         long timeoutMillis) {
-        IMCMessage m = poll(msgType.getSimpleName(), entityName, timeoutMillis);
-        if (m != null)
-            try {
-                T msg = IMCDefinition.getInstance().create(msgType);
-                msg.copyFrom(m);
-                return msg;
-            } catch (Exception e) {
-            }
-        return null;
-    }
-
-    /**
      * Verify if a system was already visible in the network
      *
      * @return <strong>false</strong> if this state is empty (no messages were
@@ -231,7 +121,7 @@ public class ImcSystemState {
      *
      * @param msg An {@link EntityList} IMC message
      */
-    void setEntityList(IMCMessage msg) {
+    private void setEntityList(IMCMessage msg) {
         entities.clear();
         putEntityList(msg);
     }
@@ -241,7 +131,7 @@ public class ImcSystemState {
      *
      * @param msg An {@link EntityList} IMC message
      */
-    void putEntityList(IMCMessage msg) {
+    private void putEntityList(IMCMessage msg) {
         if (!msg.getString("op").equals("REPORT") || ignoreEntities)
             return;
 
@@ -296,30 +186,6 @@ public class ImcSystemState {
         lastMessages.clear();
         entities.clear();
         entitiesInverted.clear();
-    }
-
-    /**
-     * Retrieve all messages of the given type in this state (divided by entity
-     * that created them)
-     *
-     * @param messageAbbrev The name of the message to be retrieved
-     * @return A map from Strings to messages as follows:<br/>
-     * <blockquote> "MessageAbbrev" -> IMCMessage<br/>
-     * "MessageAbbrev.Entity1" -> IMCMessage<br/>
-     * "MessageAbbrev.Entity2" -> IMCMessage<br/>
-     * ... </blockquote> Thus, the last received message (from all
-     * entities) will be repeated in the "MessageAbbrev" entry of the
-     * HashMap
-     */
-    public final LinkedHashMap<String, IMCMessage> lastMessagesOfType(
-            String messageAbbrev) {
-        LinkedHashMap<String, IMCMessage> ret = new LinkedHashMap<>();
-
-        for (String key : lastMessages.keySet()) {
-            if (key.startsWith(messageAbbrev))
-                ret.put(key, lastMessages.get(key));
-        }
-        return ret;
     }
 
     public Object expr(String expression) {
@@ -425,7 +291,6 @@ public class ImcSystemState {
      * @param field The name of the field to be retrieved
      * @param type  The value of the field in the last received message of given
      *              type (independently of originating entity)
-     * @return
      */
     public final <T> T get(int msgId, String field, Class<T> type)
             throws ClassCastException {
@@ -457,12 +322,11 @@ public class ImcSystemState {
      */
     @SuppressWarnings("unchecked")
     public final <T> T get(String query, Class<T> type) {
-        // System.out.println(lastMessages);
         String parts[] = query.split("\\.");
         if (parts.length == 1 && type == IMCMessage.class) {
             return (T) get(parts[0]);
         } else if (parts.length == 1 && type == IMCMessage[].class) {
-            HashSet<IMCMessage> result = new HashSet<IMCMessage>();
+            HashSet<IMCMessage> result = new HashSet<>();
 
             for (String m : lastMessages.keySet()) {
                 if (m.startsWith(query))
@@ -554,15 +418,11 @@ public class ImcSystemState {
         return definitions;
     }
 
-    public boolean isIgnoreEntities() {
-        return ignoreEntities;
-    }
-
     public void setIgnoreEntities(boolean ignoreEntities) {
         this.ignoreEntities = ignoreEntities;
     }
 
-    public long millisSinceLastMessage() {
+    private long millisSinceLastMessage() {
         return System.currentTimeMillis() - lastReceivedTimestamp;
     }
 }

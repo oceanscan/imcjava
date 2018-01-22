@@ -88,13 +88,8 @@ public class IMCFragmentHandler {
      * @return The resulting assembled message
      * @throws Exception In case the fragments do not result in a valid message
      */
-    public IMCMessage reassemble(List<MessagePart> parts) throws Exception {
-        Collections.sort(parts, new Comparator<MessagePart>() {
-            @Override
-            public int compare(MessagePart o1, MessagePart o2) {
-                return o1.getFragNumber() - o2.getFragNumber();
-            }
-        });
+    private IMCMessage reassemble(List<MessagePart> parts) throws Exception {
+        parts.sort(Comparator.comparingInt(MessagePart::getFragNumber));
 
         int totalSize = 0;
         for (MessagePart p : parts) {

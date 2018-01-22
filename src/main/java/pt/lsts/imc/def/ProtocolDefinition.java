@@ -38,17 +38,9 @@ public interface ProtocolDefinition {
 
     String getName();
 
-    String getDefinitionMD5();
-
     long getSyncWord();
 
     IMCMessageType getHeader();
-
-    IMCMessageType getFooter();
-
-    Collection<ValueDescriptor> getGlobalEnumerations();
-
-    Collection<ValueDescriptor> getGlobalBitfields();
 
     Collection<IMCMessageType> getMessageDefinitions();
 }

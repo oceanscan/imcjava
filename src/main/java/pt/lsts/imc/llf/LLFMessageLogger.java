@@ -55,17 +55,7 @@ public class LLFMessageLogger {
         dir = new File(directory);
     }
 
-    public void flushLogs() {
-        for (BufferedWriter bw : writers.values()) {
-            try {
-                bw.flush();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    protected String[] getHeaderFields(IMCMessage m) {
+    private String[] getHeaderFields(IMCMessage m) {
         if (headerFields == null) {
             headerFields = new String[]{"timestamp", "src", "src_ent", "dst", "dst_ent"};
             if (m.getHeader().getTypeOf("timestamp") == null)
@@ -123,8 +113,7 @@ public class LLFMessageLogger {
         return count;
     }
 
-    public void writeHeader(IMCMessage message) throws IOException {
-
+    private void writeHeader(IMCMessage message) throws IOException {
         if (startTime <= 0)
             startTime = message.getTimestamp();
         int id = message.getMessageType().getId();
@@ -165,6 +154,7 @@ public class LLFMessageLogger {
                 e.printStackTrace();
             }
         }
+
         writers.clear();
     }
 }

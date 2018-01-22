@@ -207,14 +207,4 @@ public class IMCUtil {
         }
         return ret + "</table>";
     }
-
-    public static int computeCrc16(byte[] data, int startPos, long length, int curCrc) {
-        int crc = curCrc;
-
-        for (int i = startPos; i < length; i++) {
-            crc = (crc >> 8) ^ crc16_table[(crc ^ data[i]) & 0xff];
-        }
-
-        return crc;
-    }
 }

@@ -105,9 +105,4 @@ public class GenerationUtils {
 	public static InputStream getImcXml(File repo) throws IOException {
 		return new FileInputStream(new File(repo, "IMC.xml"));
 	}
-
-	public static Map<String, Integer> getImcAddresses() {
-		IMCAddressResolver resolver = new IMCAddressResolver();
-		return resolver.getAddresses();
-	}
 }

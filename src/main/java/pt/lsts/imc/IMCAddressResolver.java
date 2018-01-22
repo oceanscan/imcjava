@@ -25,25 +25,13 @@
  * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * $Id:: IMCAddressResolver.java 333 2013-01-02 11:11:44Z zepinto              $:
  */
 package pt.lsts.imc;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * This class is used to store known imc names (mapping from their imc ids)
@@ -55,31 +43,12 @@ public class IMCAddressResolver {
 	private LinkedHashMap<Integer, String> addresses = new LinkedHashMap<>();
 	private LinkedHashMap<String, Integer> addressesReverse = new LinkedHashMap<>();
 	private LinkedHashMap<Integer, LinkedHashMap<Integer, String>> knownEntities = new LinkedHashMap<>();
-	private static final int DEFAULT_ID = (1 << 16) - 1;
 
 	/**
 	 * Created a new resolver that loads all the static imc addresses from the
 	 * IMC definitions
 	 */
 	public IMCAddressResolver() {
-		for (Entry<String, Integer> entry : ImcStringDefs.IMC_ADDRESSES
-				.entrySet())
-			addEntry(entry.getValue(), entry.getKey());
-	}
-
-	/**
-	 * Creates a new resolver loading initial imc addresses from given stream
-	 *
-	 * @param is
-	 *            A XML stream with IMC_Addresses.xml forma
-	 */
-	public IMCAddressResolver(InputStream is) {
-		try {
-			loadImcAddresses(is);
-			return;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	/**
@@ -96,7 +65,7 @@ public class IMCAddressResolver {
 	}
 
 	/**
-	 * Given an IMC name retrives its IMC id
+	 * Given an IMC name retrieves its IMC id
 	 *
 	 * @param imcName
 	 *            The IMC name to look for
@@ -134,7 +103,7 @@ public class IMCAddressResolver {
 	 */
 	public void setEntityName(int imcId, int entityId, String name) {
 		if (!knownEntities.containsKey(imcId))
-			knownEntities.put(imcId, new LinkedHashMap<Integer, String>());
+			knownEntities.put(imcId, new LinkedHashMap<>());
 		knownEntities.get(imcId).put(entityId, name);
 	}
 
@@ -176,90 +145,4 @@ public class IMCAddressResolver {
 			return null;
 		return knownEntities.get(src).get(src_ent);
 	}
-
-	/**
-	 * Resolve the name of an entity Id
-	 *
-	 * @param sourceName
-	 *            The source system name
-	 * @param src_ent
-	 *            The entity Id
-	 * @return The found entity name or <code>null</code> in case the entity was
-	 *         not found.
-	 */
-	public String resolveEntity(String sourceName, int src_ent) {
-		int src = resolve(sourceName);
-		if (src == -1)
-			return null;
-
-		if (!knownEntities.containsKey(src))
-			return null;
-		return knownEntities.get(src).get(src_ent);
-	}
-
-	/**
-	 * Retrieve the addresses table
-	 *
-	 * @return The currently found addresses. Bear in mind that if you try to
-	 *         change this map, an Exception will be thrown at run-time.
-	 */
-	public Map<String, Integer> getAddresses() {
-		return Collections.unmodifiableMap(addressesReverse);
-	}
-
-	/**
-	 * Given a XML input stream adds the found IMC addresses to the existing
-	 * ones
-	 */
-	protected void addImcAddresses(InputStream is) throws IOException {
-		if (is == null) {
-			System.err.println("Failed to load imc addresses table");
-			return;
-		}
-		addEntry(DEFAULT_ID, "*");
-
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		dbf.setIgnoringComments(true);
-		dbf.setIgnoringElementContentWhitespace(true);
-
-		try {
-			DocumentBuilder builder = dbf.newDocumentBuilder();
-			Document doc = builder.parse(is);
-			Element root = doc.getDocumentElement();
-
-			NodeList addresses = root.getElementsByTagName("address");
-
-			for (int i = 0; i < addresses.getLength(); i++) {
-				Node address = addresses.item(i);
-				String id = address.getAttributes().getNamedItem("id")
-						.getTextContent();
-				String name = address.getAttributes().getNamedItem("name")
-						.getTextContent();
-				int imcid = 0;
-				if (id.contains("x")) {
-					id = id.substring(id.indexOf('x') + 1);
-					imcid = Integer.parseInt(id.substring(id.indexOf('x') + 1),
-							16);
-				} else {
-					imcid = Integer.parseInt(id);
-				}
-				addEntry(imcid, name);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Given a XML input stream resets the IMC addresses table to the new found
-	 * addresses
-	 */
-	protected void loadImcAddresses(InputStream is) throws IOException {
-		addresses.clear();
-		addressesReverse.clear();
-		knownEntities.clear();
-
-		addImcAddresses(is);
-	}
-
 }

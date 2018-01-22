@@ -44,13 +44,11 @@ import pt.lsts.imc.IMCMessage;
 import pt.lsts.imc.gz.MultiMemberGZIPInputStream;
 
 public class LSF2LLF {
-
-	protected Vector<IConverterListener> listeners = new Vector<IConverterListener>();
-	protected boolean useSeparateThread = false;
-
+	protected Vector<IConverterListener> listeners = new Vector<>();
+	private boolean useSeparateThread = false;
 	protected Exception error = null;
 	protected boolean complete = false;
-	protected boolean abortRqst = false;
+	private boolean abortRqst = false;
 
 	/**
 	 * <p>
@@ -162,8 +160,7 @@ public class LSF2LLF {
 	 * @param decimalHouses
 	 * @return
 	 */
-	public static String parseToEngineeringRadix2Notation(double val,
-			int decimalHouses) {
+	private static String parseToEngineeringRadix2Notation(double val, int decimalHouses) {
 		int mulTmp = 0;
 		int signal = 1;
 		if (val < 0)
@@ -268,22 +265,7 @@ public class LSF2LLF {
 		listeners.remove(listener);
 	}
 
-	public void setUseSeparateThread(boolean useSeparateThread) {
-		this.useSeparateThread = useSeparateThread;
-	}
-
-	public boolean isConversionDone() throws Exception {
-		if (error != null)
-			throw error;
-		return complete;
-	}
-
-	public void abortConversion() {
-		this.abortRqst = true;
-	}
-
 	public void convert(File dir) throws Exception {
-
 		File data_lsf = null;
 
 		for (File f : dir.listFiles()) {
@@ -320,8 +302,7 @@ public class LSF2LLF {
 		}
 	}
 
-	public void convertInBackground(IMCDefinition defs, File data_lsf)
-			throws Exception {
+	private void convertInBackground(IMCDefinition defs, File data_lsf) {
 		final IMCDefinition d = defs;
 		final File lsf = data_lsf;
 		error = null;
@@ -475,28 +456,24 @@ public class LSF2LLF {
 	public static void main(String[] args) throws Exception {
 		final long startTime = System.currentTimeMillis();
 		LSF2LLF converter = new LSF2LLF();
-		converter.addListener(new IConverterListener() {
-			public void update(long filesize, long curPosition,
-					long messageCount) {
-
-				if (filesize > 0) {
-					System.out.print("\rProcessed "
-							+ String.format("%3d", curPosition * 100 / filesize)
-							+ "% ("
-							+ messageCount
-							+ " msgs, "
-							+ parseToEngineeringRadix2Notation(
-									curPosition, 1) + "B)           ");
-				}
-				else {
-					System.out.print("\rProcessed "
-							+ messageCount
-							+ " msgs, "
-							+ parseToEngineeringRadix2Notation(
-									curPosition, 1) + "B           ");
-				}
-			}
-		});
+		converter.addListener((filesize, curPosition, messageCount) -> {
+            if (filesize > 0) {
+                System.out.print("\rProcessed "
+                        + String.format("%3d", curPosition * 100 / filesize)
+                        + "% ("
+                        + messageCount
+                        + " msgs, "
+                        + parseToEngineeringRadix2Notation(
+                                curPosition, 1) + "B)           ");
+            }
+            else {
+                System.out.print("\rProcessed "
+                        + messageCount
+                        + " msgs, "
+                        + parseToEngineeringRadix2Notation(
+                                curPosition, 1) + "B           ");
+            }
+        });
 
 		if (args.length == 0)
 			converter.convert(new File("."));

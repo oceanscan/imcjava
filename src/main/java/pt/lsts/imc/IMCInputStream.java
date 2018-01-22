@@ -39,7 +39,6 @@ import java.io.InputStream;
 import java.math.BigInteger;
 
 public class IMCInputStream extends FilterInputStream implements DataInput {
-
     private DataInputStream input;
     private boolean bigEndian = true;
     private int crc = 0;
@@ -63,7 +62,7 @@ public class IMCInputStream extends FilterInputStream implements DataInput {
         return crc;
     }
 
-    public int resetCrc(int crc) {
+    private int resetCrc(int crc) {
         int before = this.crc;
         this.crc = crc;
         return before;
@@ -74,7 +73,6 @@ public class IMCInputStream extends FilterInputStream implements DataInput {
     }
 
     public int resync(int syncword) throws IOException {
-
         int byte1, byte2, count = 0, b1 = 0, b2 = 0;
 
         if (bigEndian) {

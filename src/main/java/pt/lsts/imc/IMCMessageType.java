@@ -83,10 +83,6 @@ public class IMCMessageType {
         return flags;
     }
 
-    public boolean hasFlag(String flag) {
-        return getFlags().contains(flag);
-    }
-
     public Object getDefaultValue(String field) {
         return defaultValues.get(field);
     }
@@ -94,30 +90,6 @@ public class IMCMessageType {
     public int getOffsetOf(String field) {
         Integer offset = offsets.get(field);
         return (offset == null) ? -1 : offset;
-    }
-
-    public static boolean isNumericType(String type) {
-        String t = type.toLowerCase();
-        if (t.startsWith("int"))
-            return true;
-        if (t.startsWith("uint"))
-            return true;
-        if (t.startsWith("fp"))
-            return true;
-        if (t.equals("enumerated"))
-            return true;
-        if (t.equals("bitmask"))
-            return true;
-
-        return false;
-    }
-
-    public static boolean isInitializable(String type) {
-        String t = type.toLowerCase();
-        if (!t.startsWith("message"))
-            return true;
-
-        return false;
     }
 
     public void addField(String abbrv, String fieldType, String unit, String min, String max) {
@@ -257,10 +229,6 @@ public class IMCMessageType {
         return computedLength;
     }
 
-    public void setComputedLength(int computedLength) {
-        this.computedLength = computedLength;
-    }
-
     public int getSize() {
         return size;
     }
@@ -289,14 +257,6 @@ public class IMCMessageType {
         return imcVersion;
     }
 
-    public void setImcVersion(String imcVersion) {
-        this.imcVersion = imcVersion;
-    }
-
-    public void setFieldDescription(String field, String description) {
-        descriptions.put(field, description);
-    }
-
     public void setFieldName(String field, String fullname) {
         fullnames.put(field, fullname);
     }
@@ -318,13 +278,6 @@ public class IMCMessageType {
 
     public void setMessageDescription(String description) {
         this.description = description;
-    }
-
-    /**
-     * @return the defaultValues
-     */
-    public LinkedHashMap<String, Object> getDefaultValues() {
-        return defaultValues;
     }
 
     public void setFieldSubtype(String abbrev, String subtype) {

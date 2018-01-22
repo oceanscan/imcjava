@@ -33,6 +33,8 @@ package pt.lsts.imc;
 
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -127,9 +129,9 @@ public class IMCMessage implements Comparable<IMCMessage> {
      *                        Example:
      *                        <p>
      *                        <pre>
-     *                                                                                                                    IMCMessage state = new IMCMessage(&quot;EstimatedState&quot;, &quot;ref&quot;, &quot;NED_ONLY&quot;, &quot;x&quot;,
-     *                                                                                                                    		10.343, y, -100);
-     *                                                                                                                    </pre>
+     *                                                                                                                                                                  IMCMessage state = new IMCMessage(&quot;EstimatedState&quot;, &quot;ref&quot;, &quot;NED_ONLY&quot;, &quot;x&quot;,
+     *                                                                                                                                                                  		10.343, y, -100);
+     *                                                                                                                                                                  </pre>
      */
     public IMCMessage(String abbreviatedName, Object... values) {
         this(abbreviatedName);
@@ -1242,7 +1244,7 @@ public class IMCMessage implements Comparable<IMCMessage> {
                     if (bytes == null) {
                         obj.add(fieldName, "");
                     } else {
-                        obj.add(fieldName, Base64.encode(bytes));
+                        obj.add(fieldName, Hex.encodeHexString(bytes));
                     }
                     break;
                 case TYPE_MESSAGE:
@@ -1336,7 +1338,7 @@ public class IMCMessage implements Comparable<IMCMessage> {
                     break;
                 case TYPE_RAWDATA:
                     if (getRawData(fieldName) != null)
-                        sb.append(Base64.encode(getRawData(fieldName)));
+                        sb.append(Hex.encodeHexString(getRawData(fieldName)));
                     break;
                 case TYPE_MESSAGELIST:
                     sb.append("\n");
@@ -1447,10 +1449,11 @@ public class IMCMessage implements Comparable<IMCMessage> {
                         msg.setValue(field, el.getTextContent());
                         break;
                     case TYPE_RAWDATA:
-                        msg.setValue(
-                                field,
-                                Base64.decode(el.getTextContent().replaceAll("\n",
-                                        "")));
+                        try {
+                            msg.setValue(field, Hex.decodeHex(el.getTextContent()));
+                        } catch (DecoderException ignored) {
+
+                        }
                         break;
                     case TYPE_MESSAGE:
                         NodeList inner = el.getChildNodes();
@@ -1475,7 +1478,6 @@ public class IMCMessage implements Comparable<IMCMessage> {
             }
         }
         return msg;
-
     }
 
     /**

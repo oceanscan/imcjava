@@ -33,8 +33,10 @@ import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 public class ValueDescriptor {
-    private String name, abbrev, prefix;
-    private LinkedHashMap<Long, String> values = new LinkedHashMap<>();
+    private String name;
+    private String abbrev;
+    private String prefix;
+    private final LinkedHashMap<Long, String> values = new LinkedHashMap<>();
 
     public String getName() {
         return name;
