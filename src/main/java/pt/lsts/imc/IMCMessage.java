@@ -37,7 +37,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import pt.lsts.neptus.messages.InvalidMessageException;
 import pt.lsts.neptus.messages.listener.MessageInfo;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -49,8 +48,12 @@ import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Vector;
 
 /**
  * This class holds a message structure, including header and payload.<br/>
@@ -123,9 +126,9 @@ public class IMCMessage implements Comparable<IMCMessage> {
      *                        Example:
      *                        <p>
      *                        <pre>
-     *                                                                                             IMCMessage state = new IMCMessage(&quot;EstimatedState&quot;, &quot;ref&quot;, &quot;NED_ONLY&quot;, &quot;x&quot;,
-     *                                                                                             		10.343, y, -100);
-     *                                                                                             </pre>
+     *                                                                                                                    IMCMessage state = new IMCMessage(&quot;EstimatedState&quot;, &quot;ref&quot;, &quot;NED_ONLY&quot;, &quot;x&quot;,
+     *                                                                                                                    		10.343, y, -100);
+     *                                                                                                                    </pre>
      */
     public IMCMessage(String abbreviatedName, Object... values) {
         this(abbreviatedName);
@@ -1180,10 +1183,6 @@ public class IMCMessage implements Comparable<IMCMessage> {
 
     public boolean isPeriodic() {
         return hasFlag("periodic");
-    }
-
-    public void validate() throws InvalidMessageException {
-        // TODO
     }
 
     /**
