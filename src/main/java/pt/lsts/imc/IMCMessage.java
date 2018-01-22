@@ -37,7 +37,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import pt.lsts.neptus.messages.listener.MessageInfo;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -46,6 +45,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
+import java.net.InetSocketAddress;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.util.Collection;
@@ -69,7 +69,8 @@ public class IMCMessage implements Comparable<IMCMessage> {
     public static final int DEFAULT_ENTITY_ID = 255;
     public static final int DEFAULT_SYSTEM_ID = 65535;
     protected IMCDefinition definitions = null;
-    private MessageInfo messageInfo = null;
+    /** Address of the node that published this message. */
+    private InetSocketAddress publisherAddress;
 
     /**
      * Creates a new (dummy) message
@@ -1504,13 +1505,5 @@ public class IMCMessage implements Comparable<IMCMessage> {
             return -1;
         else
             return 0;
-    }
-
-    public final MessageInfo getMessageInfo() {
-        return messageInfo;
-    }
-
-    public final void setMessageInfo(MessageInfo messageInfo) {
-        this.messageInfo = messageInfo;
     }
 }
