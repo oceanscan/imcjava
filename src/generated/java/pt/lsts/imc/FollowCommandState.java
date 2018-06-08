@@ -30,22 +30,17 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message UamTxStatus (816)<br/>
- *  This message shall be used by acoustic modem drivers to send updates<br/>
- *  on the transmission status of data frames.<br/>
+ *  IMC Message Follow Command State (498)<br/>
  */
 
-public class UamTxStatus extends IMCMessage {
+public class FollowCommandState extends IMCMessage {
 
-	public enum VALUE {
-		DONE(0),
-		FAILED(1),
-		CANCELED(2),
-		BUSY(3),
-		INV_ADDR(4),
-		IP(5),
-		UNSUPPORTED(6),
-		INV_SIZE(7);
+	public enum STATE {
+		WAIT(1),
+		MOVING(2),
+		STOPPED(3),
+		BAD_COMMAND(4),
+		TIMEOUT(5);
 
 		protected long value;
 
@@ -53,18 +48,18 @@ public class UamTxStatus extends IMCMessage {
 			return value;
 		}
 
-		VALUE(long value) {
+		STATE(long value) {
 			this.value = value;
 		}
 	}
 
-	public static final int ID_STATIC = 816;
+	public static final int ID_STATIC = 498;
 
-	public UamTxStatus() {
+	public FollowCommandState() {
 		super(ID_STATIC);
 	}
 
-	public UamTxStatus(IMCMessage msg) {
+	public FollowCommandState(IMCMessage msg) {
 		super(ID_STATIC);
 		try{
 			copyFrom(msg);
@@ -74,20 +69,20 @@ public class UamTxStatus extends IMCMessage {
 		}
 	}
 
-	public UamTxStatus(IMCDefinition defs) {
+	public FollowCommandState(IMCDefinition defs) {
 		super(defs, ID_STATIC);
 	}
 
-	public static UamTxStatus create(Object... values) {
-		UamTxStatus m = new UamTxStatus();
+	public static FollowCommandState create(Object... values) {
+		FollowCommandState m = new FollowCommandState();
 		for (int i = 0; i < values.length-1; i+= 2)
 			m.setValue(values[i].toString(), values[i+1]);
 		return m;
 	}
 
-	public static UamTxStatus clone(IMCMessage msg) throws Exception {
+	public static FollowCommandState clone(IMCMessage msg) throws Exception {
 
-		UamTxStatus m = new UamTxStatus();
+		FollowCommandState m = new FollowCommandState();
 		if (msg == null)
 			return m;
 		if(msg.definitions != m.definitions){
@@ -102,35 +97,76 @@ public class UamTxStatus extends IMCMessage {
 		return m;
 	}
 
-	public UamTxStatus(int seq, VALUE value, String error) {
+	public FollowCommandState(int control_src, short control_ent, Command command, STATE state) {
 		super(ID_STATIC);
-		setSeq(seq);
-		setValue(value);
-		if (error != null)
-			setError(error);
+		setControlSrc(control_src);
+		setControlEnt(control_ent);
+		if (command != null)
+			setCommand(command);
+		setState(state);
 	}
 
 	/**
-	 *  @return Sequence Id - uint16_t
+	 *  @return Controlling Source - uint16_t
 	 */
-	public int getSeq() {
-		return getInteger("seq");
+	public int getControlSrc() {
+		return getInteger("control_src");
 	}
 
 	/**
-	 *  @param seq Sequence Id
+	 *  @param control_src Controlling Source
 	 */
-	public UamTxStatus setSeq(int seq) {
-		values.put("seq", seq);
+	public FollowCommandState setControlSrc(int control_src) {
+		values.put("control_src", control_src);
 		return this;
 	}
 
 	/**
-	 *  @return Value (enumerated) - uint8_t
+	 *  @return Controlling Entity - uint8_t
 	 */
-	public VALUE getValue() {
+	public short getControlEnt() {
+		return (short) getInteger("control_ent");
+	}
+
+	/**
+	 *  @param control_ent Controlling Entity
+	 */
+	public FollowCommandState setControlEnt(short control_ent) {
+		values.put("control_ent", control_ent);
+		return this;
+	}
+
+	/**
+	 *  @return Command - message
+	 */
+	public Command getCommand() {
 		try {
-			VALUE o = VALUE.valueOf(getMessageType().getFieldPossibleValues("value").get(getLong("value")));
+			IMCMessage obj = getMessage("command");
+			if (obj instanceof Command)
+				return (Command) obj;
+			else
+				return null;
+		}
+		catch (Exception e) {
+			return null;
+		}
+
+	}
+
+	/**
+	 *  @param command Command
+	 */
+	public FollowCommandState setCommand(Command command) {
+		values.put("command", command);
+		return this;
+	}
+
+	/**
+	 *  @return State (enumerated) - uint8_t
+	 */
+	public STATE getState() {
+		try {
+			STATE o = STATE.valueOf(getMessageType().getFieldPossibleValues("state").get(getLong("state")));
 			return o;
 		}
 		catch (Exception e) {
@@ -138,50 +174,35 @@ public class UamTxStatus extends IMCMessage {
 		}
 	}
 
-	public String getValueStr() {
-		return getString("value");
+	public String getStateStr() {
+		return getString("state");
 	}
 
-	public short getValueVal() {
-		return (short) getInteger("value");
+	public short getStateVal() {
+		return (short) getInteger("state");
 	}
 
 	/**
-	 *  @param value Value (enumerated)
+	 *  @param state State (enumerated)
 	 */
-	public UamTxStatus setValue(VALUE value) {
-		values.put("value", value.value());
+	public FollowCommandState setState(STATE state) {
+		values.put("state", state.value());
 		return this;
 	}
 
 	/**
-	 *  @param value Value (as a String)
+	 *  @param state State (as a String)
 	 */
-	public UamTxStatus setValueStr(String value) {
-		setValue("value", value);
+	public FollowCommandState setStateStr(String state) {
+		setValue("state", state);
 		return this;
 	}
 
 	/**
-	 *  @param value Value (integer value)
+	 *  @param state State (integer value)
 	 */
-	public UamTxStatus setValueVal(short value) {
-		setValue("value", value);
-		return this;
-	}
-
-	/**
-	 *  @return Error Message - plaintext
-	 */
-	public String getError() {
-		return getString("error");
-	}
-
-	/**
-	 *  @param error Error Message
-	 */
-	public UamTxStatus setError(String error) {
-		values.put("error", error);
+	public FollowCommandState setStateVal(short state) {
+		setValue("state", state);
 		return this;
 	}
 

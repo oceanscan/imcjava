@@ -452,6 +452,12 @@ public class MessageFactory {
 				return new FollowPoint(defs);
 			case Alignment.ID_STATIC:
 				return new Alignment(defs);
+			case FollowCommand.ID_STATIC:
+				return new FollowCommand(defs);
+			case Command.ID_STATIC:
+				return new Command(defs);
+			case FollowCommandState.ID_STATIC:
+				return new FollowCommandState(defs);
 			case VehicleState.ID_STATIC:
 				return new VehicleState(defs);
 			case VehicleCommand.ID_STATIC:

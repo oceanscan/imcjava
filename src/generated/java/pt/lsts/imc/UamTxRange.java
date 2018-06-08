@@ -31,6 +31,7 @@ package pt.lsts.imc;
 
 /**
  *  IMC Message UamTxRange (818)<br/>
+ *  Request an acoustic modem driver to measure the distance to another system.<br/>
  */
 
 public class UamTxRange extends IMCMessage {
