@@ -1,9 +1,9 @@
 /*
  * Below is the copyright agreement for IMCJava.
- * 
+ *
  * Copyright (c) 2010-2016, Laboratório de Sistemas e Tecnologia Subaquática
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     - Redistributions of source code must retain the above copyright
@@ -11,19 +11,19 @@
  *     - Redistributions in binary form must reproduce the above copyright
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
- *     - Neither the names of IMC, LSTS, IMCJava nor the names of its 
- *       contributors may be used to endorse or promote products derived from 
+ *     - Neither the names of IMC, LSTS, IMCJava nor the names of its
+ *       contributors may be used to endorse or promote products derived from
  *       this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL LABORATORIO DE SISTEMAS E TECNOLOGIA SUBAQUATICA
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE 
- * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT 
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+ * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package pt.lsts.util;
@@ -35,7 +35,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Vector;
 
-import pt.lsts.imc.CommsRelay;
 import pt.lsts.imc.CompassCalibration;
 import pt.lsts.imc.Elevator;
 import pt.lsts.imc.FollowPath;
@@ -56,7 +55,7 @@ import pt.lsts.util.PlanUtilities.Waypoint.TYPE;
 
 /**
  * This class provides some utility methods to work with IMC plans
- * 
+ *
  * @author zp
  */
 public class PlanUtilities {
@@ -66,28 +65,28 @@ public class PlanUtilities {
 	 * This method calculates the maneuver sequence present in a plan. In case
 	 * of cyclic plans, it will retrieve the first sequence of maneuvers that
 	 * include one repeated maneuver.
-	 * 
+	 *
 	 * @param plan
-	 *            The plan to parsed.         
+	 *            The plan to parsed.
 	 * @return a maneuver sequence.
 	 * @see #getManeuverSequence(PlanSpecification)
 	 */
 	public static List<Maneuver> getManeuverCycleOrSequence(PlanSpecification plan) {
 		ArrayList<Maneuver> ret = new ArrayList<Maneuver>();
 
-		LinkedHashMap<String, Maneuver> maneuvers = new LinkedHashMap<String, Maneuver>();
-		LinkedHashMap<String, String> transitions = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, Maneuver> maneuvers = new LinkedHashMap<>();
+		LinkedHashMap<String, String> transitions = new LinkedHashMap<>();
 
 		for (PlanManeuver m : plan.getManeuvers())
 			maneuvers.put(m.getManeuverId(), m.getData());
 
 		for (PlanTransition pt : plan.getTransitions()) {
-			if (transitions.containsKey(pt.getSourceMan()))				
+			if (transitions.containsKey(pt.getSourceMan()))
 				continue;
 			transitions.put(pt.getSourceMan(), pt.getDestMan());
 		}
 
-		Vector<String> visited = new Vector<String>();
+		Vector<String> visited = new Vector<>();
 		String man = plan.getStartManId();
 
 		while (man != null) {
@@ -102,13 +101,13 @@ public class PlanUtilities {
 		}
 
 		return ret;
-		
+
 	}
 	/**
 	 * This method calculates the maneuver sequence present in a plan. In case
 	 * of cyclic plans, it will retrieve the first non-repeating sequence of
 	 * maneuvers.
-	 * 
+	 *
 	 * @param plan
 	 *            The plan to parsed.
 	 * @return a maneuver sequence.
@@ -116,8 +115,8 @@ public class PlanUtilities {
 	public static List<Maneuver> getManeuverSequence(PlanSpecification plan) {
 		ArrayList<Maneuver> ret = new ArrayList<Maneuver>();
 
-		LinkedHashMap<String, Maneuver> maneuvers = new LinkedHashMap<String, Maneuver>();
-		LinkedHashMap<String, String> transitions = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, Maneuver> maneuvers = new LinkedHashMap<>();
+		LinkedHashMap<String, String> transitions = new LinkedHashMap<>();
 
 		for (PlanManeuver m : plan.getManeuvers())
 			maneuvers.put(m.getManeuverId(), m.getData());
@@ -150,7 +149,7 @@ public class PlanUtilities {
 
 	/**
 	 * Given a PlanSpecification message, computes its list of WGS84 locations
-	 * 
+	 *
 	 * @param plan
 	 *            a PlanSpecification message
 	 * @return a Collection of locations of the type double[2] = {latitude,
@@ -168,7 +167,7 @@ public class PlanUtilities {
 
 	/**
 	 * This method parses an IMC plan and calculates its waypoints.
-	 * 
+	 *
 	 * @param plan
 	 *            An IMC plan to be parsed
 	 * @return A list of waypoints found in the plan.
@@ -186,7 +185,7 @@ public class PlanUtilities {
 	/**
 	 * Similar to {@link #computeLocations(Maneuver)} but in this case returning
 	 * waypoint structures
-	 * 
+	 *
 	 * @param m
 	 *            The Maneuver to be converted to a list of waypoints
 	 * @return a Collection of waypoints
@@ -201,12 +200,12 @@ public class PlanUtilities {
 			return waypoints;
 
 		start.setSpeed(getSpeed(m));
-		
+
 		switch (m.getMgid()) {
 		case Goto.ID_STATIC:
 		case YoYo.ID_STATIC:
 		case PopUp.ID_STATIC:
-			start.setType(TYPE.REGULAR);			
+			start.setType(TYPE.REGULAR);
 			waypoints.add(start);
 			return waypoints;
 		case Loiter.ID_STATIC:
@@ -225,10 +224,6 @@ public class PlanUtilities {
 			return waypoints;
 		case StationKeeping.ID_STATIC:
 			start.setType(TYPE.STATION_KEEP);
-			waypoints.add(start);
-			return waypoints;
-		case CommsRelay.ID_STATIC:
-			start.setType(TYPE.OTHER);
 			waypoints.add(start);
 			return waypoints;
 		case Elevator.ID_STATIC:
@@ -290,19 +285,19 @@ public class PlanUtilities {
 	public static float getSpeed(Maneuver m) {
 		if (m.getTypeOf("speed") == null)
 			return 0;
-		
+
 		if (m.getTypeOf("speed_units") == null)
 			return 0;
 		if (m.getString("speed_units").equals("RPM"))
-			return m.getFloat("speed") / 900.0f;		
+			return m.getFloat("speed") / 900.0f;
 		else if (m.getString("speed_units").equals("METERS_PS"))
 			return m.getFloat("speed");
 		return 0;
 	}
-	
+
 	/**
 	 * Compute the start location for a given maneuver
-	 * 
+	 *
 	 * @param m
 	 *            The maneuver
 	 * @return The first waypoint for the maneuver or <code>null</code> if no
@@ -370,7 +365,7 @@ public class PlanUtilities {
 
 	/**
 	 * XY Coordinate conversion considering a rotation angle. (Eduardo Marques)
-	 * 
+	 *
 	 * @param angleRadians
 	 *            angle
 	 * @param x
@@ -470,7 +465,7 @@ public class PlanUtilities {
 
 	/**
 	 * Compute all the locations for a given maneuver message
-	 * 
+	 *
 	 * @param m
 	 *            The maneuver
 	 * @return a Collection of locations of the type double[2] = {latitude,
@@ -485,18 +480,17 @@ public class PlanUtilities {
 		case Loiter.ID_STATIC:
 		case CompassCalibration.ID_STATIC:
 		case StationKeeping.ID_STATIC:
-		case CommsRelay.ID_STATIC:
 			return computeSingleLoc(m);
 		case Elevator.ID_STATIC:
 			if ((((Elevator) m).getFlags() & Elevator.FLG_CURR_POS) == 0)
 				return computeSingleLoc(m);
 			else
-				return new Vector<double[]>();
+				return new Vector<>();
 		case PopUp.ID_STATIC:
 			if ((((PopUp) m).getFlags() & PopUp.FLG_CURR_POS) == 0)
 				return computeSingleLoc(m);
 			else
-				return new Vector<double[]>();
+				return new Vector<>();
 		case FollowPath.ID_STATIC:
 			return computePath((FollowPath) m);
 		case FollowTrajectory.ID_STATIC:
@@ -504,14 +498,14 @@ public class PlanUtilities {
 		case Rows.ID_STATIC:
 			return computePath((Rows) m);
 		default:
-			return new Vector<double[]>();
+			return new Vector<>();
 		}
 	}
 
 
 	/**
 	 * Check if Plan is Cyclic (last maneuver transits to first one)
-	 * 
+	 *
 	 * @param plan
 	 *            The plan
 	 * @return true if last maneuver transits to first one, false otherwise
@@ -519,7 +513,7 @@ public class PlanUtilities {
 	public static boolean isCyclic(PlanSpecification plan){
 		String maneuverFirstID = plan.getManeuvers().get(0).getManeuverId();
 		String maneuverLastID = plan.getManeuvers().get(plan.getManeuvers().size()-1).getManeuverId();
-		
+
 		for (PlanTransition pt : plan.getTransitions()) {
 			if (pt.getSourceMan().equals(maneuverLastID)
 					&& pt.getDestMan().equals(maneuverFirstID)){
@@ -532,7 +526,7 @@ public class PlanUtilities {
 	/**
 	 * This inner class represents a IMC plan waypoint. <br/>
 	 * An IMC maneuver may contain more than one waypoints.
-	 * 
+	 *
 	 * @author zp
 	 *
 	 */

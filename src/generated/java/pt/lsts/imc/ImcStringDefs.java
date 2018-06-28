@@ -31,9 +31,9 @@ package pt.lsts.imc;
 
 public class ImcStringDefs {
 
-	public static final String IMC_SHA = "47bc4c9b7f40caf1ecc231577d73e0c191d78fc3";
-	public static final String IMC_BRANCH = "2018-06-08 47bc4c9 (HEAD -> master, origin/master, origin/HEAD)";
-	public static final String IMC_COMMIT = "José Braga (eejbraga@gmail.com), Fri Jun 08 13:23:20 WEST 2018, IMC v5.4.20.";
+	public static final String IMC_SHA = "5b1ed7b55de9164cca64736158347aeea7069609";
+	public static final String IMC_BRANCH = "2018-06-28 5b1ed7b (HEAD -> master, origin/master, origin/HEAD)";
+	public static final String IMC_COMMIT = "Ricardo Martins (rasm@oceanscan-mst.com), Thu Jun 28 18:05:46 WEST 2018, Next release will be 5.4.21.";
 
 	public static java.util.Map<String, Integer> IMC_ADDRESSES = new java.util.LinkedHashMap<String, Integer>();
 

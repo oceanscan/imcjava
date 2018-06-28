@@ -215,7 +215,6 @@ public class IMCUtil {
                 }
             case FollowTrajectory.ID_STATIC:
             case FollowPath.ID_STATIC:
-            case VehicleFormation.ID_STATIC:
                 if (msg.getTypeOf("points").equals("message")
                         && target.getType(FollowPath.ID_STATIC).getFieldType("points") == IMCFieldType.TYPE_MESSAGELIST) {
                     Vector<IMCMessage> points = new Vector<IMCMessage>();
