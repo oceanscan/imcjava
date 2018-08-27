@@ -342,6 +342,8 @@ public class MessageFactory {
 				return new Command(defs);
 			case FollowCommandState.ID_STATIC:
 				return new FollowCommandState(defs);
+			case Magnetometer.ID_STATIC:
+				return new Magnetometer(defs);
 			case VehicleState.ID_STATIC:
 				return new VehicleState(defs);
 			case VehicleCommand.ID_STATIC:

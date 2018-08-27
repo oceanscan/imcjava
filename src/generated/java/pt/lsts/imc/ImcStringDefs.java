@@ -31,9 +31,9 @@ package pt.lsts.imc;
 
 public class ImcStringDefs {
 
-	public static final String IMC_SHA = "5b1ed7b55de9164cca64736158347aeea7069609";
-	public static final String IMC_BRANCH = "2018-06-28 5b1ed7b (HEAD -> master, origin/master, origin/HEAD)";
-	public static final String IMC_COMMIT = "Ricardo Martins (rasm@oceanscan-mst.com), Thu Jun 28 18:05:46 WEST 2018, Next release will be 5.4.21.";
+	public static final String IMC_SHA = "927e7fa690e4fafef58607bb69178576049a92f3";
+	public static final String IMC_BRANCH = "2018-07-05 927e7fa (HEAD -> master, tag: imc-5.4.21, origin/master, origin/HEAD)";
+	public static final String IMC_COMMIT = "José Braga (eejbraga@gmail.com), Thu Jul 05 13:57:03 WEST 2018, Merge remote-tracking branch 'origin/feature/scm-maneuver'\n\nFeature: added magnetometer maneuver.\n\nAuthored By: Jos\u00E9 Braga.";
 
 	public static java.util.Map<String, Integer> IMC_ADDRESSES = new java.util.LinkedHashMap<String, Integer>();
 
