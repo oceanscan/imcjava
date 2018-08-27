@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
 group 'pt.lsts'
-version '5.4.21-SNAPSHOT'
+version '5.4.21.0'
 
 ext
 {
