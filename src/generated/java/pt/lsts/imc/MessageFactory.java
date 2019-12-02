@@ -464,6 +464,8 @@ public class MessageFactory {
 				return new FluorescentDissolvedOrganicMatter(defs);
 			case IridiumMsgTxExtended.ID_STATIC:
 				return new IridiumMsgTxExtended(defs);
+			case SonarPulse.ID_STATIC:
+				return new SonarPulse(defs);
 			default:
 				return new IMCMessage(defs);
 		}

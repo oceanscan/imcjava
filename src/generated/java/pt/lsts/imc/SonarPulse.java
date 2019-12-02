@@ -30,42 +30,19 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message UamTxStatus (816)<br/>
- *  This message shall be used by acoustic modem drivers to send updates<br/>
- *  on the transmission status of data frames.<br/>
+ *  IMC Message Sonar Pulse (2006)<br/>
+ *  Information regarding a sent/received Sonar pulse.<br/>
  */
 
-public class UamTxStatus extends IMCMessage {
+public class SonarPulse extends IMCMessage {
 
-	public enum VALUE {
-		DONE(0),
-		FAILED(1),
-		CANCELED(2),
-		BUSY(3),
-		INV_ADDR(4),
-		IP(5),
-		UNSUPPORTED(6),
-		INV_SIZE(7),
-		NOT_TRANSDUCER(8);
+	public static final int ID_STATIC = 2006;
 
-		protected long value;
-
-		public long value() {
-			return value;
-		}
-
-		VALUE(long value) {
-			this.value = value;
-		}
-	}
-
-	public static final int ID_STATIC = 816;
-
-	public UamTxStatus() {
+	public SonarPulse() {
 		super(ID_STATIC);
 	}
 
-	public UamTxStatus(IMCMessage msg) {
+	public SonarPulse(IMCMessage msg) {
 		super(ID_STATIC);
 		try{
 			copyFrom(msg);
@@ -75,20 +52,20 @@ public class UamTxStatus extends IMCMessage {
 		}
 	}
 
-	public UamTxStatus(IMCDefinition defs) {
+	public SonarPulse(IMCDefinition defs) {
 		super(defs, ID_STATIC);
 	}
 
-	public static UamTxStatus create(Object... values) {
-		UamTxStatus m = new UamTxStatus();
+	public static SonarPulse create(Object... values) {
+		SonarPulse m = new SonarPulse();
 		for (int i = 0; i < values.length-1; i+= 2)
 			m.setValue(values[i].toString(), values[i+1]);
 		return m;
 	}
 
-	public static UamTxStatus clone(IMCMessage msg) throws Exception {
+	public static SonarPulse clone(IMCMessage msg) throws Exception {
 
-		UamTxStatus m = new UamTxStatus();
+		SonarPulse m = new SonarPulse();
 		if (msg == null)
 			return m;
 		if(msg.definitions != m.definitions){
@@ -103,86 +80,71 @@ public class UamTxStatus extends IMCMessage {
 		return m;
 	}
 
-	public UamTxStatus(int seq, VALUE value, String error) {
+	public SonarPulse(int frequency, int pulse_length, int time_delay, int simulated_speed) {
 		super(ID_STATIC);
-		setSeq(seq);
-		setValue(value);
-		if (error != null)
-			setError(error);
+		setFrequency(frequency);
+		setPulseLength(pulse_length);
+		setTimeDelay(time_delay);
+		setSimulatedSpeed(simulated_speed);
 	}
 
 	/**
-	 *  @return Sequence Id - uint16_t
+	 *  @return Frequency (hz) - int32_t
 	 */
-	public int getSeq() {
-		return getInteger("seq");
+	public int getFrequency() {
+		return getInteger("frequency");
 	}
 
 	/**
-	 *  @param seq Sequence Id
+	 *  @param frequency Frequency (hz)
 	 */
-	public UamTxStatus setSeq(int seq) {
-		values.put("seq", seq);
+	public SonarPulse setFrequency(int frequency) {
+		values.put("frequency", frequency);
 		return this;
 	}
 
 	/**
-	 *  @return Value (enumerated) - uint8_t
+	 *  @return Pulse Length (ms) - int32_t
 	 */
-	public VALUE getValue() {
-		try {
-			VALUE o = VALUE.valueOf(getMessageType().getFieldPossibleValues("value").get(getLong("value")));
-			return o;
-		}
-		catch (Exception e) {
-			return null;
-		}
-	}
-
-	public String getValueStr() {
-		return getString("value");
-	}
-
-	public short getValueVal() {
-		return (short) getInteger("value");
+	public int getPulseLength() {
+		return getInteger("pulse_length");
 	}
 
 	/**
-	 *  @param value Value (enumerated)
+	 *  @param pulse_length Pulse Length (ms)
 	 */
-	public UamTxStatus setValue(VALUE value) {
-		values.put("value", value.value());
+	public SonarPulse setPulseLength(int pulse_length) {
+		values.put("pulse_length", pulse_length);
 		return this;
 	}
 
 	/**
-	 *  @param value Value (as a String)
+	 *  @return Time Delay (ms) - int32_t
 	 */
-	public UamTxStatus setValueStr(String value) {
-		setValue("value", value);
+	public int getTimeDelay() {
+		return getInteger("time_delay");
+	}
+
+	/**
+	 *  @param time_delay Time Delay (ms)
+	 */
+	public SonarPulse setTimeDelay(int time_delay) {
+		values.put("time_delay", time_delay);
 		return this;
 	}
 
 	/**
-	 *  @param value Value (integer value)
+	 *  @return Simulated Speed (m/s) - int32_t
 	 */
-	public UamTxStatus setValueVal(short value) {
-		setValue("value", value);
-		return this;
+	public int getSimulatedSpeed() {
+		return getInteger("simulated_speed");
 	}
 
 	/**
-	 *  @return Error Message - plaintext
+	 *  @param simulated_speed Simulated Speed (m/s)
 	 */
-	public String getError() {
-		return getString("error");
-	}
-
-	/**
-	 *  @param error Error Message
-	 */
-	public UamTxStatus setError(String error) {
-		values.put("error", error);
+	public SonarPulse setSimulatedSpeed(int simulated_speed) {
+		values.put("simulated_speed", simulated_speed);
 		return this;
 	}
 

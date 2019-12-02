@@ -10,7 +10,7 @@
           xsi:noNamespaceSchemaLocation="IMC.xsd"
           name="IMC"
           long-name="Inter Module Communication"
-          version="5.4.22">
+          version="5.4.24">
 
   <description>
     This document describes the communications protocol associated
@@ -6444,6 +6444,11 @@
           modem.
         </description>
       </value>
+      <value abbrev="NOT_TRANSDUCER" name="Not transducer" id="8">
+        <description>
+          transducer not connected to the acoustic modem.
+        </description>
+      </value>
     </field>
     <field name="Error Message" abbrev="error" type="plaintext">
       <description>
@@ -7001,6 +7006,32 @@
     <field name="Data" abbrev="data" type="rawdata">
       <description>
         Message data.
+      </description>
+    </field>
+  </message>
+
+  <message id="2006" name="Sonar Pulse" abbrev="SonarPulse" source="vehicle" category="Sensors">
+    <description>
+      Information regarding a sent/received Sonar pulse.
+    </description>
+    <field name="Frequency" abbrev="frequency" type="int32_t" unit="Hz">
+      <description>
+        Frequency of the sent/received sonar pulse.
+      </description>
+    </field>
+    <field name="Pulse Length" abbrev="pulse_length" type="int32_t" unit="ms">
+      <description>
+        Pulse Length of the sonar pulse.
+      </description>
+    </field>
+    <field name="Time Delay" abbrev="time_delay" type="int32_t" unit="ms">
+      <description>
+        Time Delay of the sonar pulse.
+      </description>
+    </field>
+    <field name="Simulated Speed" abbrev="simulated_speed" type="int32_t" unit="m/s">
+      <description>
+        Doppler shift added to the sonar pulse in retransmission
       </description>
     </field>
   </message>
