@@ -366,6 +366,8 @@ public class MessageFactory {
 				return new Collision(defs);
 			case ReportControl.ID_STATIC:
 				return new ReportControl(defs);
+			case AssetReport.ID_STATIC:
+				return new AssetReport(defs);
 			case Abort.ID_STATIC:
 				return new Abort(defs);
 			case PlanSpecification.ID_STATIC:

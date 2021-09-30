@@ -39,6 +39,7 @@ public class UamTxFrame extends IMCMessage {
 
 	public static final short UTF_ACK = 0x01;
 	public static final short UTF_DELAYED = 0x02;
+	public static final short UTF_FORCED = 0x04;
 
 	public static final int ID_STATIC = 814;
 
