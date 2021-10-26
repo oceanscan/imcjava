@@ -454,6 +454,12 @@ public class MessageFactory {
 				return new OpticalBackscatter(defs);
 			case Tachograph.ID_STATIC:
 				return new Tachograph(defs);
+			case CurrentProfile.ID_STATIC:
+				return new CurrentProfile(defs);
+			case CurrentProfileCell.ID_STATIC:
+				return new CurrentProfileCell(defs);
+			case ADCPBeam.ID_STATIC:
+				return new ADCPBeam(defs);
 			case GpioState.ID_STATIC:
 				return new GpioState(defs);
 			case GpioStateGet.ID_STATIC:
