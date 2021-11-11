@@ -474,6 +474,12 @@ public class MessageFactory {
 				return new IridiumMsgTxExtended(defs);
 			case SonarPulse.ID_STATIC:
 				return new SonarPulse(defs);
+			case ValidatePlan.ID_STATIC:
+				return new ValidatePlan(defs);
+			case TypedEntityParameter.ID_STATIC:
+				return new TypedEntityParameter(defs);
+			case TypedEntityParameters.ID_STATIC:
+				return new TypedEntityParameters(defs);
 			default:
 				return new IMCMessage(defs);
 		}
