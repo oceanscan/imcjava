@@ -31,33 +31,37 @@
 
 package pt.lsts.imc;
 
-import com.eclipsesource.json.JsonArray;
-import com.eclipsesource.json.JsonObject;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import pt.lsts.neptus.messages.IMessage;
-import pt.lsts.neptus.messages.IMessageProtocol;
-import pt.lsts.neptus.messages.InvalidMessageException;
-import pt.lsts.neptus.messages.listener.MessageInfo;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
-import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Vector;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import com.eclipsesource.json.JsonArray;
+import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonObject.Member;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import pt.lsts.neptus.messages.IMessage;
+import pt.lsts.neptus.messages.IMessageProtocol;
+import pt.lsts.neptus.messages.InvalidMessageException;
+import pt.lsts.neptus.messages.listener.MessageInfo;
 
 /**
  * This class holds a message structure, including header and payload.<br/>
@@ -129,9 +133,9 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
      * @param values          A list of objects which will be parse in pairs. <br/>
      *                        Example:
      *                        <p>
+     * 
      *                        <pre>
-     *                        IMCMessage state = new IMCMessage(&quot;EstimatedState&quot;, &quot;ref&quot;, &quot;NED_ONLY&quot;, &quot;x&quot;,
-     *                        		10.343, y, -100);
+     *                        IMCMessage state = new IMCMessage(&quot;EstimatedState&quot;, &quot;ref&quot;, &quot;NED_ONLY&quot;, &quot;x&quot;, 10.343, y, -100);
      *                        </pre>
      */
     public IMCMessage(String abbreviatedName, Object... values) {
@@ -212,8 +216,8 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
     }
 
     /**
-     * Resolves the message type, given its message identification number and
-     * then calls {@link #IMCMessage(IMCMessageType)}
+     * Resolves the message type, given its message identification number and then
+     * calls {@link #IMCMessage(IMCMessageType)}
      *
      * @param defs IMC definitions to be used
      * @param type The id of the message type (field mgid in IMC)
@@ -232,8 +236,8 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
     }
 
     /**
-     * Retrieves the header of this message, stored as an inner IMC Message
-     * (payload fields match header fields and header is NULL)
+     * Retrieves the header of this message, stored as an inner IMC Message (payload
+     * fields match header fields and header is NULL)
      *
      * @return The header of this message
      */
@@ -258,8 +262,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
      */
     public IMCMessage copyFrom(IMCMessage otherMessage) throws Exception {
         if (otherMessage.getMessageType().getId() != getMessageType().getId()) {
-            throw new Exception("Types of messages do not match: "
-                    + getMessageType().getShortName() + " vs "
+            throw new Exception("Types of messages do not match: " + getMessageType().getShortName() + " vs "
                     + otherMessage.getMessageType().getShortName());
         }
 
@@ -269,8 +272,8 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
     }
 
     /**
-     * All the values in the given hashtable will be copied to this message
-     * without any conversions
+     * All the values in the given hashtable will be copied to this message without
+     * any conversions
      *
      * @param values
      */
@@ -279,9 +282,8 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
     }
 
     /**
-     * Returns all the values in this message. The returned map may not be
-     * modified, otherwise a {@link UnsupportedOperationException} will be
-     * thrown
+     * Returns all the values in this message. The returned map may not be modified,
+     * otherwise a {@link UnsupportedOperationException} will be thrown
      *
      * @return All the values in this message
      */
@@ -290,8 +292,8 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
     }
 
     /**
-     * Change the type of the message. Bear in mind that values are preserved
-     * but may not match the new type's fields
+     * Change the type of the message. Bear in mind that values are preserved but
+     * may not match the new type's fields
      *
      * @param type The new type for this message
      */
@@ -308,8 +310,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
      */
     public IMCMessage cloneMessage(IMCDefinition defs) {
         try {
-            IMCMessage message = getHeader() != null ? defs.newMessage(type
-                    .getShortName()) : defs.createHeader();
+            IMCMessage message = getHeader() != null ? defs.newMessage(type.getShortName()) : defs.createHeader();
             if (getHeader() != null)
                 message.getHeader().setValues(getHeader().values);
             message.setValues(values);
@@ -372,8 +373,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
     }
 
     /**
-     * Retrieve IMC id of this message destination entity (header field
-     * "dst_ent")
+     * Retrieve IMC id of this message destination entity (header field "dst_ent")
      *
      * @return The IMC identifier of this message destination entity
      */
@@ -447,29 +447,29 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
                 size += t.getSizeInBytes();
             else {
                 switch (t) {
-                    case TYPE_RAWDATA:
-                    case TYPE_PLAINTEXT:
-                        if (getRawData(f) != null)
-                            size += 2 + getRawData(f).length;
-                        else
-                            size += 2;
-                        break;
-                    case TYPE_MESSAGE:
-                        IMCMessage m = getMessage(f);
-                        if (m == null)
-                            size += 2;
-                        else
-                            size += 2 + m.getPayloadSize();
-                        break;
-                    case TYPE_MESSAGELIST:
-                        Vector<IMCMessage> msgs = getMessageList(f);
-                        for (int i = 0; i < msgs.size(); i++) {
-                            size += 2 + msgs.get(i).getPayloadSize();
-                        }
+                case TYPE_RAWDATA:
+                case TYPE_PLAINTEXT:
+                    if (getRawData(f) != null)
+                        size += 2 + getRawData(f).length;
+                    else
                         size += 2;
-                        break;
-                    default:
-                        break;
+                    break;
+                case TYPE_MESSAGE:
+                    IMCMessage m = getMessage(f);
+                    if (m == null)
+                        size += 2;
+                    else
+                        size += 2 + m.getPayloadSize();
+                    break;
+                case TYPE_MESSAGELIST:
+                    Vector<IMCMessage> msgs = getMessageList(f);
+                    for (int i = 0; i < msgs.size(); i++) {
+                        size += 2 + msgs.get(i).getPayloadSize();
+                    }
+                    size += 2;
+                    break;
+                default:
+                    break;
                 }
             }
         }
@@ -482,8 +482,8 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
      * @param field The field to be set
      * @param value The new value for the field. <br/>
      *              If the field is Enumerated, then the name of the value can be
-     *              passed as a String If the field is Bitmask, then the name of
-     *              the value can be passed as a LinkedHashMap<String, Boolean>
+     *              passed as a String If the field is Bitmask, then the name of the
+     *              value can be passed as a LinkedHashMap<String, Boolean>
      */
     @SuppressWarnings("unchecked")
     public IMCMessage setValue(String field, Object value) {
@@ -494,8 +494,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
         }
 
         header.setValue(field, value);
-        if (getMessageType().getFieldType(field) == null
-                && header.type.getFieldType(field) != null) {
+        if (getMessageType().getFieldType(field) == null && header.type.getFieldType(field) != null) {
             return this;
         }
 
@@ -510,21 +509,17 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
         }
 
         if (value instanceof LinkedHashMap<?, ?>) {
-            if (getMessageType().getFieldUnits(field).equalsIgnoreCase(
-                    "tuplelist")) {
+            if (getMessageType().getFieldUnits(field).equalsIgnoreCase("tuplelist")) {
 
-                values.put(field,
-                        encodeTupleList((LinkedHashMap<String, ?>) value));
-            } else if (getMessageType().getFieldUnits(field).equalsIgnoreCase(
-                    "bitmask")) {
+                values.put(field, encodeTupleList((LinkedHashMap<String, ?>) value));
+            } else if (getMessageType().getFieldUnits(field).equalsIgnoreCase("bitmask")) {
                 try {
                     LinkedHashMap<String, Boolean> valTmp = (LinkedHashMap<String, Boolean>) value;
                     setBitMask(field, valTmp);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    System.err
-                            .println("Trying to set a bitmask with an LinkedHashMap other"
-                                    + " than LinkedHashMap<String, Boolean>!!!");
+                    System.err.println("Trying to set a bitmask with an LinkedHashMap other"
+                            + " than LinkedHashMap<String, Boolean>!!!");
                 }
             }
             return this;
@@ -537,8 +532,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
     protected void parseStringValue(String field, String sValue) {
         IMCFieldType type = getMessageType().getFieldType(field);
 
-        if (getMessageType().getFieldUnits(field)
-                .equalsIgnoreCase("enumerated")) {
+        if (getMessageType().getFieldUnits(field).equalsIgnoreCase("enumerated")) {
             Long val = getMessageType().getFieldMeanings(field).get(sValue);
             if (val != null) {
                 setValue(field, val);
@@ -547,14 +541,12 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
         }
 
         if (getMessageType().getFieldUnits(field).equalsIgnoreCase("bitmask")
-                || getMessageType().getFieldUnits(field).equalsIgnoreCase(
-                "bitfield")) {
+                || getMessageType().getFieldUnits(field).equalsIgnoreCase("bitfield")) {
             String[] parts = sValue.split("\\|");
             long value = 0;
 
             for (String s : parts) {
-                Long val = getMessageType().getFieldMeanings(field).get(
-                        s.trim());
+                Long val = getMessageType().getFieldMeanings(field).get(s.trim());
                 if (val != null)
                     value += val;
             }
@@ -563,38 +555,37 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
         }
 
         switch (type) {
-            case TYPE_PLAINTEXT:
-                setValue(field, sValue);
-                break;
-            case TYPE_RAWDATA:
-                byte[] result = new byte[sValue.length() / 2];
-                for (int i = 0; i < sValue.length(); i += 2)
-                    result[i] = Byte.parseByte("0x" + sValue.charAt(i)
-                            + sValue.charAt(i + 1));
-                break;
-            case TYPE_FP32:
-                setValue(field, Float.parseFloat(sValue));
-                break;
-            case TYPE_FP64:
-                setValue(field, Double.parseDouble(sValue));
-                break;
-            case TYPE_INT8:
-                setValue(field, Byte.parseByte(sValue));
-                break;
-            case TYPE_UINT8:
-            case TYPE_INT16:
-                setValue(field, Short.parseShort(sValue));
-                break;
-            case TYPE_UINT16:
-            case TYPE_INT32:
-                setValue(field, Integer.parseInt(sValue));
-                break;
-            case TYPE_UINT32:
-            case TYPE_INT64:
-                setValue(field, Long.parseLong(sValue));
-                break;
-            default:
-                break;
+        case TYPE_PLAINTEXT:
+            setValue(field, sValue);
+            break;
+        case TYPE_RAWDATA:
+            byte[] result = new byte[sValue.length() / 2];
+            for (int i = 0; i < sValue.length(); i += 2)
+                result[i] = Byte.parseByte("0x" + sValue.charAt(i) + sValue.charAt(i + 1));
+            break;
+        case TYPE_FP32:
+            setValue(field, Float.parseFloat(sValue));
+            break;
+        case TYPE_FP64:
+            setValue(field, Double.parseDouble(sValue));
+            break;
+        case TYPE_INT8:
+            setValue(field, Byte.parseByte(sValue));
+            break;
+        case TYPE_UINT8:
+        case TYPE_INT16:
+            setValue(field, Short.parseShort(sValue));
+            break;
+        case TYPE_UINT16:
+        case TYPE_INT32:
+            setValue(field, Integer.parseInt(sValue));
+            break;
+        case TYPE_UINT32:
+        case TYPE_INT64:
+            setValue(field, Long.parseLong(sValue));
+            break;
+        default:
+            break;
         }
     }
 
@@ -602,8 +593,8 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
      * Retrieve a value from the header
      *
      * @param field The name of the field to retrieve
-     * @return The value of the field in the header or null if the field does
-     * not exist in the header
+     * @return The value of the field in the header or null if the field does not
+     *         exist in the header
      */
     public Object getHeaderValue(String field) {
         return header.getValue(field);
@@ -613,9 +604,8 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
      * Retrieve a value in the message
      *
      * @param field The name of the field to be retrieved
-     * @return The value of the field in the payload or in the header if it
-     * doesn't exist in the payload or null if the field does not exist
-     * on both
+     * @return The value of the field in the payload or in the header if it doesn't
+     *         exist in the payload or null if the field does not exist on both
      */
     public Object getValue(String field) {
         Object o = values.get(field);
@@ -680,8 +670,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
         LinkedHashMap<String, Boolean> bitmask = new LinkedHashMap<>();
         long value = getLong(field);
         for (String key : getMessageType().getFieldMeanings(field).keySet()) {
-            bitmask.put(key, (value & getMessageType().getFieldMeanings(field)
-                    .get(key)) != 0);
+            bitmask.put(key, (value & getMessageType().getFieldMeanings(field).get(key)) != 0);
         }
         return bitmask;
     }
@@ -704,8 +693,8 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
      * If the field is not numeric, returns <i>Double.NaN</i>
      *
      * @param field The name of the field (should be numeric)
-     * @return The value of the field as double or <i>Double.NaN</i> if the
-     * field is not numeric
+     * @return The value of the field as double or <i>Double.NaN</i> if the field is
+     *         not numeric
      */
     public double getDouble(String field) {
         Object o = getValue(field);
@@ -721,8 +710,8 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
      * If the field is not numeric, returns <i>Float.NaN</i>
      *
      * @param field The name of the field (should be numeric)
-     * @return The value of the field as float or <i>Float.NaN</i> if the field
-     * is not numeric
+     * @return The value of the field as float or <i>Float.NaN</i> if the field is
+     *         not numeric
      */
     public float getFloat(String field) {
         Object o = getValue(field);
@@ -739,7 +728,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
      *
      * @param field The name of the field (should be numeric)
      * @return The value of the field as integer or <i>0</i> if the field is not
-     * numeric
+     *         numeric
      */
     public int getInteger(String field) {
         Object o = getValue(field);
@@ -757,7 +746,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
      *
      * @param field The name of the field (should be numeric)
      * @return The value of the field as long or <i>0</i> if the field is not
-     * numeric
+     *         numeric
      */
     public long getLong(String field) {
         Object o = getValue(field);
@@ -775,12 +764,9 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
         Object o = getValue(field);
         if (o == null)
             return null;
-        else if (o instanceof Number
-                && getMessageType().getFieldPossibleValues(field) != null) {
-            if (getUnitsOf(field).equals("tuplelist")
-                    || getUnitsOf(field).equals("enumerated"))
-                return getMessageType().getFieldPossibleValues(field).get(
-                        ((Number) o).longValue());
+        else if (o instanceof Number && getMessageType().getFieldPossibleValues(field) != null) {
+            if (getUnitsOf(field).equals("tuplelist") || getUnitsOf(field).equals("enumerated"))
+                return getMessageType().getFieldPossibleValues(field).get(((Number) o).longValue());
             else {
 
                 long val = getLong(field);
@@ -788,8 +774,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
                 for (int i = 0; i < 16; i++) {
                     long bitVal = (long) Math.pow(2, i);
                     if ((val & bitVal) > 0)
-                        ret += getMessageType().getFieldPossibleValues(field)
-                                .get(bitVal) + "|";
+                        ret += getMessageType().getFieldPossibleValues(field).get(bitVal) + "|";
                 }
                 ret = ret.replaceAll("null\\|", "");
                 ret = ret.replaceAll("\\|null", "");
@@ -810,32 +795,28 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
             return doubleFormat.format(o);
         } else if (o instanceof IMCMessage) {
             return "%INLINE{"
-                    + (((IMCMessage) o).getMessageType() != null ? ((IMCMessage) o)
-                    .getMessageType().getShortName() : "NULL") + "}";
+                    + (((IMCMessage) o).getMessageType() != null ? ((IMCMessage) o).getMessageType().getShortName()
+                            : "NULL")
+                    + "}";
         } else if (o instanceof Vector<?>) {
             String ret = "%MESSAGE-LIST[";
             Vector<?> vec = (Vector<?>) o;
             for (Object ob : vec) {
-                ret += ((IMCMessage) ob).getMessageType() != null ? ((IMCMessage) ob)
-                        .getMessageType().getShortName() + ", "
+                ret += ((IMCMessage) ob).getMessageType() != null
+                        ? ((IMCMessage) ob).getMessageType().getShortName() + ", "
                         : "NULL, ";
             }
             if (!vec.isEmpty())
                 ret = ret.substring(0, ret.length() - 2);
             return ret + "]";
-        } else if ("rad"
-                .equalsIgnoreCase(getMessageType().getFieldUnits(field))) {
-            return addUnits ? Math.toDegrees(((Number) o).doubleValue())
-                    + " deg" : o.toString();
-        } else if ("rad/s".equalsIgnoreCase(getMessageType().getFieldUnits(
-                field))) {
-            return addUnits ? Math.toDegrees(((Number) o).doubleValue())
-                    + " deg/s" : o.toString();
+        } else if ("rad".equalsIgnoreCase(getMessageType().getFieldUnits(field))) {
+            return addUnits ? Math.toDegrees(((Number) o).doubleValue()) + " deg" : o.toString();
+        } else if ("rad/s".equalsIgnoreCase(getMessageType().getFieldUnits(field))) {
+            return addUnits ? Math.toDegrees(((Number) o).doubleValue()) + " deg/s" : o.toString();
         }
         if (getMessageType().getFieldUnits(field) == null)
             return o.toString();
-        return o.toString()
-                + (addUnits ? " " + getMessageType().getFieldUnits(field) : "");
+        return o.toString() + (addUnits ? " " + getMessageType().getFieldUnits(field) : "");
     }
 
     /**
@@ -852,8 +833,8 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
      * Returns a byte array from a rawdata field
      *
      * @param field The field whose value is to be returned
-     * @return The value of the rawdata as a byte array or <i>null</i> if an
-     * error occurs
+     * @return The value of the rawdata as a byte array or <i>null</i> if an error
+     *         occurs
      */
     public byte[] getRawData(String field) {
         Object o = getValue(field);
@@ -874,7 +855,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
      *
      * @param field The field whose value is to be returned
      * @return The IMCMessage in the field or <i>null</i> if the value is not a
-     * message
+     *         message
      */
     public IMCMessage getMessage(String field) {
         Object o = getValue(field);
@@ -887,6 +868,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
      * Retrieves an IMCMessage from a field and converts it to a chosen type.<br/>
      * Example:
      * <p>
+     * 
      * <pre>
      * PlanSpecification plan = planControl.getMessage(PlanSpecification.class, &quot;arg&quot;);
      * </pre>
@@ -895,15 +877,13 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
      * @param field The field corresponding to the inline message
      * @return The inline message, converted to chosen type
      */
-    public <T extends IMCMessage> T getMessage(Class<T> clazz, String field)
-            throws Exception {
+    public <T extends IMCMessage> T getMessage(Class<T> clazz, String field) throws Exception {
         IMCMessage m = getMessage(field);
         if (m == null)
             return null;
         if (!m.getAbbrev().equals(clazz.getSimpleName())) {
-            throw new Exception("The inline message type (" + m.getAbbrev()
-                    + " doesn't match given type (" + clazz.getSimpleName()
-                    + ")");
+            throw new Exception("The inline message type (" + m.getAbbrev() + " doesn't match given type ("
+                    + clazz.getSimpleName() + ")");
         }
 
         return clazz.getConstructor(IMCMessage.class).newInstance(m);
@@ -956,14 +936,13 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
     }
 
     /**
-     * This method receives a vector of messages and sets a field with a
-     * MessageList of those messages
+     * This method receives a vector of messages and sets a field with a MessageList
+     * of those messages
      *
      * @param messages The messages in the MessageList
      * @param field    The field to be set with a list of messages
      */
-    public void setMessageList(Vector<? extends IMCMessage> messages,
-                               String field) {
+    public void setMessageList(Vector<? extends IMCMessage> messages, String field) {
 
         if (type.getFieldType(field) == IMCFieldType.TYPE_MESSAGE) {
             // encode list of messages as a single MessageList message
@@ -995,8 +974,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
      * @throws Exception If the messages found do not correspond to expected type
      */
     @SuppressWarnings("unchecked")
-    public <T extends IMCMessage> Vector<T> getMessageList(String field,
-                                                           Class<T> clazz) throws Exception {
+    public <T extends IMCMessage> Vector<T> getMessageList(String field, Class<T> clazz) throws Exception {
         Vector<IMCMessage> msgs = getMessageList(field);
         Vector<T> ret = new Vector<T>();
 
@@ -1004,8 +982,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
             if (m.getClass().isInstance(clazz))
                 ret.add((T) m);
             else
-                ret.add((T) clazz.getMethod("clone", IMCMessage.class).invoke(
-                        null, m));
+                ret.add((T) clazz.getMethod("clone", IMCMessage.class).invoke(null, m));
         }
         return ret;
     }
@@ -1017,18 +994,15 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
     public String toString() {
 
         if (getHeader() != null) {
-            StringBuilder sb = new StringBuilder("message (").append(
-                    getMessageType().getShortName())
+            StringBuilder sb = new StringBuilder("message (").append(getMessageType().getShortName())
                     .append(") {\n\theader {\n");
 
             for (String f : getHeader().getMessageType().getFieldNames()) {
-                sb.append("\t\t").append(f).append(": \t").append(getString(f))
-                        .append('\n');
+                sb.append("\t\t").append(f).append(": \t").append(getString(f)).append('\n');
             }
             sb.append("\t}\n\tpayload {\n");
             for (String f : getMessageType().getFieldNames()) {
-                sb.append("\t\t").append(f).append(": \t").append(getString(f))
-                        .append('\n');
+                sb.append("\t\t").append(f).append(": \t").append(getString(f)).append('\n');
             }
             sb.append("\t}\n}\n");
             return sb.toString();
@@ -1036,8 +1010,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
             StringBuilder sb = new StringBuilder("header {\n");
 
             for (String f : getMessageType().getFieldNames()) {
-                sb.append("\t").append(f).append(": \t").append(getString(f))
-                        .append('\n');
+                sb.append("\t").append(f).append(": \t").append(getString(f)).append('\n');
             }
             sb.append("}\n");
             return sb.toString();
@@ -1050,8 +1023,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
      * @param out The OutputStream to write to
      * @return The number of bytes written
      */
-    public int serialize(IMCDefinition def, IMCOutputStream out)
-            throws IOException {
+    public int serialize(IMCDefinition def, IMCOutputStream out) throws IOException {
         int count = 0;
         out.resetCRC();
         if (!getAbbrev().equals("Header")) {
@@ -1138,29 +1110,28 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
         if (o == null)
             return null;
         switch (getMessageType().getFieldType(fieldName)) {
-            case TYPE_RAWDATA:
-                StringBuilder sb = new StringBuilder();
-                byte[] buf = (byte[]) o;
-                for (int i = 0; i < buf.length; i++) {
-                    sb.append(String.format("%02X", buf[i]));
-                }
-                return sb.toString();
-            case TYPE_MESSAGE:
-                return "%INLINE{"
-                        + ((IMCMessage) o).getMessageType().getShortName() + "}";
-            case TYPE_MESSAGELIST:
-                String ret = "%MESSAGE-LIST[";
-                Collection<?> vec = (Collection<?>) o;
-                for (Object ob : vec) {
-                    ret += ((IMCMessage) ob).getMessageType() != null ? ((IMCMessage) ob)
-                            .getMessageType().getShortName() + ", "
-                            : "NULL, ";
-                }
-                if (!vec.isEmpty())
-                    ret = ret.substring(0, ret.length() - 2);
-                return ret + "]";
-            default:
-                return o.toString();
+        case TYPE_RAWDATA:
+            StringBuilder sb = new StringBuilder();
+            byte[] buf = (byte[]) o;
+            for (int i = 0; i < buf.length; i++) {
+                sb.append(String.format("%02X", buf[i]));
+            }
+            return sb.toString();
+        case TYPE_MESSAGE:
+            return "%INLINE{" + ((IMCMessage) o).getMessageType().getShortName() + "}";
+        case TYPE_MESSAGELIST:
+            String ret = "%MESSAGE-LIST[";
+            Collection<?> vec = (Collection<?>) o;
+            for (Object ob : vec) {
+                ret += ((IMCMessage) ob).getMessageType() != null
+                        ? ((IMCMessage) ob).getMessageType().getShortName() + ", "
+                        : "NULL, ";
+            }
+            if (!vec.isEmpty())
+                ret = ret.substring(0, ret.length() - 2);
+            return ret + "]";
+        default:
+            return o.toString();
         }
     }
 
@@ -1225,6 +1196,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
     /**
      * Write this message as text into the given OutputStream. Example:
      * <p>
+     * 
      * <pre>
      * IMCMessage estate = new IMCMessage(&quot;EstimatedState&quot;);
      * estate.dump(System.out);
@@ -1246,8 +1218,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
         if (includeHeader) {
             for (String fieldName : header.getFieldNames()) {
-                if (fieldName.equals("mgid") || fieldName.equals("size")
-                        || fieldName.equals("sync"))
+                if (fieldName.equals("mgid") || fieldName.equals("size") || fieldName.equals("sync"))
                     continue;
                 else if (fieldName.equals("timestamp"))
                     obj.add(fieldName, getDouble(fieldName));
@@ -1261,45 +1232,48 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
             IMCFieldType fieldType = getMessageType().getFieldType(fieldName);
 
             switch (fieldType) {
-                case TYPE_PLAINTEXT:
-                    obj.add(fieldName, getValue(fieldName).toString());
-                    break;
-                case TYPE_RAWDATA:
-                    byte[] bytes = getRawData(fieldName);
-                    if (bytes == null) {
-                        obj.add(fieldName, "");
-                    } else {
-                        obj.add(fieldName, Base64.encode(bytes));
-                    }
-                    break;
-                case TYPE_MESSAGE:
-                    IMCMessage msg = null;
-                    msg = getMessage(fieldName);
-                    if (msg != null)
-                        obj.add(fieldName, msg.asJsonObject(false));
-                    else
-                        obj.add(fieldName, new JsonObject());
-                    break;
-                case TYPE_MESSAGELIST:
-                    Vector<IMCMessage> msgs = null;
-                    msgs = getMessageList(fieldName);
-                    if (msgs == null)
-                        msgs = new Vector<IMCMessage>();
-                    JsonArray arr = new JsonArray();
-                    for (IMCMessage m : msgs) {
-                        arr.add(m.asJsonObject(false));
-                    }
-                    obj.add(fieldName, arr);
-                    break;
-                case TYPE_FP32:
-                    obj.add(fieldName, getFloat(fieldName));
-                    break;
-                case TYPE_FP64:
-                    obj.add(fieldName, getDouble(fieldName));
-                    break;
-                default:
+            case TYPE_PLAINTEXT:
+                obj.add(fieldName, getValue(fieldName).toString());
+                break;
+            case TYPE_RAWDATA:
+                byte[] bytes = getRawData(fieldName);
+                if (bytes == null) {
+                    obj.add(fieldName, "");
+                } else {
+                    obj.add(fieldName, Base64.encode(bytes));
+                }
+                break;
+            case TYPE_MESSAGE:
+                IMCMessage msg = null;
+                msg = getMessage(fieldName);
+                if (msg != null)
+                    obj.add(fieldName, msg.asJsonObject(false));
+                else
+                    obj.add(fieldName, new JsonObject());
+                break;
+            case TYPE_MESSAGELIST:
+                Vector<IMCMessage> msgs = null;
+                msgs = getMessageList(fieldName);
+                if (msgs == null)
+                    msgs = new Vector<IMCMessage>();
+                JsonArray arr = new JsonArray();
+                for (IMCMessage m : msgs) {
+                    arr.add(m.asJsonObject(false));
+                }
+                obj.add(fieldName, arr);
+                break;
+            case TYPE_FP32:
+                obj.add(fieldName, getFloat(fieldName));
+                break;
+            case TYPE_FP64:
+                obj.add(fieldName, getDouble(fieldName));
+                break;
+            default:
+                if (getMessageType().getFieldMeanings(fieldName) == null)
                     obj.add(fieldName, getLong(fieldName));
-                    break;
+                else
+                    obj.add(fieldName, getString(fieldName, false));
+                break;
             }
         }
         return obj;
@@ -1338,38 +1312,38 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
         for (String fieldName : getMessageType().getFieldNames()) {
             sb.append("<").append(fieldName).append(">");
             switch (getMessageType().getFieldType(fieldName)) {
-                case TYPE_FP32:
-                case TYPE_FP64:
-                    double val = getDouble(fieldName);
-                    if (val == 0)
-                        sb.append("0.0");
-                    else
-                        sb.append(getString(fieldName));
-                    break;
-                case TYPE_INT16:
-                case TYPE_INT32:
-                case TYPE_INT64:
-                case TYPE_INT8:
-                case TYPE_UINT16:
-                case TYPE_UINT32:
-                case TYPE_UINT8:
-                case TYPE_PLAINTEXT:
-                    sb.append(getString(fieldName, false));
-                    break;
-                case TYPE_MESSAGE:
-                    IMCMessage msg = getMessage(fieldName);
-                    if (msg != null)
-                        sb.append("\n").append(msg.asXml(true));
-                    break;
-                case TYPE_RAWDATA:
-                    if (getRawData(fieldName) != null)
-                        sb.append(Base64.encode(getRawData(fieldName)));
-                    break;
-                case TYPE_MESSAGELIST:
-                    sb.append("\n");
-                    for (IMCMessage m : getMessageList(fieldName))
-                        sb.append(m.asXml(true));
-                    break;
+            case TYPE_FP32:
+            case TYPE_FP64:
+                double val = getDouble(fieldName);
+                if (val == 0)
+                    sb.append("0.0");
+                else
+                    sb.append(getString(fieldName));
+                break;
+            case TYPE_INT16:
+            case TYPE_INT32:
+            case TYPE_INT64:
+            case TYPE_INT8:
+            case TYPE_UINT16:
+            case TYPE_UINT32:
+            case TYPE_UINT8:
+            case TYPE_PLAINTEXT:
+                sb.append(getString(fieldName, false));
+                break;
+            case TYPE_MESSAGE:
+                IMCMessage msg = getMessage(fieldName);
+                if (msg != null)
+                    sb.append("\n").append(msg.asXml(true));
+                break;
+            case TYPE_RAWDATA:
+                if (getRawData(fieldName) != null)
+                    sb.append(Base64.encode(getRawData(fieldName)));
+                break;
+            case TYPE_MESSAGELIST:
+                sb.append("\n");
+                for (IMCMessage m : getMessageList(fieldName))
+                    sb.append(m.asXml(true));
+                break;
             }
             sb.append("</").append(fieldName).append(">\n");
         }
@@ -1388,8 +1362,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             MessageDigest md = MessageDigest.getInstance("MD5");
-            IMCDefinition.getInstance().serializeFields(this,
-                    new IMCOutputStream(baos));
+            IMCDefinition.getInstance().serializeFields(this, new IMCOutputStream(baos));
             md.update(baos.toByteArray());
             return md.digest();
         } catch (Exception e) {
@@ -1423,24 +1396,19 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
         IMCMessage msg = defs.create(name);
 
         if (element.getAttributes().getNamedItem("time") != null)
-            msg.setTimestamp(Double.parseDouble(element.getAttributes()
-                    .getNamedItem("time").getTextContent()));
+            msg.setTimestamp(Double.parseDouble(element.getAttributes().getNamedItem("time").getTextContent()));
 
         if (element.getAttributes().getNamedItem("src") != null)
-            msg.setSrc(Integer.parseInt(element.getAttributes()
-                    .getNamedItem("src").getTextContent()));
+            msg.setSrc(Integer.parseInt(element.getAttributes().getNamedItem("src").getTextContent()));
 
         if (element.getAttributes().getNamedItem("dst") != null)
-            msg.setDst(Integer.parseInt(element.getAttributes()
-                    .getNamedItem("dst").getTextContent()));
+            msg.setDst(Integer.parseInt(element.getAttributes().getNamedItem("dst").getTextContent()));
 
         if (element.getAttributes().getNamedItem("src_ent") != null)
-            msg.setSrcEnt(Short.parseShort(element.getAttributes()
-                    .getNamedItem("src_ent").getTextContent()));
+            msg.setSrcEnt(Short.parseShort(element.getAttributes().getNamedItem("src_ent").getTextContent()));
 
         if (element.getAttributes().getNamedItem("dst_ent") != null)
-            msg.setDstEnt(Short.parseShort(element.getAttributes()
-                    .getNamedItem("dst_ent").getTextContent()));
+            msg.setDstEnt(Short.parseShort(element.getAttributes().getNamedItem("dst_ent").getTextContent()));
 
         NodeList children = element.getChildNodes();
 
@@ -1454,50 +1422,46 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
 
                 switch (msg.getMessageType().getFieldType(field)) {
 
-                    case TYPE_FP32:
-                    case TYPE_FP64:
-                        msg.setValue(field, Double.parseDouble(el.getTextContent()));
-                        break;
-                    case TYPE_INT16:
-                    case TYPE_INT64:
-                    case TYPE_INT32:
-                    case TYPE_INT8:
-                    case TYPE_UINT16:
-                    case TYPE_UINT32:
-                    case TYPE_UINT8:
-                        if (msg.getMessageType().getFieldMeanings(field) != null)
-                            msg.setValue(field, el.getTextContent());
-                        else
-                            msg.setValue(field, Long.parseLong(el.getTextContent()));
-                        break;
-                    case TYPE_PLAINTEXT:
+                case TYPE_FP32:
+                case TYPE_FP64:
+                    msg.setValue(field, Double.parseDouble(el.getTextContent()));
+                    break;
+                case TYPE_INT16:
+                case TYPE_INT64:
+                case TYPE_INT32:
+                case TYPE_INT8:
+                case TYPE_UINT16:
+                case TYPE_UINT32:
+                case TYPE_UINT8:
+                    if (msg.getMessageType().getFieldMeanings(field) != null)
                         msg.setValue(field, el.getTextContent());
-                        break;
-                    case TYPE_RAWDATA:
-                        msg.setValue(
-                                field,
-                                Base64.decode(el.getTextContent().replaceAll("\n",
-                                        "")));
-                        break;
-                    case TYPE_MESSAGE:
-                        NodeList inner = el.getChildNodes();
-                        for (int j = 0; j < inner.getLength(); j++) {
-                            Node nd = inner.item(j);
-                            if (nd instanceof Element)
-                                msg.setValue(field,
-                                        parseElement(defs, (Element) nd));
-                        }
-                        break;
-                    case TYPE_MESSAGELIST:
-                        Vector<IMCMessage> msgs = new Vector<IMCMessage>();
-                        NodeList innerMsgs = el.getChildNodes();
-                        for (int k = 0; k < innerMsgs.getLength(); k++) {
-                            Node nd = innerMsgs.item(k);
-                            if (nd instanceof Element)
-                                msgs.add(parseElement(defs, (Element) nd));
-                        }
-                        msg.setValue(field, msgs);
-                        break;
+                    else
+                        msg.setValue(field, Long.parseLong(el.getTextContent()));
+                    break;
+                case TYPE_PLAINTEXT:
+                    msg.setValue(field, el.getTextContent());
+                    break;
+                case TYPE_RAWDATA:
+                    msg.setValue(field, Base64.decode(el.getTextContent().replaceAll("\n", "")));
+                    break;
+                case TYPE_MESSAGE:
+                    NodeList inner = el.getChildNodes();
+                    for (int j = 0; j < inner.getLength(); j++) {
+                        Node nd = inner.item(j);
+                        if (nd instanceof Element)
+                            msg.setValue(field, parseElement(defs, (Element) nd));
+                    }
+                    break;
+                case TYPE_MESSAGELIST:
+                    Vector<IMCMessage> msgs = new Vector<IMCMessage>();
+                    NodeList innerMsgs = el.getChildNodes();
+                    for (int k = 0; k < innerMsgs.getLength(); k++) {
+                        Node nd = innerMsgs.item(k);
+                        if (nd instanceof Element)
+                            msgs.add(parseElement(defs, (Element) nd));
+                    }
+                    msg.setValue(field, msgs);
+                    break;
                 }
             }
         }
@@ -1516,8 +1480,71 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
         DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = fac.newDocumentBuilder();
         Document doc = db.parse(new ByteArrayInputStream(xml.getBytes()));
-        return parseElement(IMCDefinition.getInstance(),
-                doc.getDocumentElement());
+        return parseElement(IMCDefinition.getInstance(), doc.getDocumentElement());
+    }
+
+    private static IMCMessage parseJsonObject(JsonObject obj) {
+        IMCMessage msg = IMCDefinition.getInstance().create(obj.getString("abbrev", null));
+        for (Member m : obj) {
+            if (m.getName().equals("abbrev"))
+                continue;
+
+            IMCFieldType type = msg.getMessageType().getFieldType(m.getName());
+            if (type == null)
+                type = msg.getHeader().getMessageType().getFieldType(m.getName());
+
+            switch (type) {
+            case TYPE_PLAINTEXT:
+                msg.setValue(m.getName(), m.getValue().asString());
+                break;
+            case TYPE_RAWDATA:
+                msg.setValue(m.getName(), Base64.decode(m.getValue().asString()));
+                break;
+            case TYPE_MESSAGE:
+                msg.setValue(m.getName(), parseJsonObject(m.getValue().asObject()));
+                break;
+            case TYPE_MESSAGELIST:
+                JsonArray arr = m.getValue().asArray();
+                ArrayList<IMCMessage> msgs = new ArrayList<IMCMessage>();
+                for (int i = 0; i < arr.size(); i++) {
+                    msgs.add(parseJsonObject(arr.get(i).asObject()));
+                }
+                msg.setValue(m.getName(), msgs);
+                break;
+            case TYPE_FP32:
+                msg.setValue(m.getName(), m.getValue().asFloat());
+                break;
+            case TYPE_FP64:
+                msg.setValue(m.getName(), m.getValue().asDouble());
+                break;
+            default:
+                LinkedHashMap<String, Long> meanings = msg.getMessageType().getFieldMeanings(m.getName());
+                
+                if (meanings == null)
+                    msg.setValue(m.getName(), m.getValue().asLong());
+                else {
+                    String value = m.getValue().asString();
+                    String[] parts = value.split("\\|");
+                    long val = 0;
+                    for (String part : parts) {
+                        if (meanings.containsKey(part.trim()))
+                            val += meanings.get(part.trim());
+                    }
+                    try {
+                        val += m.getValue().asLong();
+                    } catch (Exception e) {
+
+                    }
+                    msg.setValue(m.getName(), val);
+                }
+            }
+        }
+        return msg;
+    }
+
+    public static IMCMessage parseJson(String json) {
+        JsonObject obj = JsonObject.readFrom(json);
+        return parseJsonObject(obj);
     }
 
     /**
@@ -1539,7 +1566,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
      * message
      *
      * @return The difference between current time and the timestamp in this
-     * message, in seconds
+     *         message, in seconds
      */
     public double getAgeInSeconds() {
         return (System.currentTimeMillis() - getTimestampMillis()) / 1000.0;

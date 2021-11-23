@@ -1,6 +1,5 @@
 package pt.lsts.util;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 import pt.lsts.imc.IMCDefinition;
