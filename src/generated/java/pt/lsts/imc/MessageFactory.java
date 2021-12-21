@@ -368,6 +368,10 @@ public class MessageFactory {
 				return new ReportControl(defs);
 			case AssetReport.ID_STATIC:
 				return new AssetReport(defs);
+			case SmsRequest.ID_STATIC:
+				return new SmsRequest(defs);
+			case SmsStatus.ID_STATIC:
+				return new SmsStatus(defs);
 			case Abort.ID_STATIC:
 				return new Abort(defs);
 			case PlanSpecification.ID_STATIC:
@@ -480,6 +484,8 @@ public class MessageFactory {
 				return new TypedEntityParameter(defs);
 			case TypedEntityParameters.ID_STATIC:
 				return new TypedEntityParameters(defs);
+			case CommRestriction.ID_STATIC:
+				return new CommRestriction(defs);
 			default:
 				return new IMCMessage(defs);
 		}

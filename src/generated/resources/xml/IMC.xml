@@ -5547,6 +5547,40 @@
     <field name="Additional Info" abbrev="msgs" type="message-list" />
   </message>
 
+  <message id="517" name="SMS Transmission Request" abbrev="SmsRequest" category="Networking">
+    <description>
+      Request SMS Text sending.
+    </description>
+    <field name="Request Identifier" abbrev="req_id" type="uint16_t">
+    </field>
+    <field name="Destination" abbrev="destination" type="plaintext">
+      <description>
+        Recipient identifier (number or name).
+      </description>
+    </field>
+    <field name="Timeout" abbrev="timeout" type="fp64_t" unit="s">
+    <description> Period of time to send message (in seconds). </description>
+    </field>
+    <field name="SMS Text" abbrev="sms_text" type="plaintext">
+    </field>
+  </message>
+
+  <message id="518" name="SMS Transmission Status" abbrev="SmsStatus" category="Networking">
+    <description>
+      Reply sent in response to a SMS sending request.
+    </description>
+    <field name="Request Identifier" abbrev="req_id" type="uint16_t"/>
+    <field name="Status" abbrev="status" type="uint8_t" unit="Enumerated" prefix="SMSSTAT">
+      <value id="0" abbrev="QUEUED" name="Queued"/>
+      <value id="1" abbrev="SENT" name="Sent"/>
+      <value id="101" abbrev="INPUT_FAILURE" name="Input Error"/>
+      <value id="102" abbrev="ERROR" name="Error trying to send sms"/>
+    </field>
+    <field name="Information" abbrev="info" type="plaintext">
+      <description> Error description.</description>
+    </field>
+  </message>
+
   <!-- Plan Supervision -->
   <message id="550" name="Abort" abbrev="Abort" source="ccu" category="Plan Supervision">
     <description>
@@ -7306,4 +7340,19 @@
       <description>Contains an optionally defined List of TypedEntityParameter as a response to a TypedEntityParamaters Request.</description>
     </field>
   </message>
+
+  <message id="2010" name="Communication Restriction" abbrev="CommRestriction" source="ccu,vehicle" category="Networking">
+    <description>This message is used to restrict the vehicle from using some communication means.</description>
+    <field name="Restricted Communication Means" abbrev="restriction" type="uint8_t" unit="Bitfield" prefix="MEAN">
+      <description>The restricted communication means.</description>
+      <value abbrev="SATELLITE" name="Satellite" id="0x01" />
+      <value abbrev="ACOUSTIC" name="Acoustic" id="0x02" />
+      <value abbrev="WIFI" name="WiFi" id="0x04" />
+      <value abbrev="GSM" name="GSM" id="0x08" />
+    </field>
+    <field name="Reason" abbrev="reason" type="plaintext">
+      <description>Textual description for why this restriction is needed.</description>
+    </field>
+  </message>
+
 </messages>
