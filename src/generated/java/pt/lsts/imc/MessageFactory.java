@@ -486,6 +486,10 @@ public class MessageFactory {
 				return new TypedEntityParameters(defs);
 			case CommRestriction.ID_STATIC:
 				return new CommRestriction(defs);
+			case WifiStats.ID_STATIC:
+				return new WifiStats(defs);
+			case WifiNetwork.ID_STATIC:
+				return new WifiNetwork(defs);
 			default:
 				return new IMCMessage(defs);
 		}

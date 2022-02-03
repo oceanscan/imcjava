@@ -106,7 +106,7 @@ public class TypedEntityParameters extends IMCMessage {
 	}
 
 	/**
-	 *  @return operation (enumerated) - uint8_t
+	 *  @return Operation (enumerated) - uint8_t
 	 */
 	public OP getOp() {
 		try {
@@ -127,7 +127,7 @@ public class TypedEntityParameters extends IMCMessage {
 	}
 
 	/**
-	 *  @param op operation (enumerated)
+	 *  @param op Operation (enumerated)
 	 */
 	public TypedEntityParameters setOp(OP op) {
 		values.put("op", op.value());
@@ -135,7 +135,7 @@ public class TypedEntityParameters extends IMCMessage {
 	}
 
 	/**
-	 *  @param op operation (as a String)
+	 *  @param op Operation (as a String)
 	 */
 	public TypedEntityParameters setOpStr(String op) {
 		setValue("op", op);
@@ -143,7 +143,7 @@ public class TypedEntityParameters extends IMCMessage {
 	}
 
 	/**
-	 *  @param op operation (integer value)
+	 *  @param op Operation (integer value)
 	 */
 	public TypedEntityParameters setOpVal(short op) {
 		setValue("op", op);
@@ -151,14 +151,14 @@ public class TypedEntityParameters extends IMCMessage {
 	}
 
 	/**
-	 *  @return request id - uint32_t
+	 *  @return Request identitier - uint32_t
 	 */
 	public long getRequestId() {
 		return getLong("request_id");
 	}
 
 	/**
-	 *  @param request_id request id
+	 *  @param request_id Request identitier
 	 */
 	public TypedEntityParameters setRequestId(long request_id) {
 		values.put("request_id", request_id);
@@ -181,7 +181,7 @@ public class TypedEntityParameters extends IMCMessage {
 	}
 
 	/**
-	 *  @return parameters - message-list
+	 *  @return Parameters - message-list
 	 */
 	public java.util.Vector<TypedEntityParameter> getParameters() {
 		try {
@@ -194,7 +194,7 @@ public class TypedEntityParameters extends IMCMessage {
 	}
 
 	/**
-	 *  @param parameters parameters
+	 *  @param parameters Parameters
 	 */
 	public TypedEntityParameters setParameters(java.util.Collection<TypedEntityParameter> parameters) {
 		values.put("parameters", parameters);
