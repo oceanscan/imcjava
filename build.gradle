@@ -52,6 +52,21 @@ task sender(type: JavaExec) {
     main = "pt.lsts.imc.sender.MessageSender"
 }
 
+
+task replay(type: JavaExec) {
+    classpath sourceSets.main.runtimeClasspath
+    main = "pt.lsts.util.ImcReplay"
+    args = ["replay"]
+}
+
+task toJson(type: JavaExec) {
+    classpath sourceSets.main.runtimeClasspath
+    main = "pt.lsts.util.ImcReplay"
+    args = ["toJson"]    
+}
+
+
+
 //******************************************************************************
 //* Publishing.                                                                *
 //******************************************************************************

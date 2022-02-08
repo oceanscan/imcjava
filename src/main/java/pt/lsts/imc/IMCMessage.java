@@ -49,8 +49,10 @@ import java.util.Vector;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonValue;
 import com.eclipsesource.json.JsonObject.Member;
 
 import org.w3c.dom.Document;
@@ -1483,7 +1485,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
         return parseElement(IMCDefinition.getInstance(), doc.getDocumentElement());
     }
 
-    private static IMCMessage parseJsonObject(JsonObject obj) {
+    public static IMCMessage parseJsonObject(JsonObject obj) {
         IMCMessage msg = IMCDefinition.getInstance().create(obj.getString("abbrev", null));
         for (Member m : obj) {
             if (m.getName().equals("abbrev"))
@@ -1543,8 +1545,8 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
     }
 
     public static IMCMessage parseJson(String json) {
-        JsonObject obj = JsonObject.readFrom(json);
-        return parseJsonObject(obj);
+        JsonValue obj = Json.parse(json);
+        return parseJsonObject(obj.asObject());
     }
 
     /**
