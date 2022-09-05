@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
 group 'pt.lsts'
-version '5.4.26.2'
+version '5.5.0'
 
 ext
 {
@@ -39,7 +39,7 @@ sourceSets {
 task generate(type: JavaExec) {
     classpath sourceSets.main.runtimeClasspath
     main = "pt.lsts.imc.generator.ClassGenerator"
-    args rootProject.ext.imcDir, rootProject.file('src/generated').absolutePath
+    args "IMC/", rootProject.file('src/generated').absolutePath
 }
 
 task protocol(type: JavaExec) {

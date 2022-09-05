@@ -30,13 +30,13 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message Sonar Pulse (2006)<br/>
+ *  IMC Message Sonar Pulse (2013)<br/>
  *  Information regarding a sent/received Sonar pulse.<br/>
  */
 
 public class SonarPulse extends IMCMessage {
 
-	public static final int ID_STATIC = 2006;
+	public static final int ID_STATIC = 2013;
 
 	public SonarPulse() {
 		super(ID_STATIC);
