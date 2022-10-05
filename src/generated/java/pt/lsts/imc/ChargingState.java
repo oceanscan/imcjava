@@ -30,19 +30,34 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message Sonar Pulse (2013)<br/>
- *  Information regarding a sent/received Sonar pulse.<br/>
+ *  IMC Message Charging State (315)<br/>
+ *  Reports if the vehicle is charging or not<br/>
  */
 
-public class SonarPulse extends IMCMessage {
+public class ChargingState extends IMCMessage {
 
-	public static final int ID_STATIC = 2013;
+	public enum IS_CHARGING {
+		NOT_CHARGING(0),
+		IS_CHARGING(1);
 
-	public SonarPulse() {
+		protected long value;
+
+		public long value() {
+			return value;
+		}
+
+		IS_CHARGING(long value) {
+			this.value = value;
+		}
+	}
+
+	public static final int ID_STATIC = 315;
+
+	public ChargingState() {
 		super(ID_STATIC);
 	}
 
-	public SonarPulse(IMCMessage msg) {
+	public ChargingState(IMCMessage msg) {
 		super(ID_STATIC);
 		try{
 			copyFrom(msg);
@@ -52,20 +67,20 @@ public class SonarPulse extends IMCMessage {
 		}
 	}
 
-	public SonarPulse(IMCDefinition defs) {
+	public ChargingState(IMCDefinition defs) {
 		super(defs, ID_STATIC);
 	}
 
-	public static SonarPulse create(Object... values) {
-		SonarPulse m = new SonarPulse();
+	public static ChargingState create(Object... values) {
+		ChargingState m = new ChargingState();
 		for (int i = 0; i < values.length-1; i+= 2)
 			m.setValue(values[i].toString(), values[i+1]);
 		return m;
 	}
 
-	public static SonarPulse clone(IMCMessage msg) throws Exception {
+	public static ChargingState clone(IMCMessage msg) throws Exception {
 
-		SonarPulse m = new SonarPulse();
+		ChargingState m = new ChargingState();
 		if (msg == null)
 			return m;
 		if(msg.definitions != m.definitions){
@@ -80,71 +95,53 @@ public class SonarPulse extends IMCMessage {
 		return m;
 	}
 
-	public SonarPulse(int frequency, int pulse_length, int time_delay, int simulated_speed) {
+	public ChargingState(IS_CHARGING is_charging) {
 		super(ID_STATIC);
-		setFrequency(frequency);
-		setPulseLength(pulse_length);
-		setTimeDelay(time_delay);
-		setSimulatedSpeed(simulated_speed);
+		setIsCharging(is_charging);
 	}
 
 	/**
-	 *  @return Frequency (hz) - int32_t
+	 *  @return Is Charging (enumerated) - uint8_t
 	 */
-	public int getFrequency() {
-		return getInteger("frequency");
+	public IS_CHARGING getIsCharging() {
+		try {
+			IS_CHARGING o = IS_CHARGING.valueOf(getMessageType().getFieldPossibleValues("is_charging").get(getLong("is_charging")));
+			return o;
+		}
+		catch (Exception e) {
+			return null;
+		}
+	}
+
+	public String getIsChargingStr() {
+		return getString("is_charging");
+	}
+
+	public short getIsChargingVal() {
+		return (short) getInteger("is_charging");
 	}
 
 	/**
-	 *  @param frequency Frequency (hz)
+	 *  @param is_charging Is Charging (enumerated)
 	 */
-	public SonarPulse setFrequency(int frequency) {
-		values.put("frequency", frequency);
+	public ChargingState setIsCharging(IS_CHARGING is_charging) {
+		values.put("is_charging", is_charging.value());
 		return this;
 	}
 
 	/**
-	 *  @return Pulse Length (ms) - int32_t
+	 *  @param is_charging Is Charging (as a String)
 	 */
-	public int getPulseLength() {
-		return getInteger("pulse_length");
-	}
-
-	/**
-	 *  @param pulse_length Pulse Length (ms)
-	 */
-	public SonarPulse setPulseLength(int pulse_length) {
-		values.put("pulse_length", pulse_length);
+	public ChargingState setIsChargingStr(String is_charging) {
+		setValue("is_charging", is_charging);
 		return this;
 	}
 
 	/**
-	 *  @return Time Delay (ms) - int32_t
+	 *  @param is_charging Is Charging (integer value)
 	 */
-	public int getTimeDelay() {
-		return getInteger("time_delay");
-	}
-
-	/**
-	 *  @param time_delay Time Delay (ms)
-	 */
-	public SonarPulse setTimeDelay(int time_delay) {
-		values.put("time_delay", time_delay);
-		return this;
-	}
-
-	/**
-	 *  @return Simulated Speed (m/s) - int32_t
-	 */
-	public int getSimulatedSpeed() {
-		return getInteger("simulated_speed");
-	}
-
-	/**
-	 *  @param simulated_speed Simulated Speed (m/s)
-	 */
-	public SonarPulse setSimulatedSpeed(int simulated_speed) {
-		values.put("simulated_speed", simulated_speed);
+	public ChargingState setIsChargingVal(short is_charging) {
+		setValue("is_charging", is_charging);
 		return this;
 	}
 

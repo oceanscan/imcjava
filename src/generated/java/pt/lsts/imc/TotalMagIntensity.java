@@ -30,19 +30,18 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message Sonar Pulse (2013)<br/>
- *  Information regarding a sent/received Sonar pulse.<br/>
+ *  IMC Message Total Magnetic Field Intensity (2006)<br/>
  */
 
-public class SonarPulse extends IMCMessage {
+public class TotalMagIntensity extends IMCMessage {
 
-	public static final int ID_STATIC = 2013;
+	public static final int ID_STATIC = 2006;
 
-	public SonarPulse() {
+	public TotalMagIntensity() {
 		super(ID_STATIC);
 	}
 
-	public SonarPulse(IMCMessage msg) {
+	public TotalMagIntensity(IMCMessage msg) {
 		super(ID_STATIC);
 		try{
 			copyFrom(msg);
@@ -52,20 +51,20 @@ public class SonarPulse extends IMCMessage {
 		}
 	}
 
-	public SonarPulse(IMCDefinition defs) {
+	public TotalMagIntensity(IMCDefinition defs) {
 		super(defs, ID_STATIC);
 	}
 
-	public static SonarPulse create(Object... values) {
-		SonarPulse m = new SonarPulse();
+	public static TotalMagIntensity create(Object... values) {
+		TotalMagIntensity m = new TotalMagIntensity();
 		for (int i = 0; i < values.length-1; i+= 2)
 			m.setValue(values[i].toString(), values[i+1]);
 		return m;
 	}
 
-	public static SonarPulse clone(IMCMessage msg) throws Exception {
+	public static TotalMagIntensity clone(IMCMessage msg) throws Exception {
 
-		SonarPulse m = new SonarPulse();
+		TotalMagIntensity m = new TotalMagIntensity();
 		if (msg == null)
 			return m;
 		if(msg.definitions != m.definitions){
@@ -80,71 +79,23 @@ public class SonarPulse extends IMCMessage {
 		return m;
 	}
 
-	public SonarPulse(int frequency, int pulse_length, int time_delay, int simulated_speed) {
+	public TotalMagIntensity(double value) {
 		super(ID_STATIC);
-		setFrequency(frequency);
-		setPulseLength(pulse_length);
-		setTimeDelay(time_delay);
-		setSimulatedSpeed(simulated_speed);
+		setValue(value);
 	}
 
 	/**
-	 *  @return Frequency (hz) - int32_t
+	 *  @return Value - fp64_t
 	 */
-	public int getFrequency() {
-		return getInteger("frequency");
+	public double getValue() {
+		return getDouble("value");
 	}
 
 	/**
-	 *  @param frequency Frequency (hz)
+	 *  @param value Value
 	 */
-	public SonarPulse setFrequency(int frequency) {
-		values.put("frequency", frequency);
-		return this;
-	}
-
-	/**
-	 *  @return Pulse Length (ms) - int32_t
-	 */
-	public int getPulseLength() {
-		return getInteger("pulse_length");
-	}
-
-	/**
-	 *  @param pulse_length Pulse Length (ms)
-	 */
-	public SonarPulse setPulseLength(int pulse_length) {
-		values.put("pulse_length", pulse_length);
-		return this;
-	}
-
-	/**
-	 *  @return Time Delay (ms) - int32_t
-	 */
-	public int getTimeDelay() {
-		return getInteger("time_delay");
-	}
-
-	/**
-	 *  @param time_delay Time Delay (ms)
-	 */
-	public SonarPulse setTimeDelay(int time_delay) {
-		values.put("time_delay", time_delay);
-		return this;
-	}
-
-	/**
-	 *  @return Simulated Speed (m/s) - int32_t
-	 */
-	public int getSimulatedSpeed() {
-		return getInteger("simulated_speed");
-	}
-
-	/**
-	 *  @param simulated_speed Simulated Speed (m/s)
-	 */
-	public SonarPulse setSimulatedSpeed(int simulated_speed) {
-		values.put("simulated_speed", simulated_speed);
+	public TotalMagIntensity setValue(double value) {
+		values.put("value", value);
 		return this;
 	}
 

@@ -242,6 +242,8 @@ public class MessageFactory {
 				return new QueryLedBrightness(defs);
 			case SetLedBrightness.ID_STATIC:
 				return new SetLedBrightness(defs);
+			case ChargingState.ID_STATIC:
+				return new ChargingState(defs);
 			case EstimatedState.ID_STATIC:
 				return new EstimatedState(defs);
 			case EstimatedStreamVelocity.ID_STATIC:
@@ -476,8 +478,8 @@ public class MessageFactory {
 				return new FluorescentDissolvedOrganicMatter(defs);
 			case IridiumMsgTxExtended.ID_STATIC:
 				return new IridiumMsgTxExtended(defs);
-			case SonarPulse.ID_STATIC:
-				return new SonarPulse(defs);
+			case TotalMagIntensity.ID_STATIC:
+				return new TotalMagIntensity(defs);
 			case ValidatePlan.ID_STATIC:
 				return new ValidatePlan(defs);
 			case TypedEntityParameter.ID_STATIC:
@@ -490,6 +492,8 @@ public class MessageFactory {
 				return new WifiStats(defs);
 			case WifiNetwork.ID_STATIC:
 				return new WifiNetwork(defs);
+			case SonarPulse.ID_STATIC:
+				return new SonarPulse(defs);
 			default:
 				return new IMCMessage(defs);
 		}
