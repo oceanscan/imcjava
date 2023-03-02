@@ -57,77 +57,6 @@ public class TypedEntityParameter extends IMCMessage {
 		}
 	}
 
-	public enum UNITS {
-		METERPERSQUARESECOND(0),
-		DECIBELPERMETER(1),
-		DEGREE(2),
-		RADIAN(3),
-		RADIANPERSECOND(4),
-		DEGREEPERSECOND(5),
-		SQUAREMETER(6),
-		KILOGRAMPERCUBICMETER(7),
-		BIT(8),
-		BYTE(9),
-		KIBIBYTE(10),
-		MIBIBYTE(11),
-		GIBIBYTE(12),
-		BITPERSECOND(13),
-		PIXEL(14),
-		METER(15),
-		CENTIMETER(16),
-		KILOMETER(17),
-		KILOGRAMPERSECOND(18),
-		KILOGRAMPERMETER(19),
-		COULOMB(20),
-		AMPEREHOUR(21),
-		MILLIAMPEREHOUR(22),
-		AMPERE(23),
-		MILLIAMPERE(24),
-		VOLT(25),
-		MILLIVOLT(26),
-		WATTHOUR(27),
-		KILLOWATTHOUR(28),
-		NEWTON(29),
-		HERTZ(30),
-		KILOHERTZ(31),
-		MEGAHERTZ(32),
-		DECIBEL(33),
-		GAUSS(34),
-		GRAM(35),
-		KILOGRAM(36),
-		KILOGRAMSQUAREMETER(37),
-		WATT(38),
-		MILLIWATT(39),
-		ATMOSPHERE(40),
-		PASCAL(41),
-		KILOPASCAL(42),
-		BAR(43),
-		RPM(44),
-		DEGREECELSIUS(45),
-		SECOND(46),
-		MILLISECOND(47),
-		MICROSECOND(48),
-		NANOSECOND(49),
-		MINUTE(50),
-		NETWONMETER(51),
-		NETWONMETERPERRADIAN(52),
-		METERPERSECOND(53),
-		KNOT(54),
-		CUBICMETER(55),
-		PERCENTAGE(56),
-		NONE(57);
-
-		protected long value;
-
-		public long value() {
-			return value;
-		}
-
-		UNITS(long value) {
-			this.value = value;
-		}
-	}
-
 	public enum VISIBILITY {
 		USER(0),
 		DEVELOPER(1);
@@ -204,14 +133,15 @@ public class TypedEntityParameter extends IMCMessage {
 		return m;
 	}
 
-	public TypedEntityParameter(String name, TYPE type, String default_value, UNITS units, String description, float min_value, float max_value, long list_min_size, long list_max_size, VISIBILITY visibility, SCOPE scope) {
+	public TypedEntityParameter(String name, TYPE type, String default_value, String units, String description, float min_value, float max_value, long list_min_size, long list_max_size, VISIBILITY visibility, SCOPE scope) {
 		super(ID_STATIC);
 		if (name != null)
 			setName(name);
 		setType(type);
 		if (default_value != null)
 			setDefaultValue(default_value);
-		setUnits(units);
+		if (units != null)
+			setUnits(units);
 		if (description != null)
 			setDescription(description);
 		setMinValue(min_value);
@@ -298,47 +228,17 @@ public class TypedEntityParameter extends IMCMessage {
 	}
 
 	/**
-	 *  @return Units (enumerated) - uint8_t
+	 *  @return Units - plaintext
 	 */
-	public UNITS getUnits() {
-		try {
-			UNITS o = UNITS.valueOf(getMessageType().getFieldPossibleValues("units").get(getLong("units")));
-			return o;
-		}
-		catch (Exception e) {
-			return null;
-		}
-	}
-
-	public String getUnitsStr() {
+	public String getUnits() {
 		return getString("units");
 	}
 
-	public short getUnitsVal() {
-		return (short) getInteger("units");
-	}
-
 	/**
-	 *  @param units Units (enumerated)
+	 *  @param units Units
 	 */
-	public TypedEntityParameter setUnits(UNITS units) {
-		values.put("units", units.value());
-		return this;
-	}
-
-	/**
-	 *  @param units Units (as a String)
-	 */
-	public TypedEntityParameter setUnitsStr(String units) {
-		setValue("units", units);
-		return this;
-	}
-
-	/**
-	 *  @param units Units (integer value)
-	 */
-	public TypedEntityParameter setUnitsVal(short units) {
-		setValue("units", units);
+	public TypedEntityParameter setUnits(String units) {
+		values.put("units", units);
 		return this;
 	}
 

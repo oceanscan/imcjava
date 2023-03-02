@@ -34,8 +34,7 @@ package pt.lsts.imc;
  *  This maneuver follows a direct command given by an external entity.<br/>
  */
 
-@SuppressWarnings("unchecked")
-public class FollowCommand extends Maneuver {
+public class FollowCommand extends IMCMessage {
 
 	public static final int ID_STATIC = 496;
 

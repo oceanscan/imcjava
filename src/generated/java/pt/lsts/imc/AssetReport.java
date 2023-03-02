@@ -30,7 +30,7 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message Asset Report  (515)<br/>
+ *  IMC Message Asset Report  (525)<br/>
  *  This message is represents an Asset position / status.<br/>
  */
 
@@ -53,7 +53,7 @@ public class AssetReport extends IMCMessage {
 		}
 	}
 
-	public static final int ID_STATIC = 515;
+	public static final int ID_STATIC = 525;
 
 	public AssetReport() {
 		super(ID_STATIC);
