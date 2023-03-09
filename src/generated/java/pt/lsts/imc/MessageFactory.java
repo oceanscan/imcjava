@@ -728,6 +728,8 @@ public class MessageFactory {
 				return new WifiNetwork(defs);
 			case SonarPulse.ID_STATIC:
 				return new SonarPulse(defs);
+			case HealthCheck.ID_STATIC:
+				return new HealthCheck(defs);
 			default:
 				return new IMCMessage(defs);
 		}

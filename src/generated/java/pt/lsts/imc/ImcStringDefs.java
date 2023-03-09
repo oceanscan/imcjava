@@ -31,9 +31,9 @@ package pt.lsts.imc;
 
 public class ImcStringDefs {
 
-	public static final String IMC_SHA = "fedca688655fd253da1a743252d07aed1712a26f";
-	public static final String IMC_BRANCH = "2022-06-27 fedca68 (HEAD -> feature/unify, origin/feature/unify)";
-	public static final String IMC_COMMIT = "Paulo Dias (paulo.sousa.dias@gmail.com), Mon Jun 27 09:45:34 WEST 2022, ChargingState: Defined the charging states as an enumeration.";
+	public static final String IMC_SHA = "3ae4ed6aed5cd677325fba7569491a2f082123bd";
+	public static final String IMC_BRANCH = "2023-03-08 3ae4ed6 (HEAD -> feature/unify, origin/feature/unify)";
+	public static final String IMC_COMMIT = "GitHub (noreply@github.com), Wed Mar 08 10:03:53 WET 2023, Merge pull request #35 from ineeve/feature/healthcheck\n\nIMC.xml: adds HealthCheck msg";
 
 	public static java.util.Map<String, Integer> IMC_ADDRESSES = new java.util.LinkedHashMap<String, Integer>();
 
