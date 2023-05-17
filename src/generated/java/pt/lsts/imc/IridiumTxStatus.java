@@ -40,7 +40,8 @@ public class IridiumTxStatus extends IMCMessage {
 		ERROR(2),
 		QUEUED(3),
 		TRANSMIT(4),
-		EXPIRED(5);
+		EXPIRED(5),
+		EMPTY(6);
 
 		protected long value;
 

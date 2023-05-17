@@ -30,7 +30,7 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message Typed Entity Parameter (2008)<br/>
+ *  IMC Message Typed Entity Parameter (2017)<br/>
  *  Entity parameter with all the data that defines an entity parameter.<br/>
  */
 
@@ -53,77 +53,6 @@ public class TypedEntityParameter extends IMCMessage {
 		}
 
 		TYPE(long value) {
-			this.value = value;
-		}
-	}
-
-	public enum UNITS {
-		METERPERSQUARESECOND(0),
-		DECIBELPERMETER(1),
-		DEGREE(2),
-		RADIAN(3),
-		RADIANPERSECOND(4),
-		DEGREEPERSECOND(5),
-		SQUAREMETER(6),
-		KILOGRAMPERCUBICMETER(7),
-		BIT(8),
-		BYTE(9),
-		KIBIBYTE(10),
-		MIBIBYTE(11),
-		GIBIBYTE(12),
-		BITPERSECOND(13),
-		PIXEL(14),
-		METER(15),
-		CENTIMETER(16),
-		KILOMETER(17),
-		KILOGRAMPERSECOND(18),
-		KILOGRAMPERMETER(19),
-		COULOMB(20),
-		AMPEREHOUR(21),
-		MILLIAMPEREHOUR(22),
-		AMPERE(23),
-		MILLIAMPERE(24),
-		VOLT(25),
-		MILLIVOLT(26),
-		WATTHOUR(27),
-		KILLOWATTHOUR(28),
-		NEWTON(29),
-		HERTZ(30),
-		KILOHERTZ(31),
-		MEGAHERTZ(32),
-		DECIBEL(33),
-		GAUSS(34),
-		GRAM(35),
-		KILOGRAM(36),
-		KILOGRAMSQUAREMETER(37),
-		WATT(38),
-		MILLIWATT(39),
-		ATMOSPHERE(40),
-		PASCAL(41),
-		KILOPASCAL(42),
-		BAR(43),
-		RPM(44),
-		DEGREECELSIUS(45),
-		SECOND(46),
-		MILLISECOND(47),
-		MICROSECOND(48),
-		NANOSECOND(49),
-		MINUTE(50),
-		NETWONMETER(51),
-		NETWONMETERPERRADIAN(52),
-		METERPERSECOND(53),
-		KNOT(54),
-		CUBICMETER(55),
-		PERCENTAGE(56),
-		NONE(57);
-
-		protected long value;
-
-		public long value() {
-			return value;
-		}
-
-		UNITS(long value) {
 			this.value = value;
 		}
 	}
@@ -160,7 +89,7 @@ public class TypedEntityParameter extends IMCMessage {
 		}
 	}
 
-	public static final int ID_STATIC = 2008;
+	public static final int ID_STATIC = 2017;
 
 	public TypedEntityParameter() {
 		super(ID_STATIC);
@@ -204,33 +133,38 @@ public class TypedEntityParameter extends IMCMessage {
 		return m;
 	}
 
-	public TypedEntityParameter(String name, TYPE type, String default_value, UNITS units, String description, float min_value, float max_value, long list_min_size, long list_max_size, VISIBILITY visibility, SCOPE scope) {
+	public TypedEntityParameter(String name, TYPE type, String default_value, String units, String description, String values_list, float min_value, float max_value, short list_min_size, short list_max_size, java.util.Collection<ValuesIf> values_if_list, VISIBILITY visibility, SCOPE scope) {
 		super(ID_STATIC);
 		if (name != null)
 			setName(name);
 		setType(type);
 		if (default_value != null)
 			setDefaultValue(default_value);
-		setUnits(units);
+		if (units != null)
+			setUnits(units);
 		if (description != null)
 			setDescription(description);
+		if (values_list != null)
+			setValuesList(values_list);
 		setMinValue(min_value);
 		setMaxValue(max_value);
 		setListMinSize(list_min_size);
 		setListMaxSize(list_max_size);
+		if (values_if_list != null)
+			setValuesIfList(values_if_list);
 		setVisibility(visibility);
 		setScope(scope);
 	}
 
 	/**
-	 *  @return Entity Name - plaintext
+	 *  @return Parameter Name - plaintext
 	 */
 	public String getName() {
 		return getString("name");
 	}
 
 	/**
-	 *  @param name Entity Name
+	 *  @param name Parameter Name
 	 */
 	public TypedEntityParameter setName(String name) {
 		values.put("name", name);
@@ -298,47 +232,17 @@ public class TypedEntityParameter extends IMCMessage {
 	}
 
 	/**
-	 *  @return Units (enumerated) - uint8_t
+	 *  @return Units - plaintext
 	 */
-	public UNITS getUnits() {
-		try {
-			UNITS o = UNITS.valueOf(getMessageType().getFieldPossibleValues("units").get(getLong("units")));
-			return o;
-		}
-		catch (Exception e) {
-			return null;
-		}
-	}
-
-	public String getUnitsStr() {
+	public String getUnits() {
 		return getString("units");
 	}
 
-	public short getUnitsVal() {
-		return (short) getInteger("units");
-	}
-
 	/**
-	 *  @param units Units (enumerated)
+	 *  @param units Units
 	 */
-	public TypedEntityParameter setUnits(UNITS units) {
-		values.put("units", units.value());
-		return this;
-	}
-
-	/**
-	 *  @param units Units (as a String)
-	 */
-	public TypedEntityParameter setUnitsStr(String units) {
-		setValue("units", units);
-		return this;
-	}
-
-	/**
-	 *  @param units Units (integer value)
-	 */
-	public TypedEntityParameter setUnitsVal(short units) {
-		setValue("units", units);
+	public TypedEntityParameter setUnits(String units) {
+		values.put("units", units);
 		return this;
 	}
 
@@ -354,6 +258,21 @@ public class TypedEntityParameter extends IMCMessage {
 	 */
 	public TypedEntityParameter setDescription(String description) {
 		values.put("description", description);
+		return this;
+	}
+
+	/**
+	 *  @return Values List - plaintext
+	 */
+	public String getValuesList() {
+		return getString("values_list");
+	}
+
+	/**
+	 *  @param values_list Values List
+	 */
+	public TypedEntityParameter setValuesList(String values_list) {
+		values.put("values_list", values_list);
 		return this;
 	}
 
@@ -388,32 +307,53 @@ public class TypedEntityParameter extends IMCMessage {
 	}
 
 	/**
-	 *  @return List Min Size - uint32_t
+	 *  @return List Min Size - uint8_t
 	 */
-	public long getListMinSize() {
-		return getLong("list_min_size");
+	public short getListMinSize() {
+		return (short) getInteger("list_min_size");
 	}
 
 	/**
 	 *  @param list_min_size List Min Size
 	 */
-	public TypedEntityParameter setListMinSize(long list_min_size) {
+	public TypedEntityParameter setListMinSize(short list_min_size) {
 		values.put("list_min_size", list_min_size);
 		return this;
 	}
 
 	/**
-	 *  @return List Max Size - uint32_t
+	 *  @return List Max Size - uint8_t
 	 */
-	public long getListMaxSize() {
-		return getLong("list_max_size");
+	public short getListMaxSize() {
+		return (short) getInteger("list_max_size");
 	}
 
 	/**
 	 *  @param list_max_size List Max Size
 	 */
-	public TypedEntityParameter setListMaxSize(long list_max_size) {
+	public TypedEntityParameter setListMaxSize(short list_max_size) {
 		values.put("list_max_size", list_max_size);
+		return this;
+	}
+
+	/**
+	 *  @return Values If List - message-list
+	 */
+	public java.util.Vector<ValuesIf> getValuesIfList() {
+		try {
+			return getMessageList("values_if_list", ValuesIf.class);
+		}
+		catch (Exception e) {
+			return null;
+		}
+
+	}
+
+	/**
+	 *  @param values_if_list Values If List
+	 */
+	public TypedEntityParameter setValuesIfList(java.util.Collection<ValuesIf> values_if_list) {
+		values.put("values_if_list", values_if_list);
 		return this;
 	}
 

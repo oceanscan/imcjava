@@ -66,6 +66,10 @@ public class MessageFactory {
 				return new TransportBindings(defs);
 			case RestartSystem.ID_STATIC:
 				return new RestartSystem(defs);
+			case DevCalibrationControl.ID_STATIC:
+				return new DevCalibrationControl(defs);
+			case DevCalibrationState.ID_STATIC:
+				return new DevCalibrationState(defs);
 			case EntityActivationState.ID_STATIC:
 				return new EntityActivationState(defs);
 			case QueryEntityActivationState.ID_STATIC:
@@ -76,6 +80,12 @@ public class MessageFactory {
 				return new MsgList(defs);
 			case SimulatedState.ID_STATIC:
 				return new SimulatedState(defs);
+			case LeakSimulation.ID_STATIC:
+				return new LeakSimulation(defs);
+			case UASimulation.ID_STATIC:
+				return new UASimulation(defs);
+			case DynamicsSimParam.ID_STATIC:
+				return new DynamicsSimParam(defs);
 			case StorageUsage.ID_STATIC:
 				return new StorageUsage(defs);
 			case CacheControl.ID_STATIC:
@@ -90,6 +100,18 @@ public class MessageFactory {
 				return new ReplayControl(defs);
 			case ClockControl.ID_STATIC:
 				return new ClockControl(defs);
+			case HistoricCTD.ID_STATIC:
+				return new HistoricCTD(defs);
+			case HistoricTelemetry.ID_STATIC:
+				return new HistoricTelemetry(defs);
+			case HistoricSonarData.ID_STATIC:
+				return new HistoricSonarData(defs);
+			case HistoricEvent.ID_STATIC:
+				return new HistoricEvent(defs);
+			case VerticalProfile.ID_STATIC:
+				return new VerticalProfile(defs);
+			case ProfileSample.ID_STATIC:
+				return new ProfileSample(defs);
 			case Heartbeat.ID_STATIC:
 				return new Heartbeat(defs);
 			case Announce.ID_STATIC:
@@ -98,6 +120,10 @@ public class MessageFactory {
 				return new AnnounceService(defs);
 			case RSSI.ID_STATIC:
 				return new RSSI(defs);
+			case VSWR.ID_STATIC:
+				return new VSWR(defs);
+			case LinkLevel.ID_STATIC:
+				return new LinkLevel(defs);
 			case Sms.ID_STATIC:
 				return new Sms(defs);
 			case SmsTx.ID_STATIC:
@@ -114,14 +140,38 @@ public class MessageFactory {
 				return new IridiumMsgTx(defs);
 			case IridiumTxStatus.ID_STATIC:
 				return new IridiumTxStatus(defs);
+			case GroupMembershipState.ID_STATIC:
+				return new GroupMembershipState(defs);
+			case SystemGroup.ID_STATIC:
+				return new SystemGroup(defs);
+			case LinkLatency.ID_STATIC:
+				return new LinkLatency(defs);
 			case ExtendedRSSI.ID_STATIC:
 				return new ExtendedRSSI(defs);
+			case HistoricData.ID_STATIC:
+				return new HistoricData(defs);
+			case CompressedHistory.ID_STATIC:
+				return new CompressedHistory(defs);
+			case HistoricSample.ID_STATIC:
+				return new HistoricSample(defs);
+			case HistoricDataQuery.ID_STATIC:
+				return new HistoricDataQuery(defs);
+			case RemoteCommand.ID_STATIC:
+				return new RemoteCommand(defs);
+			case CommSystemsQuery.ID_STATIC:
+				return new CommSystemsQuery(defs);
+			case TelemetryMsg.ID_STATIC:
+				return new TelemetryMsg(defs);
 			case LblRange.ID_STATIC:
 				return new LblRange(defs);
 			case LblBeacon.ID_STATIC:
 				return new LblBeacon(defs);
 			case LblConfig.ID_STATIC:
 				return new LblConfig(defs);
+			case AcousticMessage.ID_STATIC:
+				return new AcousticMessage(defs);
+			case SimAcousticMessage.ID_STATIC:
+				return new SimAcousticMessage(defs);
 			case AcousticOperation.ID_STATIC:
 				return new AcousticOperation(defs);
 			case AcousticSystemsQuery.ID_STATIC:
@@ -130,6 +180,10 @@ public class MessageFactory {
 				return new AcousticSystems(defs);
 			case AcousticLink.ID_STATIC:
 				return new AcousticLink(defs);
+			case AcousticRequest.ID_STATIC:
+				return new AcousticRequest(defs);
+			case AcousticStatus.ID_STATIC:
+				return new AcousticStatus(defs);
 			case Rpm.ID_STATIC:
 				return new Rpm(defs);
 			case Voltage.ID_STATIC:
@@ -162,6 +216,8 @@ public class MessageFactory {
 				return new Pressure(defs);
 			case Depth.ID_STATIC:
 				return new Depth(defs);
+			case DepthOffset.ID_STATIC:
+				return new DepthOffset(defs);
 			case SoundSpeed.ID_STATIC:
 				return new SoundSpeed(defs);
 			case WaterDensity.ID_STATIC:
@@ -170,12 +226,16 @@ public class MessageFactory {
 				return new Conductivity(defs);
 			case Salinity.ID_STATIC:
 				return new Salinity(defs);
+			case WindSpeed.ID_STATIC:
+				return new WindSpeed(defs);
 			case RelativeHumidity.ID_STATIC:
 				return new RelativeHumidity(defs);
 			case DevDataText.ID_STATIC:
 				return new DevDataText(defs);
 			case DevDataBinary.ID_STATIC:
 				return new DevDataBinary(defs);
+			case Force.ID_STATIC:
+				return new Force(defs);
 			case SonarData.ID_STATIC:
 				return new SonarData(defs);
 			case Pulse.ID_STATIC:
@@ -184,6 +244,8 @@ public class MessageFactory {
 				return new PulseDetectionControl(defs);
 			case FuelLevel.ID_STATIC:
 				return new FuelLevel(defs);
+			case GpsNavData.ID_STATIC:
+				return new GpsNavData(defs);
 			case ServoPosition.ID_STATIC:
 				return new ServoPosition(defs);
 			case DeviceState.ID_STATIC:
@@ -208,18 +270,28 @@ public class MessageFactory {
 				return new Phycocyanin(defs);
 			case Phycoerythrin.ID_STATIC:
 				return new Phycoerythrin(defs);
+			case GpsFixRtk.ID_STATIC:
+				return new GpsFixRtk(defs);
+			case ExternalNavData.ID_STATIC:
+				return new ExternalNavData(defs);
 			case DissolvedOxygen.ID_STATIC:
 				return new DissolvedOxygen(defs);
 			case AirSaturation.ID_STATIC:
 				return new AirSaturation(defs);
+			case Throttle.ID_STATIC:
+				return new Throttle(defs);
 			case PH.ID_STATIC:
 				return new PH(defs);
 			case Redox.ID_STATIC:
 				return new Redox(defs);
+			case CameraZoom.ID_STATIC:
+				return new CameraZoom(defs);
 			case SetThrusterActuation.ID_STATIC:
 				return new SetThrusterActuation(defs);
 			case SetServoPosition.ID_STATIC:
 				return new SetServoPosition(defs);
+			case SetControlSurfaceDeflection.ID_STATIC:
+				return new SetControlSurfaceDeflection(defs);
 			case RemoteActionsRequest.ID_STATIC:
 				return new RemoteActionsRequest(defs);
 			case RemoteActions.ID_STATIC:
@@ -242,12 +314,18 @@ public class MessageFactory {
 				return new QueryLedBrightness(defs);
 			case SetLedBrightness.ID_STATIC:
 				return new SetLedBrightness(defs);
-			case ChargingState.ID_STATIC:
-				return new ChargingState(defs);
+			case SetPWM.ID_STATIC:
+				return new SetPWM(defs);
+			case PWM.ID_STATIC:
+				return new PWM(defs);
 			case EstimatedState.ID_STATIC:
 				return new EstimatedState(defs);
 			case EstimatedStreamVelocity.ID_STATIC:
 				return new EstimatedStreamVelocity(defs);
+			case IndicatedSpeed.ID_STATIC:
+				return new IndicatedSpeed(defs);
+			case TrueSpeed.ID_STATIC:
+				return new TrueSpeed(defs);
 			case NavigationUncertainty.ID_STATIC:
 				return new NavigationUncertainty(defs);
 			case NavigationData.ID_STATIC:
@@ -262,6 +340,10 @@ public class MessageFactory {
 				return new LblEstimate(defs);
 			case AlignmentState.ID_STATIC:
 				return new AlignmentState(defs);
+			case GroupStreamVelocity.ID_STATIC:
+				return new GroupStreamVelocity(defs);
+			case Airflow.ID_STATIC:
+				return new Airflow(defs);
 			case DesiredHeading.ID_STATIC:
 				return new DesiredHeading(defs);
 			case DesiredZ.ID_STATIC:
@@ -272,12 +354,16 @@ public class MessageFactory {
 				return new DesiredRoll(defs);
 			case DesiredPitch.ID_STATIC:
 				return new DesiredPitch(defs);
+			case DesiredVerticalRate.ID_STATIC:
+				return new DesiredVerticalRate(defs);
 			case DesiredPath.ID_STATIC:
 				return new DesiredPath(defs);
 			case DesiredControl.ID_STATIC:
 				return new DesiredControl(defs);
 			case DesiredHeadingRate.ID_STATIC:
 				return new DesiredHeadingRate(defs);
+			case DesiredVelocity.ID_STATIC:
+				return new DesiredVelocity(defs);
 			case PathControlState.ID_STATIC:
 				return new PathControlState(defs);
 			case AllocatedControlTorques.ID_STATIC:
@@ -286,6 +372,10 @@ public class MessageFactory {
 				return new ControlParcel(defs);
 			case Brake.ID_STATIC:
 				return new Brake(defs);
+			case DesiredLinearState.ID_STATIC:
+				return new DesiredLinearState(defs);
+			case DesiredThrottle.ID_STATIC:
+				return new DesiredThrottle(defs);
 			case Goto.ID_STATIC:
 				return new Goto(defs);
 			case PopUp.ID_STATIC:
@@ -296,6 +386,8 @@ public class MessageFactory {
 				return new Loiter(defs);
 			case IdleManeuver.ID_STATIC:
 				return new IdleManeuver(defs);
+			case LowLevelControl.ID_STATIC:
+				return new LowLevelControl(defs);
 			case Rows.ID_STATIC:
 				return new Rows(defs);
 			case FollowPath.ID_STATIC:
@@ -316,26 +408,64 @@ public class MessageFactory {
 				return new TrajectoryPoint(defs);
 			case CustomManeuver.ID_STATIC:
 				return new CustomManeuver(defs);
+			case VehicleFormation.ID_STATIC:
+				return new VehicleFormation(defs);
+			case VehicleFormationParticipant.ID_STATIC:
+				return new VehicleFormationParticipant(defs);
 			case StopManeuver.ID_STATIC:
 				return new StopManeuver(defs);
 			case RegisterManeuver.ID_STATIC:
 				return new RegisterManeuver(defs);
 			case ManeuverControlState.ID_STATIC:
 				return new ManeuverControlState(defs);
+			case FollowSystem.ID_STATIC:
+				return new FollowSystem(defs);
+			case CommsRelay.ID_STATIC:
+				return new CommsRelay(defs);
+			case CoverArea.ID_STATIC:
+				return new CoverArea(defs);
 			case PolygonVertex.ID_STATIC:
 				return new PolygonVertex(defs);
 			case CompassCalibration.ID_STATIC:
 				return new CompassCalibration(defs);
+			case FormationParameters.ID_STATIC:
+				return new FormationParameters(defs);
+			case FormationPlanExecution.ID_STATIC:
+				return new FormationPlanExecution(defs);
 			case FollowReference.ID_STATIC:
 				return new FollowReference(defs);
 			case Reference.ID_STATIC:
 				return new Reference(defs);
 			case FollowRefState.ID_STATIC:
 				return new FollowRefState(defs);
+			case FormationMonitor.ID_STATIC:
+				return new FormationMonitor(defs);
+			case RelativeState.ID_STATIC:
+				return new RelativeState(defs);
 			case Dislodge.ID_STATIC:
 				return new Dislodge(defs);
+			case Formation.ID_STATIC:
+				return new Formation(defs);
 			case Launch.ID_STATIC:
 				return new Launch(defs);
+			case Drop.ID_STATIC:
+				return new Drop(defs);
+			case ScheduledGoto.ID_STATIC:
+				return new ScheduledGoto(defs);
+			case RowsCoverage.ID_STATIC:
+				return new RowsCoverage(defs);
+			case Sample.ID_STATIC:
+				return new Sample(defs);
+			case ImageTracking.ID_STATIC:
+				return new ImageTracking(defs);
+			case Takeoff.ID_STATIC:
+				return new Takeoff(defs);
+			case Land.ID_STATIC:
+				return new Land(defs);
+			case AutonomousSection.ID_STATIC:
+				return new AutonomousSection(defs);
+			case FollowPoint.ID_STATIC:
+				return new FollowPoint(defs);
 			case Alignment.ID_STATIC:
 				return new Alignment(defs);
 			case FollowCommand.ID_STATIC:
@@ -366,14 +496,34 @@ public class MessageFactory {
 				return new VehicleMedium(defs);
 			case Collision.ID_STATIC:
 				return new Collision(defs);
+			case FormState.ID_STATIC:
+				return new FormState(defs);
+			case AutopilotMode.ID_STATIC:
+				return new AutopilotMode(defs);
+			case FormationState.ID_STATIC:
+				return new FormationState(defs);
 			case ReportControl.ID_STATIC:
 				return new ReportControl(defs);
-			case AssetReport.ID_STATIC:
-				return new AssetReport(defs);
+			case StateReport.ID_STATIC:
+				return new StateReport(defs);
+			case TransmissionRequest.ID_STATIC:
+				return new TransmissionRequest(defs);
+			case TransmissionStatus.ID_STATIC:
+				return new TransmissionStatus(defs);
 			case SmsRequest.ID_STATIC:
 				return new SmsRequest(defs);
 			case SmsStatus.ID_STATIC:
 				return new SmsStatus(defs);
+			case VtolState.ID_STATIC:
+				return new VtolState(defs);
+			case ArmingState.ID_STATIC:
+				return new ArmingState(defs);
+			case TCPRequest.ID_STATIC:
+				return new TCPRequest(defs);
+			case TCPStatus.ID_STATIC:
+				return new TCPStatus(defs);
+			case AssetReport.ID_STATIC:
+				return new AssetReport(defs);
 			case Abort.ID_STATIC:
 				return new Abort(defs);
 			case PlanSpecification.ID_STATIC:
@@ -382,6 +532,10 @@ public class MessageFactory {
 				return new PlanManeuver(defs);
 			case PlanTransition.ID_STATIC:
 				return new PlanTransition(defs);
+			case EmergencyControl.ID_STATIC:
+				return new EmergencyControl(defs);
+			case EmergencyControlState.ID_STATIC:
+				return new EmergencyControlState(defs);
 			case PlanDB.ID_STATIC:
 				return new PlanDB(defs);
 			case PlanDBState.ID_STATIC:
@@ -396,18 +550,50 @@ public class MessageFactory {
 				return new PlanVariable(defs);
 			case PlanGeneration.ID_STATIC:
 				return new PlanGeneration(defs);
+			case LeaderState.ID_STATIC:
+				return new LeaderState(defs);
 			case PlanStatistics.ID_STATIC:
 				return new PlanStatistics(defs);
+			case ReportedState.ID_STATIC:
+				return new ReportedState(defs);
+			case RemoteSensorInfo.ID_STATIC:
+				return new RemoteSensorInfo(defs);
+			case Map.ID_STATIC:
+				return new Map(defs);
+			case MapFeature.ID_STATIC:
+				return new MapFeature(defs);
+			case MapPoint.ID_STATIC:
+				return new MapPoint(defs);
 			case CcuEvent.ID_STATIC:
 				return new CcuEvent(defs);
 			case VehicleLinks.ID_STATIC:
 				return new VehicleLinks(defs);
+			case TrexObservation.ID_STATIC:
+				return new TrexObservation(defs);
+			case TrexCommand.ID_STATIC:
+				return new TrexCommand(defs);
 			case TrexOperation.ID_STATIC:
 				return new TrexOperation(defs);
 			case TrexAttribute.ID_STATIC:
 				return new TrexAttribute(defs);
 			case TrexToken.ID_STATIC:
 				return new TrexToken(defs);
+			case TrexPlan.ID_STATIC:
+				return new TrexPlan(defs);
+			case Event.ID_STATIC:
+				return new Event(defs);
+			case CompressedImage.ID_STATIC:
+				return new CompressedImage(defs);
+			case ImageTxSettings.ID_STATIC:
+				return new ImageTxSettings(defs);
+			case ManeuverDone.ID_STATIC:
+				return new ManeuverDone(defs);
+			case StationKeepingExtended.ID_STATIC:
+				return new StationKeepingExtended(defs);
+			case RemoteState.ID_STATIC:
+				return new RemoteState(defs);
+			case Target.ID_STATIC:
+				return new Target(defs);
 			case EntityParameter.ID_STATIC:
 				return new EntityParameter(defs);
 			case EntityParameters.ID_STATIC:
@@ -418,6 +604,16 @@ public class MessageFactory {
 				return new SetEntityParameters(defs);
 			case SaveEntityParameters.ID_STATIC:
 				return new SaveEntityParameters(defs);
+			case CreateSession.ID_STATIC:
+				return new CreateSession(defs);
+			case CloseSession.ID_STATIC:
+				return new CloseSession(defs);
+			case SessionSubscription.ID_STATIC:
+				return new SessionSubscription(defs);
+			case SessionKeepAlive.ID_STATIC:
+				return new SessionKeepAlive(defs);
+			case SessionStatus.ID_STATIC:
+				return new SessionStatus(defs);
 			case PushEntityParameters.ID_STATIC:
 				return new PushEntityParameters(defs);
 			case PopEntityParameters.ID_STATIC:
@@ -434,8 +630,26 @@ public class MessageFactory {
 				return new UamRxRange(defs);
 			case UamTxRange.ID_STATIC:
 				return new UamTxRange(defs);
+			case FormCtrlParam.ID_STATIC:
+				return new FormCtrlParam(defs);
+			case FormationEval.ID_STATIC:
+				return new FormationEval(defs);
+			case FormationControlParams.ID_STATIC:
+				return new FormationControlParams(defs);
+			case FormationEvaluation.ID_STATIC:
+				return new FormationEvaluation(defs);
+			case SoiWaypoint.ID_STATIC:
+				return new SoiWaypoint(defs);
+			case SoiPlan.ID_STATIC:
+				return new SoiPlan(defs);
+			case SoiCommand.ID_STATIC:
+				return new SoiCommand(defs);
+			case SoiState.ID_STATIC:
+				return new SoiState(defs);
 			case MessagePart.ID_STATIC:
 				return new MessagePart(defs);
+			case NeptusBlob.ID_STATIC:
+				return new NeptusBlob(defs);
 			case Aborted.ID_STATIC:
 				return new Aborted(defs);
 			case UsblAngles.ID_STATIC:
@@ -444,6 +658,16 @@ public class MessageFactory {
 				return new UsblPosition(defs);
 			case UsblFix.ID_STATIC:
 				return new UsblFix(defs);
+			case ParametersXml.ID_STATIC:
+				return new ParametersXml(defs);
+			case GetParametersXml.ID_STATIC:
+				return new GetParametersXml(defs);
+			case SetImageCoords.ID_STATIC:
+				return new SetImageCoords(defs);
+			case GetImageCoords.ID_STATIC:
+				return new GetImageCoords(defs);
+			case GetWorldCoordinates.ID_STATIC:
+				return new GetWorldCoordinates(defs);
 			case UsblAnglesExtended.ID_STATIC:
 				return new UsblAnglesExtended(defs);
 			case UsblPositionExtended.ID_STATIC:
@@ -460,6 +684,16 @@ public class MessageFactory {
 				return new OpticalBackscatter(defs);
 			case Tachograph.ID_STATIC:
 				return new Tachograph(defs);
+			case ApmStatus.ID_STATIC:
+				return new ApmStatus(defs);
+			case SadcReadings.ID_STATIC:
+				return new SadcReadings(defs);
+			case DmsDetection.ID_STATIC:
+				return new DmsDetection(defs);
+			case HomePosition.ID_STATIC:
+				return new HomePosition(defs);
+			case ChargingState.ID_STATIC:
+				return new ChargingState(defs);
 			case CurrentProfile.ID_STATIC:
 				return new CurrentProfile(defs);
 			case CurrentProfileCell.ID_STATIC:
@@ -482,10 +716,6 @@ public class MessageFactory {
 				return new TotalMagIntensity(defs);
 			case ValidatePlan.ID_STATIC:
 				return new ValidatePlan(defs);
-			case TypedEntityParameter.ID_STATIC:
-				return new TypedEntityParameter(defs);
-			case TypedEntityParameters.ID_STATIC:
-				return new TypedEntityParameters(defs);
 			case CommRestriction.ID_STATIC:
 				return new CommRestriction(defs);
 			case WifiStats.ID_STATIC:
@@ -494,6 +724,14 @@ public class MessageFactory {
 				return new WifiNetwork(defs);
 			case SonarPulse.ID_STATIC:
 				return new SonarPulse(defs);
+			case HealthCheck.ID_STATIC:
+				return new HealthCheck(defs);
+			case QueryTypedEntityParameters.ID_STATIC:
+				return new QueryTypedEntityParameters(defs);
+			case TypedEntityParameter.ID_STATIC:
+				return new TypedEntityParameter(defs);
+			case ValuesIf.ID_STATIC:
+				return new ValuesIf(defs);
 			default:
 				return new IMCMessage(defs);
 		}

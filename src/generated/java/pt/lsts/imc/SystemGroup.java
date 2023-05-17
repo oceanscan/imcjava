@@ -30,15 +30,19 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message Typed Entity Parameters (2009)<br/>
- *  This message can be used to query/report the entities and respective parameters in the system<br/>
+ *  IMC Message System Group (181)<br/>
+ *  Group of systems configuration.<br/>
  */
 
-public class TypedEntityParameters extends IMCMessage {
+public class SystemGroup extends IMCMessage {
 
-	public enum OP {
-		REQUEST(0),
-		REPLY(1);
+	public enum ACTION {
+		DIS(0),
+		SET(1),
+		REQ(2),
+		CHG(3),
+		REP(4),
+		FRC(5);
 
 		protected long value;
 
@@ -46,18 +50,18 @@ public class TypedEntityParameters extends IMCMessage {
 			return value;
 		}
 
-		OP(long value) {
+		ACTION(long value) {
 			this.value = value;
 		}
 	}
 
-	public static final int ID_STATIC = 2009;
+	public static final int ID_STATIC = 181;
 
-	public TypedEntityParameters() {
+	public SystemGroup() {
 		super(ID_STATIC);
 	}
 
-	public TypedEntityParameters(IMCMessage msg) {
+	public SystemGroup(IMCMessage msg) {
 		super(ID_STATIC);
 		try{
 			copyFrom(msg);
@@ -67,20 +71,20 @@ public class TypedEntityParameters extends IMCMessage {
 		}
 	}
 
-	public TypedEntityParameters(IMCDefinition defs) {
+	public SystemGroup(IMCDefinition defs) {
 		super(defs, ID_STATIC);
 	}
 
-	public static TypedEntityParameters create(Object... values) {
-		TypedEntityParameters m = new TypedEntityParameters();
+	public static SystemGroup create(Object... values) {
+		SystemGroup m = new SystemGroup();
 		for (int i = 0; i < values.length-1; i+= 2)
 			m.setValue(values[i].toString(), values[i+1]);
 		return m;
 	}
 
-	public static TypedEntityParameters clone(IMCMessage msg) throws Exception {
+	public static SystemGroup clone(IMCMessage msg) throws Exception {
 
-		TypedEntityParameters m = new TypedEntityParameters();
+		SystemGroup m = new SystemGroup();
 		if (msg == null)
 			return m;
 		if(msg.definitions != m.definitions){
@@ -95,22 +99,36 @@ public class TypedEntityParameters extends IMCMessage {
 		return m;
 	}
 
-	public TypedEntityParameters(OP op, long request_id, String entity_name, java.util.Collection<TypedEntityParameter> parameters) {
+	public SystemGroup(String GroupName, ACTION Action, String GroupList) {
 		super(ID_STATIC);
-		setOp(op);
-		setRequestId(request_id);
-		if (entity_name != null)
-			setEntityName(entity_name);
-		if (parameters != null)
-			setParameters(parameters);
+		if (GroupName != null)
+			setGroupName(GroupName);
+		setAction(Action);
+		if (GroupList != null)
+			setGroupList(GroupList);
 	}
 
 	/**
-	 *  @return Operation (enumerated) - uint8_t
+	 *  @return Group Name - plaintext
 	 */
-	public OP getOp() {
+	public String getGroupName() {
+		return getString("GroupName");
+	}
+
+	/**
+	 *  @param GroupName Group Name
+	 */
+	public SystemGroup setGroupName(String GroupName) {
+		values.put("GroupName", GroupName);
+		return this;
+	}
+
+	/**
+	 *  @return Group List Action (enumerated) - uint8_t
+	 */
+	public ACTION getAction() {
 		try {
-			OP o = OP.valueOf(getMessageType().getFieldPossibleValues("op").get(getLong("op")));
+			ACTION o = ACTION.valueOf(getMessageType().getFieldPossibleValues("Action").get(getLong("Action")));
 			return o;
 		}
 		catch (Exception e) {
@@ -118,86 +136,50 @@ public class TypedEntityParameters extends IMCMessage {
 		}
 	}
 
-	public String getOpStr() {
-		return getString("op");
+	public String getActionStr() {
+		return getString("Action");
 	}
 
-	public short getOpVal() {
-		return (short) getInteger("op");
+	public short getActionVal() {
+		return (short) getInteger("Action");
 	}
 
 	/**
-	 *  @param op Operation (enumerated)
+	 *  @param Action Group List Action (enumerated)
 	 */
-	public TypedEntityParameters setOp(OP op) {
-		values.put("op", op.value());
+	public SystemGroup setAction(ACTION Action) {
+		values.put("Action", Action.value());
 		return this;
 	}
 
 	/**
-	 *  @param op Operation (as a String)
+	 *  @param Action Group List Action (as a String)
 	 */
-	public TypedEntityParameters setOpStr(String op) {
-		setValue("op", op);
+	public SystemGroup setActionStr(String Action) {
+		setValue("Action", Action);
 		return this;
 	}
 
 	/**
-	 *  @param op Operation (integer value)
+	 *  @param Action Group List Action (integer value)
 	 */
-	public TypedEntityParameters setOpVal(short op) {
-		setValue("op", op);
+	public SystemGroup setActionVal(short Action) {
+		setValue("Action", Action);
 		return this;
 	}
 
 	/**
-	 *  @return Request identitier - uint32_t
+	 *  @return Systems Name List - plaintext
 	 */
-	public long getRequestId() {
-		return getLong("request_id");
+	public String getGroupList() {
+		return getString("GroupList");
 	}
 
 	/**
-	 *  @param request_id Request identitier
+	 *  @param GroupList Systems Name List
 	 */
-	public TypedEntityParameters setRequestId(long request_id) {
-		values.put("request_id", request_id);
-		return this;
-	}
-
-	/**
-	 *  @return Entity Name - plaintext
-	 */
-	public String getEntityName() {
-		return getString("entity_name");
-	}
-
-	/**
-	 *  @param entity_name Entity Name
-	 */
-	public TypedEntityParameters setEntityName(String entity_name) {
-		values.put("entity_name", entity_name);
-		return this;
-	}
-
-	/**
-	 *  @return Parameters - message-list
-	 */
-	public java.util.Vector<TypedEntityParameter> getParameters() {
-		try {
-			return getMessageList("parameters", TypedEntityParameter.class);
-		}
-		catch (Exception e) {
-			return null;
-		}
-
-	}
-
-	/**
-	 *  @param parameters Parameters
-	 */
-	public TypedEntityParameters setParameters(java.util.Collection<TypedEntityParameter> parameters) {
-		values.put("parameters", parameters);
+	public SystemGroup setGroupList(String GroupList) {
+		values.put("GroupList", GroupList);
 		return this;
 	}
 
