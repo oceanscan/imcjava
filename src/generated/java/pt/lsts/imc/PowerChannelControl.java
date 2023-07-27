@@ -43,8 +43,7 @@ public class PowerChannelControl extends IMCMessage {
 		SCHED_ON(3),
 		SCHED_OFF(4),
 		SCHED_RESET(5),
-		SAVE(6),
-		RESTART(7);
+		SAVE(6);
 
 		protected long value;
 

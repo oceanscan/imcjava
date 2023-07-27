@@ -30,19 +30,19 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message Voltage Standing Wave Ratio (154)<br/>
- *  Measure of the VSWR by a networking device.<br/>
+ *  IMC Message Directional Sonar Data (2019)<br/>
+ *  This message contains the data acquired by a single sonar measurement whose angle can be controlled.<br/>
  */
 
-public class VSWR extends IMCMessage {
+public class DirSonarData extends IMCMessage {
 
-	public static final int ID_STATIC = 154;
+	public static final int ID_STATIC = 2019;
 
-	public VSWR() {
+	public DirSonarData() {
 		super(ID_STATIC);
 	}
 
-	public VSWR(IMCMessage msg) {
+	public DirSonarData(IMCMessage msg) {
 		super(ID_STATIC);
 		try{
 			copyFrom(msg);
@@ -52,20 +52,20 @@ public class VSWR extends IMCMessage {
 		}
 	}
 
-	public VSWR(IMCDefinition defs) {
+	public DirSonarData(IMCDefinition defs) {
 		super(defs, ID_STATIC);
 	}
 
-	public static VSWR create(Object... values) {
-		VSWR m = new VSWR();
+	public static DirSonarData create(Object... values) {
+		DirSonarData m = new DirSonarData();
 		for (int i = 0; i < values.length-1; i+= 2)
 			m.setValue(values[i].toString(), values[i+1]);
 		return m;
 	}
 
-	public static VSWR clone(IMCMessage msg) throws Exception {
+	public static DirSonarData clone(IMCMessage msg) throws Exception {
 
-		VSWR m = new VSWR();
+		DirSonarData m = new DirSonarData();
 		if (msg == null)
 			return m;
 		if(msg.definitions != m.definitions){
@@ -80,23 +80,61 @@ public class VSWR extends IMCMessage {
 		return m;
 	}
 
-	public VSWR(float value) {
+	public DirSonarData(DeviceState pose, SonarData measurement) {
 		super(ID_STATIC);
-		setValue(value);
+		if (pose != null)
+			setPose(pose);
+		if (measurement != null)
+			setMeasurement(measurement);
 	}
 
 	/**
-	 *  @return Value - fp32_t
+	 *  @return Relative Pose - message
 	 */
-	public double getValue() {
-		return getDouble("value");
+	public DeviceState getPose() {
+		try {
+			IMCMessage obj = getMessage("pose");
+			if (obj instanceof DeviceState)
+				return (DeviceState) obj;
+			else
+				return null;
+		}
+		catch (Exception e) {
+			return null;
+		}
+
 	}
 
 	/**
-	 *  @param value Value
+	 *  @param pose Relative Pose
 	 */
-	public VSWR setValue(double value) {
-		values.put("value", value);
+	public DirSonarData setPose(DeviceState pose) {
+		values.put("pose", pose);
+		return this;
+	}
+
+	/**
+	 *  @return Measurement - message
+	 */
+	public SonarData getMeasurement() {
+		try {
+			IMCMessage obj = getMessage("measurement");
+			if (obj instanceof SonarData)
+				return (SonarData) obj;
+			else
+				return null;
+		}
+		catch (Exception e) {
+			return null;
+		}
+
+	}
+
+	/**
+	 *  @param measurement Measurement
+	 */
+	public DirSonarData setMeasurement(SonarData measurement) {
+		values.put("measurement", measurement);
 		return this;
 	}
 

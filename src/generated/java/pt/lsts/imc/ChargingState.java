@@ -30,7 +30,7 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message Charging State (910)<br/>
+ *  IMC Message Charging State (2014)<br/>
  *  Reports if the vehicle is charging or not<br/>
  */
 
@@ -51,7 +51,7 @@ public class ChargingState extends IMCMessage {
 		}
 	}
 
-	public static final int ID_STATIC = 910;
+	public static final int ID_STATIC = 2014;
 
 	public ChargingState() {
 		super(ID_STATIC);

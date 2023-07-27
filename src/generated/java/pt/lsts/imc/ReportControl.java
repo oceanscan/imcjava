@@ -40,7 +40,6 @@ public class ReportControl extends IMCMessage {
 	public static final short CI_SATELLITE = 0x02;
 	public static final short CI_GSM = 0x04;
 	public static final short CI_MOBILE = 0x08;
-	public static final short CI_RADIO = 0x10;
 
 	public enum OP {
 		REQUEST_START(0),

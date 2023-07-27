@@ -32,61 +32,7 @@ package pt.lsts.imc;
 /**
  *  IMC Message Sonar Data (276)<br/>
  *  This message contains the data acquired by a single sonar<br/>
- *  measurement. The following describes the format used to<br/>
- *  fill the data field used in this message. (Byte order is<br/>
- *  little endian.)<br/>
- *  <code>*Sidescan:*</code><br/>
- *  +------+-------------------+-----------+<br/>
- *  | Data | Name              | Type      |<br/>
- *  +======+===================+===========+<br/>
- *  | A    | Ranges data       |   uintX_t |<br/>
- *  +------+-------------------+-----------+<br/>
- *  <code> The type *uintX_t</code> will depend on the number of bits per unit, and it should be a multiple of 8.<br/>
- *  * Furthermore, for now, 32 bits is the highest value of bits per unit supported.<br/>
- *  <code>*Multibeam:*</code><br/>
- *  +------+--------+-------------------------+---------+----------------------------------------------------------------------+<br/>
- *  | Index| Section| Name                    | Type    | Comments                                                             |<br/>
- *  +======+========+=========================+=========+======================================================================+<br/>
- *  | 1    | H1     | Number of points        | uint16_t| Number of data points                                                |<br/>
- *  +------+--------+-------------------------+---------+----------------------------------------------------------------------+<br/>
- *  | 2    | H2     | Start angle             | fp32_t  | In radians                                                           |<br/>
- *  +------+--------+-------------------------+---------+----------------------------------------------------------------------+<br/>
- *  | 3    | H3     | Flags                   | uint8_t | Refer to next table                                                  |<br/>
- *  +------+--------+-------------------------+---------+----------------------------------------------------------------------+<br/>
- *  | 4    | H4 ?   | Angle scale factor      | fp32_t  | Used for angle steps in radians                                      |<br/>
- *  +------+--------+-------------------------+---------+----------------------------------------------------------------------+<br/>
- *  | 5    | H5 ?   | Intensities scale factor| fp32_t  |                                                                      |<br/>
- *  +------+--------+-------------------------+---------+----------------------------------------------------------------------+<br/>
- *  | 6    | D1 ?   | Angle steps[H1]         | uint16_t| Values in radians                                                    |<br/>
- *  +------+--------+-------------------------+---------+----------------------------------------------------------------------+<br/>
- *  | 7    | D2     | Ranges[H1]              | uintX_t | Ranges data points (scale factor from common field "Scaling Factor") |<br/>
- *  +------+--------+-------------------------+---------+----------------------------------------------------------------------+<br/>
- *  | 8    | D3 ?   | Intensities[H1]         | uintX_t | Intensities data points                                              |<br/>
- *  +------+--------+-------------------------+---------+----------------------------------------------------------------------+<br/>
- *  +--------+------------------+-----+<br/>
- *  | Section| Flag Label       | Bit |<br/>
- *  +========+==================+=====+<br/>
- *  | H4.1   | Intensities flag | 0   |<br/>
- *  +--------+------------------+-----+<br/>
- *  | H4.2   | Angle step flag  | 1   |<br/>
- *  +--------+------------------+-----+<br/>
- *  <code>Notes:</code><br/>
- *  <code> Each angle at step *i</code> can be calculated is defined by:<br/>
- *  .. code-block:: python<br/>
- *  angle[i] = H2_start_angle + (32-bit sum of D1_angle_step[0] through D1_angle_step[i]) * H4_scaling_factor<br/>
- *  * If bit H4.1 is not set then sections H5 and D3 won't exist.<br/>
- *  * If bit H4.2 is not set then sections H4 and D1 won't exist. In case this bit is set, then the angle steps is read from field "Beam Width" from "Beam Configuration".<br/>
- *  <code> The type *uintX_t</code> will depend on the number of bits per unit, and it should be a multiple of 8.<br/>
- *  * Furthermore, for now, 32 bits is the highest value of bits per unit supported.<br/>
- *  <code>How to write ranges and intensities data:</code><br/>
- *  .. code-block:: python<br/>
- *  :linenos:<br/>
- *  data_unit = (Integer) (data_value / scale_factor);<br/>
- *  bytes_per_unit = bits_per_unit / 8;<br/>
- *  LOOP: i = 0, until i = bytes_per_unit<br/>
- *  byte[i] = (data_unit >> 8 * i) & 0xFF);<br/>
- *  write(byte);<br/>
- *  <code>*Common:*</code><br/>
+ *  measurement.<br/>
  */
 
 public class SonarData extends IMCMessage {
@@ -94,7 +40,8 @@ public class SonarData extends IMCMessage {
 	public enum TYPE {
 		SIDESCAN(0),
 		ECHOSOUNDER(1),
-		MULTIBEAM(2);
+		MULTIBEAM(2),
+		PENCILBEAM(3);
 
 		protected long value;
 

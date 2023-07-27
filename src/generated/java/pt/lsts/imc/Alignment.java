@@ -34,6 +34,8 @@ package pt.lsts.imc;
  *  An "Alignment" is a maneuver specifying a movement of the vehicle to a<br/>
  *  target waypoint intended to control activation of an IMU/INS in order<br/>
  *  to start aligning navigation for more precise dead reckoning operation.<br/>
+ *  Mandatory parameters defined for a "Launch" are<br/>
+ *  timeout, speed and speed units.<br/>
  */
 
 @SuppressWarnings("unchecked")

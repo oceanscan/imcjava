@@ -30,38 +30,19 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message System Group (181)<br/>
- *  Group of systems configuration.<br/>
+ *  IMC Message Memory Usage (10)<br/>
+ *  Report of memory usage.<br/>
  */
 
-public class SystemGroup extends IMCMessage {
+public class MemUsage extends IMCMessage {
 
-	public enum ACTION {
-		DIS(0),
-		SET(1),
-		REQ(2),
-		CHG(3),
-		REP(4),
-		FRC(5);
+	public static final int ID_STATIC = 10;
 
-		protected long value;
-
-		public long value() {
-			return value;
-		}
-
-		ACTION(long value) {
-			this.value = value;
-		}
-	}
-
-	public static final int ID_STATIC = 181;
-
-	public SystemGroup() {
+	public MemUsage() {
 		super(ID_STATIC);
 	}
 
-	public SystemGroup(IMCMessage msg) {
+	public MemUsage(IMCMessage msg) {
 		super(ID_STATIC);
 		try{
 			copyFrom(msg);
@@ -71,20 +52,20 @@ public class SystemGroup extends IMCMessage {
 		}
 	}
 
-	public SystemGroup(IMCDefinition defs) {
+	public MemUsage(IMCDefinition defs) {
 		super(defs, ID_STATIC);
 	}
 
-	public static SystemGroup create(Object... values) {
-		SystemGroup m = new SystemGroup();
+	public static MemUsage create(Object... values) {
+		MemUsage m = new MemUsage();
 		for (int i = 0; i < values.length-1; i+= 2)
 			m.setValue(values[i].toString(), values[i+1]);
 		return m;
 	}
 
-	public static SystemGroup clone(IMCMessage msg) throws Exception {
+	public static MemUsage clone(IMCMessage msg) throws Exception {
 
-		SystemGroup m = new SystemGroup();
+		MemUsage m = new MemUsage();
 		if (msg == null)
 			return m;
 		if(msg.definitions != m.definitions){
@@ -99,87 +80,23 @@ public class SystemGroup extends IMCMessage {
 		return m;
 	}
 
-	public SystemGroup(String GroupName, ACTION Action, String GroupList) {
+	public MemUsage(short value) {
 		super(ID_STATIC);
-		if (GroupName != null)
-			setGroupName(GroupName);
-		setAction(Action);
-		if (GroupList != null)
-			setGroupList(GroupList);
+		setValue(value);
 	}
 
 	/**
-	 *  @return Group Name - plaintext
+	 *  @return Usage percentage (%) - uint8_t
 	 */
-	public String getGroupName() {
-		return getString("GroupName");
+	public short getValue() {
+		return (short) getInteger("value");
 	}
 
 	/**
-	 *  @param GroupName Group Name
+	 *  @param value Usage percentage (%)
 	 */
-	public SystemGroup setGroupName(String GroupName) {
-		values.put("GroupName", GroupName);
-		return this;
-	}
-
-	/**
-	 *  @return Group List Action (enumerated) - uint8_t
-	 */
-	public ACTION getAction() {
-		try {
-			ACTION o = ACTION.valueOf(getMessageType().getFieldPossibleValues("Action").get(getLong("Action")));
-			return o;
-		}
-		catch (Exception e) {
-			return null;
-		}
-	}
-
-	public String getActionStr() {
-		return getString("Action");
-	}
-
-	public short getActionVal() {
-		return (short) getInteger("Action");
-	}
-
-	/**
-	 *  @param Action Group List Action (enumerated)
-	 */
-	public SystemGroup setAction(ACTION Action) {
-		values.put("Action", Action.value());
-		return this;
-	}
-
-	/**
-	 *  @param Action Group List Action (as a String)
-	 */
-	public SystemGroup setActionStr(String Action) {
-		setValue("Action", Action);
-		return this;
-	}
-
-	/**
-	 *  @param Action Group List Action (integer value)
-	 */
-	public SystemGroup setActionVal(short Action) {
-		setValue("Action", Action);
-		return this;
-	}
-
-	/**
-	 *  @return Systems Name List - plaintext
-	 */
-	public String getGroupList() {
-		return getString("GroupList");
-	}
-
-	/**
-	 *  @param GroupList Systems Name List
-	 */
-	public SystemGroup setGroupList(String GroupList) {
-		values.put("GroupList", GroupList);
+	public MemUsage setValue(short value) {
+		values.put("value", value);
 		return this;
 	}
 
