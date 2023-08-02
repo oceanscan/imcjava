@@ -874,50 +874,55 @@ public class ClassGenerator {
 				sb.append("\t\treturn getMessage(\"" + field + "\");\n");
 				sb.append("\t}\n\n");
 
-				sb.append("\tpublic <T extends IMCMessage> T get"
-						+ capitalizedField
-						+ "(Class<T> clazz) throws Exception {\n");
-				sb.append("\t\treturn getMessage(clazz, \"" + field + "\");\n");
-				sb.append("\t}\n\n");
-			} else {
-				String subtype = type.getFieldSubtype(field);
-				sb.append("\tpublic " + subtype + " get" + capitalizedField
-						+ "() {\n");
-				sb.append("\t\ttry {\n");
-				sb.append("\t\t\tIMCMessage obj = getMessage(\"" + field
-						+ "\");\n");
-				sb.append("\t\t\tif (obj instanceof " + subtype + ")\n");
-				sb.append("\t\t\t\treturn (" + subtype + ") obj;\n");
-				sb.append("\t\t\telse\n");
-				sb.append("\t\t\t\treturn null;\n");
-				sb.append("\t\t}\n");
-				sb.append("\t\tcatch (Exception e) {\n");
-				sb.append("\t\t\treturn null;\n");
-				sb.append("\t\t}\n\n");
-				sb.append("\t}\n\n");
-			}
-			break;
-		case TYPE_MESSAGELIST:
-			if (type.getFieldSubtype(field) == null) {
-				sb.append("\tpublic java.util.Vector<IMCMessage> get"
-						+ capitalizedField + "() {\n");
-				sb.append("\t\treturn getMessageList(\"" + field + "\");\n");
-				sb.append("\t}\n\n");
-			} else {
-				String subtype = type.getFieldSubtype(field);
-				sb.append("\tpublic java.util.Vector<" + subtype + "> get"
-						+ capitalizedField + "() {\n");
-				sb.append("\t\ttry {\n");
-				sb.append("\t\t\treturn getMessageList(\"" + field + "\", "
-						+ subtype + ".class);\n");
-				sb.append("\t\t}\n");
-				sb.append("\t\tcatch (Exception e) {\n");
-				sb.append("\t\t\treturn null;\n");
-				sb.append("\t\t}\n\n");
-				sb.append("\t}\n\n");
-			}
-		default:
-			break;
+					sb.append("\tpublic <T extends IMCMessage> T get"
+							+ capitalizedField
+							+ "(Class<T> clazz) throws Exception {\n");
+					sb.append("\t\treturn getMessage(clazz, \"" + field + "\");\n");
+					sb.append("\t}\n\n");
+				} else {
+					String subtype = type.getFieldSubtype(field);
+					sb.append("\tpublic " + subtype + " get" + capitalizedField
+							+ "() {\n");
+					sb.append("\t\ttry {\n");
+					sb.append("\t\t\tIMCMessage obj = getMessage(\"" + field
+							+ "\");\n");
+					// sb.append("\t\t\tif (obj.getMessageType().getId() == " + subtype +
+					// ".ID_STATIC)\n");
+					// TODO:: Check if the following line can be optimized. instanceof doesn't work with inline messages.
+					sb.append("\t\t\treturn " + subtype + ".clone(obj);\n");
+																				// optimization
+					// sb.append("\t\t\tif (obj instanceof " + subtype + ")\n");
+					// sb.append("\t\t\t\treturn (" + subtype + ") obj;\n");
+					// sb.append("\t\t\telse\n");
+					// sb.append("\t\t\t\treturn null;\n");
+					sb.append("\t\t}\n");
+					sb.append("\t\tcatch (Exception e) {\n");
+					sb.append("\t\t\treturn null;\n");
+					sb.append("\t\t}\n\n");
+					sb.append("\t}\n\n");
+				}
+				break;
+			case TYPE_MESSAGELIST:
+				if (type.getFieldSubtype(field) == null) {
+					sb.append("\tpublic java.util.Vector<IMCMessage> get"
+							+ capitalizedField + "() {\n");
+					sb.append("\t\treturn getMessageList(\"" + field + "\");\n");
+					sb.append("\t}\n\n");
+				} else {
+					String subtype = type.getFieldSubtype(field);
+					sb.append("\tpublic java.util.Vector<" + subtype + "> get"
+							+ capitalizedField + "() {\n");
+					sb.append("\t\ttry {\n");
+					sb.append("\t\t\treturn getMessageList(\"" + field + "\", "
+							+ subtype + ".class);\n");
+					sb.append("\t\t}\n");
+					sb.append("\t\tcatch (Exception e) {\n");
+					sb.append("\t\t\treturn null;\n");
+					sb.append("\t\t}\n\n");
+					sb.append("\t}\n\n");
+				}
+			default:
+				break;
 		}
 
 		return sb.toString();
