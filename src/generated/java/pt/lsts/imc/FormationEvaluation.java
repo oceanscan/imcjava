@@ -297,10 +297,7 @@ public class FormationEvaluation extends IMCMessage {
 	public FormationControlParams getControlParams() {
 		try {
 			IMCMessage obj = getMessage("ControlParams");
-			if (obj instanceof FormationControlParams)
-				return (FormationControlParams) obj;
-			else
-				return null;
+			return FormationControlParams.clone(obj);
 		}
 		catch (Exception e) {
 			return null;

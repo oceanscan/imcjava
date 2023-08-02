@@ -237,10 +237,7 @@ public class VehicleCommand extends IMCMessage {
 	public Maneuver getManeuver() {
 		try {
 			IMCMessage obj = getMessage("maneuver");
-			if (obj instanceof Maneuver)
-				return (Maneuver) obj;
-			else
-				return null;
+			return Maneuver.clone(obj);
 		}
 		catch (Exception e) {
 			return null;

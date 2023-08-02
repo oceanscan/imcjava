@@ -730,6 +730,12 @@ public class MessageFactory {
 				return new SonarPulse(defs);
 			case HealthCheck.ID_STATIC:
 				return new HealthCheck(defs);
+			case QueryTypedEntityParameters.ID_STATIC:
+				return new QueryTypedEntityParameters(defs);
+			case ValuesIf.ID_STATIC:
+				return new ValuesIf(defs);
+			case DirSonarData.ID_STATIC:
+				return new DirSonarData(defs);
 			default:
 				return new IMCMessage(defs);
 		}

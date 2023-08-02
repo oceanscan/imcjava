@@ -243,10 +243,7 @@ public class SoiCommand extends IMCMessage {
 	public SoiPlan getPlan() {
 		try {
 			IMCMessage obj = getMessage("plan");
-			if (obj instanceof SoiPlan)
-				return (SoiPlan) obj;
-			else
-				return null;
+			return SoiPlan.clone(obj);
 		}
 		catch (Exception e) {
 			return null;

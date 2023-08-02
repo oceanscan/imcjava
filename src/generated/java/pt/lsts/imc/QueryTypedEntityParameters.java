@@ -30,18 +30,15 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message Emergency Control (554)<br/>
+ *  IMC Message Query Typed Entity Parameters (2016)<br/>
+ *  This message can be used to query/report the entities and respective parameters in the system<br/>
  */
 
-public class EmergencyControl extends IMCMessage {
+public class QueryTypedEntityParameters extends IMCMessage {
 
-	public enum COMMAND {
-		ENABLE(0),
-		DISABLE(1),
-		START(2),
-		STOP(3),
-		QUERY(4),
-		SET_PLAN(5);
+	public enum OP {
+		REQUEST(0),
+		REPLY(1);
 
 		protected long value;
 
@@ -49,18 +46,18 @@ public class EmergencyControl extends IMCMessage {
 			return value;
 		}
 
-		COMMAND(long value) {
+		OP(long value) {
 			this.value = value;
 		}
 	}
 
-	public static final int ID_STATIC = 554;
+	public static final int ID_STATIC = 2016;
 
-	public EmergencyControl() {
+	public QueryTypedEntityParameters() {
 		super(ID_STATIC);
 	}
 
-	public EmergencyControl(IMCMessage msg) {
+	public QueryTypedEntityParameters(IMCMessage msg) {
 		super(ID_STATIC);
 		try{
 			copyFrom(msg);
@@ -70,20 +67,20 @@ public class EmergencyControl extends IMCMessage {
 		}
 	}
 
-	public EmergencyControl(IMCDefinition defs) {
+	public QueryTypedEntityParameters(IMCDefinition defs) {
 		super(defs, ID_STATIC);
 	}
 
-	public static EmergencyControl create(Object... values) {
-		EmergencyControl m = new EmergencyControl();
+	public static QueryTypedEntityParameters create(Object... values) {
+		QueryTypedEntityParameters m = new QueryTypedEntityParameters();
 		for (int i = 0; i < values.length-1; i+= 2)
 			m.setValue(values[i].toString(), values[i+1]);
 		return m;
 	}
 
-	public static EmergencyControl clone(IMCMessage msg) throws Exception {
+	public static QueryTypedEntityParameters clone(IMCMessage msg) throws Exception {
 
-		EmergencyControl m = new EmergencyControl();
+		QueryTypedEntityParameters m = new QueryTypedEntityParameters();
 		if (msg == null)
 			return m;
 		if(msg.definitions != m.definitions){
@@ -98,19 +95,22 @@ public class EmergencyControl extends IMCMessage {
 		return m;
 	}
 
-	public EmergencyControl(COMMAND command, PlanSpecification plan) {
+	public QueryTypedEntityParameters(OP op, long request_id, String entity_name, java.util.Collection<TypedEntityParameter> parameters) {
 		super(ID_STATIC);
-		setCommand(command);
-		if (plan != null)
-			setPlan(plan);
+		setOp(op);
+		setRequestId(request_id);
+		if (entity_name != null)
+			setEntityName(entity_name);
+		if (parameters != null)
+			setParameters(parameters);
 	}
 
 	/**
-	 *  @return Command (enumerated) - uint8_t
+	 *  @return Operation (enumerated) - uint8_t
 	 */
-	public COMMAND getCommand() {
+	public OP getOp() {
 		try {
-			COMMAND o = COMMAND.valueOf(getMessageType().getFieldPossibleValues("command").get(getLong("command")));
+			OP o = OP.valueOf(getMessageType().getFieldPossibleValues("op").get(getLong("op")));
 			return o;
 		}
 		catch (Exception e) {
@@ -118,45 +118,74 @@ public class EmergencyControl extends IMCMessage {
 		}
 	}
 
-	public String getCommandStr() {
-		return getString("command");
+	public String getOpStr() {
+		return getString("op");
 	}
 
-	public short getCommandVal() {
-		return (short) getInteger("command");
+	public short getOpVal() {
+		return (short) getInteger("op");
 	}
 
 	/**
-	 *  @param command Command (enumerated)
+	 *  @param op Operation (enumerated)
 	 */
-	public EmergencyControl setCommand(COMMAND command) {
-		values.put("command", command.value());
+	public QueryTypedEntityParameters setOp(OP op) {
+		values.put("op", op.value());
 		return this;
 	}
 
 	/**
-	 *  @param command Command (as a String)
+	 *  @param op Operation (as a String)
 	 */
-	public EmergencyControl setCommandStr(String command) {
-		setValue("command", command);
+	public QueryTypedEntityParameters setOpStr(String op) {
+		setValue("op", op);
 		return this;
 	}
 
 	/**
-	 *  @param command Command (integer value)
+	 *  @param op Operation (integer value)
 	 */
-	public EmergencyControl setCommandVal(short command) {
-		setValue("command", command);
+	public QueryTypedEntityParameters setOpVal(short op) {
+		setValue("op", op);
 		return this;
 	}
 
 	/**
-	 *  @return Plan Specification - message
+	 *  @return Request identitier - uint32_t
 	 */
-	public PlanSpecification getPlan() {
+	public long getRequestId() {
+		return getLong("request_id");
+	}
+
+	/**
+	 *  @param request_id Request identitier
+	 */
+	public QueryTypedEntityParameters setRequestId(long request_id) {
+		values.put("request_id", request_id);
+		return this;
+	}
+
+	/**
+	 *  @return Entity Name - plaintext
+	 */
+	public String getEntityName() {
+		return getString("entity_name");
+	}
+
+	/**
+	 *  @param entity_name Entity Name
+	 */
+	public QueryTypedEntityParameters setEntityName(String entity_name) {
+		values.put("entity_name", entity_name);
+		return this;
+	}
+
+	/**
+	 *  @return Parameters - message-list
+	 */
+	public java.util.Vector<TypedEntityParameter> getParameters() {
 		try {
-			IMCMessage obj = getMessage("plan");
-			return PlanSpecification.clone(obj);
+			return getMessageList("parameters", TypedEntityParameter.class);
 		}
 		catch (Exception e) {
 			return null;
@@ -165,10 +194,10 @@ public class EmergencyControl extends IMCMessage {
 	}
 
 	/**
-	 *  @param plan Plan Specification
+	 *  @param parameters Parameters
 	 */
-	public EmergencyControl setPlan(PlanSpecification plan) {
-		values.put("plan", plan);
+	public QueryTypedEntityParameters setParameters(java.util.Collection<TypedEntityParameter> parameters) {
+		values.put("parameters", parameters);
 		return this;
 	}
 

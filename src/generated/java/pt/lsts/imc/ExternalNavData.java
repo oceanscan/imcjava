@@ -120,10 +120,7 @@ public class ExternalNavData extends IMCMessage {
 	public EstimatedState getState() {
 		try {
 			IMCMessage obj = getMessage("state");
-			if (obj instanceof EstimatedState)
-				return (EstimatedState) obj;
-			else
-				return null;
+			return EstimatedState.clone(obj);
 		}
 		catch (Exception e) {
 			return null;

@@ -173,10 +173,7 @@ public class TrexOperation extends IMCMessage {
 	public TrexToken getToken() {
 		try {
 			IMCMessage obj = getMessage("token");
-			if (obj instanceof TrexToken)
-				return (TrexToken) obj;
-			else
-				return null;
+			return TrexToken.clone(obj);
 		}
 		catch (Exception e) {
 			return null;

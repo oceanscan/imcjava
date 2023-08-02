@@ -30,37 +30,19 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message Emergency Control (554)<br/>
+ *  IMC Message Values If (2018)<br/>
+ *  This message is used to describe the ValuesIf content of a TypedEntityParameter.<br/>
  */
 
-public class EmergencyControl extends IMCMessage {
+public class ValuesIf extends IMCMessage {
 
-	public enum COMMAND {
-		ENABLE(0),
-		DISABLE(1),
-		START(2),
-		STOP(3),
-		QUERY(4),
-		SET_PLAN(5);
+	public static final int ID_STATIC = 2018;
 
-		protected long value;
-
-		public long value() {
-			return value;
-		}
-
-		COMMAND(long value) {
-			this.value = value;
-		}
-	}
-
-	public static final int ID_STATIC = 554;
-
-	public EmergencyControl() {
+	public ValuesIf() {
 		super(ID_STATIC);
 	}
 
-	public EmergencyControl(IMCMessage msg) {
+	public ValuesIf(IMCMessage msg) {
 		super(ID_STATIC);
 		try{
 			copyFrom(msg);
@@ -70,20 +52,20 @@ public class EmergencyControl extends IMCMessage {
 		}
 	}
 
-	public EmergencyControl(IMCDefinition defs) {
+	public ValuesIf(IMCDefinition defs) {
 		super(defs, ID_STATIC);
 	}
 
-	public static EmergencyControl create(Object... values) {
-		EmergencyControl m = new EmergencyControl();
+	public static ValuesIf create(Object... values) {
+		ValuesIf m = new ValuesIf();
 		for (int i = 0; i < values.length-1; i+= 2)
 			m.setValue(values[i].toString(), values[i+1]);
 		return m;
 	}
 
-	public static EmergencyControl clone(IMCMessage msg) throws Exception {
+	public static ValuesIf clone(IMCMessage msg) throws Exception {
 
-		EmergencyControl m = new EmergencyControl();
+		ValuesIf m = new ValuesIf();
 		if (msg == null)
 			return m;
 		if(msg.definitions != m.definitions){
@@ -98,77 +80,58 @@ public class EmergencyControl extends IMCMessage {
 		return m;
 	}
 
-	public EmergencyControl(COMMAND command, PlanSpecification plan) {
+	public ValuesIf(String param, String value, String values_list) {
 		super(ID_STATIC);
-		setCommand(command);
-		if (plan != null)
-			setPlan(plan);
+		if (param != null)
+			setParam(param);
+		if (value != null)
+			setValue(value);
+		if (values_list != null)
+			setValuesList(values_list);
 	}
 
 	/**
-	 *  @return Command (enumerated) - uint8_t
+	 *  @return Param - plaintext
 	 */
-	public COMMAND getCommand() {
-		try {
-			COMMAND o = COMMAND.valueOf(getMessageType().getFieldPossibleValues("command").get(getLong("command")));
-			return o;
-		}
-		catch (Exception e) {
-			return null;
-		}
-	}
-
-	public String getCommandStr() {
-		return getString("command");
-	}
-
-	public short getCommandVal() {
-		return (short) getInteger("command");
+	public String getParam() {
+		return getString("param");
 	}
 
 	/**
-	 *  @param command Command (enumerated)
+	 *  @param param Param
 	 */
-	public EmergencyControl setCommand(COMMAND command) {
-		values.put("command", command.value());
+	public ValuesIf setParam(String param) {
+		values.put("param", param);
 		return this;
 	}
 
 	/**
-	 *  @param command Command (as a String)
+	 *  @return Value - plaintext
 	 */
-	public EmergencyControl setCommandStr(String command) {
-		setValue("command", command);
+	public String getValue() {
+		return getString("value");
+	}
+
+	/**
+	 *  @param value Value
+	 */
+	public ValuesIf setValue(String value) {
+		values.put("value", value);
 		return this;
 	}
 
 	/**
-	 *  @param command Command (integer value)
+	 *  @return Values List - plaintext
 	 */
-	public EmergencyControl setCommandVal(short command) {
-		setValue("command", command);
-		return this;
+	public String getValuesList() {
+		return getString("values_list");
 	}
 
 	/**
-	 *  @return Plan Specification - message
+	 *  @param values_list Values List
 	 */
-	public PlanSpecification getPlan() {
-		try {
-			IMCMessage obj = getMessage("plan");
-			return PlanSpecification.clone(obj);
-		}
-		catch (Exception e) {
-			return null;
-		}
-
-	}
-
-	/**
-	 *  @param plan Plan Specification
-	 */
-	public EmergencyControl setPlan(PlanSpecification plan) {
-		values.put("plan", plan);
+	public ValuesIf setValuesList(String values_list) {
+		values.put("values_list", values_list);
 		return this;
 	}
 

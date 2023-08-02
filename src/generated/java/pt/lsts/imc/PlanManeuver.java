@@ -113,10 +113,7 @@ public class PlanManeuver extends IMCMessage {
 	public Maneuver getData() {
 		try {
 			IMCMessage obj = getMessage("data");
-			if (obj instanceof Maneuver)
-				return (Maneuver) obj;
-			else
-				return null;
+			return Maneuver.clone(obj);
 		}
 		catch (Exception e) {
 			return null;

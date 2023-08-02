@@ -30,7 +30,7 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message Typed Entity Parameter (2008)<br/>
+ *  IMC Message Typed Entity Parameter (2017)<br/>
  *  Entity parameter with all the data that defines an entity parameter.<br/>
  */
 
@@ -89,7 +89,7 @@ public class TypedEntityParameter extends IMCMessage {
 		}
 	}
 
-	public static final int ID_STATIC = 2008;
+	public static final int ID_STATIC = 2017;
 
 	public TypedEntityParameter() {
 		super(ID_STATIC);
@@ -133,7 +133,7 @@ public class TypedEntityParameter extends IMCMessage {
 		return m;
 	}
 
-	public TypedEntityParameter(String name, TYPE type, String default_value, String units, String description, float min_value, float max_value, long list_min_size, long list_max_size, VISIBILITY visibility, SCOPE scope) {
+	public TypedEntityParameter(String name, TYPE type, String default_value, String units, String description, String values_list, float min_value, float max_value, short list_min_size, short list_max_size, java.util.Collection<ValuesIf> values_if_list, VISIBILITY visibility, SCOPE scope) {
 		super(ID_STATIC);
 		if (name != null)
 			setName(name);
@@ -144,23 +144,27 @@ public class TypedEntityParameter extends IMCMessage {
 			setUnits(units);
 		if (description != null)
 			setDescription(description);
+		if (values_list != null)
+			setValuesList(values_list);
 		setMinValue(min_value);
 		setMaxValue(max_value);
 		setListMinSize(list_min_size);
 		setListMaxSize(list_max_size);
+		if (values_if_list != null)
+			setValuesIfList(values_if_list);
 		setVisibility(visibility);
 		setScope(scope);
 	}
 
 	/**
-	 *  @return Entity Name - plaintext
+	 *  @return Parameter Name - plaintext
 	 */
 	public String getName() {
 		return getString("name");
 	}
 
 	/**
-	 *  @param name Entity Name
+	 *  @param name Parameter Name
 	 */
 	public TypedEntityParameter setName(String name) {
 		values.put("name", name);
@@ -258,6 +262,21 @@ public class TypedEntityParameter extends IMCMessage {
 	}
 
 	/**
+	 *  @return Values List - plaintext
+	 */
+	public String getValuesList() {
+		return getString("values_list");
+	}
+
+	/**
+	 *  @param values_list Values List
+	 */
+	public TypedEntityParameter setValuesList(String values_list) {
+		values.put("values_list", values_list);
+		return this;
+	}
+
+	/**
 	 *  @return Min Value - fp32_t
 	 */
 	public double getMinValue() {
@@ -288,32 +307,53 @@ public class TypedEntityParameter extends IMCMessage {
 	}
 
 	/**
-	 *  @return List Min Size - uint32_t
+	 *  @return List Min Size - uint8_t
 	 */
-	public long getListMinSize() {
-		return getLong("list_min_size");
+	public short getListMinSize() {
+		return (short) getInteger("list_min_size");
 	}
 
 	/**
 	 *  @param list_min_size List Min Size
 	 */
-	public TypedEntityParameter setListMinSize(long list_min_size) {
+	public TypedEntityParameter setListMinSize(short list_min_size) {
 		values.put("list_min_size", list_min_size);
 		return this;
 	}
 
 	/**
-	 *  @return List Max Size - uint32_t
+	 *  @return List Max Size - uint8_t
 	 */
-	public long getListMaxSize() {
-		return getLong("list_max_size");
+	public short getListMaxSize() {
+		return (short) getInteger("list_max_size");
 	}
 
 	/**
 	 *  @param list_max_size List Max Size
 	 */
-	public TypedEntityParameter setListMaxSize(long list_max_size) {
+	public TypedEntityParameter setListMaxSize(short list_max_size) {
 		values.put("list_max_size", list_max_size);
+		return this;
+	}
+
+	/**
+	 *  @return Values If List - message-list
+	 */
+	public java.util.Vector<ValuesIf> getValuesIfList() {
+		try {
+			return getMessageList("values_if_list", ValuesIf.class);
+		}
+		catch (Exception e) {
+			return null;
+		}
+
+	}
+
+	/**
+	 *  @param values_if_list Values If List
+	 */
+	public TypedEntityParameter setValuesIfList(java.util.Collection<ValuesIf> values_if_list) {
+		values.put("values_if_list", values_if_list);
 		return this;
 	}
 

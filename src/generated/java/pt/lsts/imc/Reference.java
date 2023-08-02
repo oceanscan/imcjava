@@ -120,10 +120,7 @@ public class Reference extends IMCMessage {
 	public DesiredSpeed getSpeed() {
 		try {
 			IMCMessage obj = getMessage("speed");
-			if (obj instanceof DesiredSpeed)
-				return (DesiredSpeed) obj;
-			else
-				return null;
+			return DesiredSpeed.clone(obj);
 		}
 		catch (Exception e) {
 			return null;
@@ -145,10 +142,7 @@ public class Reference extends IMCMessage {
 	public DesiredZ getZ() {
 		try {
 			IMCMessage obj = getMessage("z");
-			if (obj instanceof DesiredZ)
-				return (DesiredZ) obj;
-			else
-				return null;
+			return DesiredZ.clone(obj);
 		}
 		catch (Exception e) {
 			return null;

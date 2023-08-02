@@ -154,10 +154,7 @@ public class ValidatePlan extends IMCMessage {
 	public PlanDB getPlan() {
 		try {
 			IMCMessage obj = getMessage("plan");
-			if (obj instanceof PlanDB)
-				return (PlanDB) obj;
-			else
-				return null;
+			return PlanDB.clone(obj);
 		}
 		catch (Exception e) {
 			return null;

@@ -185,10 +185,7 @@ public class HistoricDataQuery extends IMCMessage {
 	public HistoricData getData() {
 		try {
 			IMCMessage obj = getMessage("data");
-			if (obj instanceof HistoricData)
-				return (HistoricData) obj;
-			else
-				return null;
+			return HistoricData.clone(obj);
 		}
 		catch (Exception e) {
 			return null;

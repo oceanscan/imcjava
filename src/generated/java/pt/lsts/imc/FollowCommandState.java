@@ -142,10 +142,7 @@ public class FollowCommandState extends IMCMessage {
 	public Command getCommand() {
 		try {
 			IMCMessage obj = getMessage("command");
-			if (obj instanceof Command)
-				return (Command) obj;
-			else
-				return null;
+			return Command.clone(obj);
 		}
 		catch (Exception e) {
 			return null;

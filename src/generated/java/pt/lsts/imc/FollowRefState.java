@@ -150,10 +150,7 @@ public class FollowRefState extends IMCMessage {
 	public Reference getReference() {
 		try {
 			IMCMessage obj = getMessage("reference");
-			if (obj instanceof Reference)
-				return (Reference) obj;
-			else
-				return null;
+			return Reference.clone(obj);
 		}
 		catch (Exception e) {
 			return null;

@@ -97,10 +97,7 @@ public class LblEstimate extends IMCMessage {
 	public LblBeacon getBeacon() {
 		try {
 			IMCMessage obj = getMessage("beacon");
-			if (obj instanceof LblBeacon)
-				return (LblBeacon) obj;
-			else
-				return null;
+			return LblBeacon.clone(obj);
 		}
 		catch (Exception e) {
 			return null;

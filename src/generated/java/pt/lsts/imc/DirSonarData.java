@@ -30,37 +30,19 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message Emergency Control (554)<br/>
+ *  IMC Message Directional Sonar Data (2019)<br/>
+ *  This message contains the data acquired by a single sonar measurement whose angle can be controlled.<br/>
  */
 
-public class EmergencyControl extends IMCMessage {
+public class DirSonarData extends IMCMessage {
 
-	public enum COMMAND {
-		ENABLE(0),
-		DISABLE(1),
-		START(2),
-		STOP(3),
-		QUERY(4),
-		SET_PLAN(5);
+	public static final int ID_STATIC = 2019;
 
-		protected long value;
-
-		public long value() {
-			return value;
-		}
-
-		COMMAND(long value) {
-			this.value = value;
-		}
-	}
-
-	public static final int ID_STATIC = 554;
-
-	public EmergencyControl() {
+	public DirSonarData() {
 		super(ID_STATIC);
 	}
 
-	public EmergencyControl(IMCMessage msg) {
+	public DirSonarData(IMCMessage msg) {
 		super(ID_STATIC);
 		try{
 			copyFrom(msg);
@@ -70,20 +52,20 @@ public class EmergencyControl extends IMCMessage {
 		}
 	}
 
-	public EmergencyControl(IMCDefinition defs) {
+	public DirSonarData(IMCDefinition defs) {
 		super(defs, ID_STATIC);
 	}
 
-	public static EmergencyControl create(Object... values) {
-		EmergencyControl m = new EmergencyControl();
+	public static DirSonarData create(Object... values) {
+		DirSonarData m = new DirSonarData();
 		for (int i = 0; i < values.length-1; i+= 2)
 			m.setValue(values[i].toString(), values[i+1]);
 		return m;
 	}
 
-	public static EmergencyControl clone(IMCMessage msg) throws Exception {
+	public static DirSonarData clone(IMCMessage msg) throws Exception {
 
-		EmergencyControl m = new EmergencyControl();
+		DirSonarData m = new DirSonarData();
 		if (msg == null)
 			return m;
 		if(msg.definitions != m.definitions){
@@ -98,65 +80,21 @@ public class EmergencyControl extends IMCMessage {
 		return m;
 	}
 
-	public EmergencyControl(COMMAND command, PlanSpecification plan) {
+	public DirSonarData(DeviceState pose, SonarData measurement) {
 		super(ID_STATIC);
-		setCommand(command);
-		if (plan != null)
-			setPlan(plan);
+		if (pose != null)
+			setPose(pose);
+		if (measurement != null)
+			setMeasurement(measurement);
 	}
 
 	/**
-	 *  @return Command (enumerated) - uint8_t
+	 *  @return Relative Pose - message
 	 */
-	public COMMAND getCommand() {
+	public DeviceState getPose() {
 		try {
-			COMMAND o = COMMAND.valueOf(getMessageType().getFieldPossibleValues("command").get(getLong("command")));
-			return o;
-		}
-		catch (Exception e) {
-			return null;
-		}
-	}
-
-	public String getCommandStr() {
-		return getString("command");
-	}
-
-	public short getCommandVal() {
-		return (short) getInteger("command");
-	}
-
-	/**
-	 *  @param command Command (enumerated)
-	 */
-	public EmergencyControl setCommand(COMMAND command) {
-		values.put("command", command.value());
-		return this;
-	}
-
-	/**
-	 *  @param command Command (as a String)
-	 */
-	public EmergencyControl setCommandStr(String command) {
-		setValue("command", command);
-		return this;
-	}
-
-	/**
-	 *  @param command Command (integer value)
-	 */
-	public EmergencyControl setCommandVal(short command) {
-		setValue("command", command);
-		return this;
-	}
-
-	/**
-	 *  @return Plan Specification - message
-	 */
-	public PlanSpecification getPlan() {
-		try {
-			IMCMessage obj = getMessage("plan");
-			return PlanSpecification.clone(obj);
+			IMCMessage obj = getMessage("pose");
+			return DeviceState.clone(obj);
 		}
 		catch (Exception e) {
 			return null;
@@ -165,10 +103,32 @@ public class EmergencyControl extends IMCMessage {
 	}
 
 	/**
-	 *  @param plan Plan Specification
+	 *  @param pose Relative Pose
 	 */
-	public EmergencyControl setPlan(PlanSpecification plan) {
-		values.put("plan", plan);
+	public DirSonarData setPose(DeviceState pose) {
+		values.put("pose", pose);
+		return this;
+	}
+
+	/**
+	 *  @return Measurement - message
+	 */
+	public SonarData getMeasurement() {
+		try {
+			IMCMessage obj = getMessage("measurement");
+			return SonarData.clone(obj);
+		}
+		catch (Exception e) {
+			return null;
+		}
+
+	}
+
+	/**
+	 *  @param measurement Measurement
+	 */
+	public DirSonarData setMeasurement(SonarData measurement) {
+		values.put("measurement", measurement);
 		return this;
 	}
 

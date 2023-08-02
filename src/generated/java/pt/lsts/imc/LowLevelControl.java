@@ -98,10 +98,7 @@ public class LowLevelControl extends Maneuver {
 	public ControlCommand getControl() {
 		try {
 			IMCMessage obj = getMessage("control");
-			if (obj instanceof ControlCommand)
-				return (ControlCommand) obj;
-			else
-				return null;
+			return ControlCommand.clone(obj);
 		}
 		catch (Exception e) {
 			return null;
