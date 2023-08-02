@@ -213,6 +213,7 @@ public class IMCUtil {
                     msg.setValue("min_range", msg.getDouble("range"));
                     msg.setValue("max_range", msg.getDouble("range"));
                 }
+                break;
             case FollowTrajectory.ID_STATIC:
             case FollowPath.ID_STATIC:
                 if (msg.getTypeOf("points").equals("message")
