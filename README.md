@@ -5,8 +5,11 @@ Java bindings for IMC.
 
 # Generate Messages
 
-* IMC.xml resides in PROJECT_ROOT/..:
-gradle generate
+IMC.xml resides in conf/imc/
+imcjava supports multiple IMC versions.
 
-* IMC.xml resides in <FOLDER>:
-gradle generate -PimcDir=<FOLDER>
+Use `gradle generate` to create the bindings.
+
+Use `gradle publishToMavenLocal` to test locally.
+
+`mvn_update.sh` to publish the current build to omst's maven repository.

@@ -40,6 +40,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Formatter;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -48,6 +49,7 @@ import java.util.Vector;
 import pt.lsts.imc.IMCDefinition;
 import pt.lsts.imc.IMCFieldType;
 import pt.lsts.imc.IMCMessageType;
+import pt.lsts.imc.MultiIMCDefinitions;
 
 /**
  * This class generates IMCMessage subclasses that ease sending and receiving
@@ -58,7 +60,7 @@ import pt.lsts.imc.IMCMessageType;
  */
 public class ClassGenerator {
 
-	public static void generateImcFactory(IMCDefinition definitions,
+	public static void generateImcFactory(HashSet<IMCDefinition> definitionsSet,
 			File outputFolder) throws Exception {
 		File outputDir = getOutputDir(outputFolder, "pt.lsts.imc");
 		File outputFile = new File(outputDir, "MessageFactory.java");
@@ -89,20 +91,28 @@ public class ClassGenerator {
 
 		bw.write("\tprivate IMCMessage createTypedMessage(int mgid, IMCDefinition defs) {\n\n");
 
-		bw.write("\t\tswitch(mgid) {\n");
-		for (String msg : definitions.getConcreteMessages()) {
-			bw.write("\t\t\tcase " + msg + ".ID_STATIC:\n");
-			bw.write("\t\t\t\treturn new " + msg + "(defs);\n");
+		for (IMCDefinition def : definitionsSet) {
+			bw.write("\t\tif (" + def.getSyncWord() + " == defs.getSyncWord()) {\n");
+			bw.write("\t\t\tswitch(mgid) {\n");
+			for (String msg : def.getConcreteMessages()) {
+				bw.write("\t\t\t\tcase " +  def.getMessageId(msg) + ":\n");
+				bw.write("\t\t\t\t\treturn new " + msg + "(defs, " + def.getMessageId(msg) + ");\n");
+			}
+			bw.write("\t\t\t\tdefault:\n");
+			bw.write("\t\t\t\t\treturn new IMCMessage(defs);\n");
+
+			bw.write("\t\t\t}\n");
+			bw.write("\t\t}\n");
+
 		}
+		bw.write("\t\treturn new IMCMessage(defs);\n");
 
-		bw.write("\t\t\tdefault:\n");
-		bw.write("\t\t\t\treturn new IMCMessage(defs);\n");
-
-		bw.write("\t\t}\n");
-		bw.write("\t}\n");
+		bw.write("}\n\n");
 		bw.write("}\n");
 
+
 		bw.close();
+		System.out.println("Imc Factory complete");
 	}
 
 	@Deprecated
@@ -262,7 +272,7 @@ public class ClassGenerator {
 	public static void generateStringDefinitions(String packageName,
 			Map<String, Integer> addresses, String sha, String branch,
 			String commitDetails, File outputFolder)
-					throws Exception {
+			throws Exception {
 		File outputDir = getOutputDir(outputFolder, packageName);
 		File outputFile = new File(outputDir, "ImcStringDefs.java");
 
@@ -285,7 +295,8 @@ public class ClassGenerator {
 				+ "\";\n\n");
 
 		// IMC_STATIC_ADDRESSES
-		bw.write("\tpublic static java.util.Map<String, Integer> IMC_ADDRESSES = new java.util.LinkedHashMap<String, Integer>();\n\n");
+		bw.write(
+				"\tpublic static java.util.Map<String, Integer> IMC_ADDRESSES = new java.util.LinkedHashMap<String, Integer>();\n\n");
 
 		bw.write("\tstatic {\n");
 
@@ -317,11 +328,6 @@ public class ClassGenerator {
 
 	public static void generateClasses(String packageName, File outputFolder,
 			IMCDefinition definitions) throws Exception {
-
-		for (File f : outputFolder.listFiles()) {
-			f.delete();
-		}
-		outputFolder.delete();
 
 		generateHeader(packageName, outputFolder, definitions);
 
@@ -365,11 +371,11 @@ public class ClassGenerator {
 
 		sb.append("\tpublic ").append(msgName).append("(");
 		sb.append(imcTypeToJava(type, fields.firstElement())).append(" ")
-		.append(fields.firstElement());
+				.append(fields.firstElement());
 
 		for (int i = 1; i < fields.size(); i++) {
 			sb.append(", ").append(imcTypeToJava(type, fields.get(i)))
-			.append(" ").append(fields.get(i));
+					.append(" ").append(fields.get(i));
 		}
 
 		sb.append(") {\n\t\tsuper(ID_STATIC);\n");
@@ -377,14 +383,14 @@ public class ClassGenerator {
 			IMCFieldType fieldType = type.getFieldType(fields.get(i));
 
 			switch (fieldType) {
-			case TYPE_MESSAGE:
-			case TYPE_PLAINTEXT:
-			case TYPE_MESSAGELIST:
-			case TYPE_RAWDATA:
-				sb.append("\t\tif (" + fields.get(i) + " != null)\n\t");
-			default:
-				sb.append("\t\tset").append(capitalize(fields.get(i)))
-				.append("(").append(fields.get(i)).append(");\n");
+				case TYPE_MESSAGE:
+				case TYPE_PLAINTEXT:
+				case TYPE_MESSAGELIST:
+				case TYPE_RAWDATA:
+					sb.append("\t\tif (" + fields.get(i) + " != null)\n\t");
+				default:
+					sb.append("\t\tset").append(capitalize(fields.get(i)))
+							.append("(").append(fields.get(i)).append(");\n");
 
 			}
 		}
@@ -399,38 +405,38 @@ public class ClassGenerator {
 			return field.toUpperCase();
 
 		switch (imcType) {
-		case TYPE_INT8:
-			return "byte";
-		case TYPE_UINT8:
-		case TYPE_INT16:
-			return "short";
-		case TYPE_UINT16:
-		case TYPE_INT32:
-			return "int";
-		case TYPE_FP32:
-			return "float";
-		case TYPE_FP64:
-			return "double";
-		case TYPE_INT64:
-		case TYPE_UINT32:
-			return "long";
-		case TYPE_PLAINTEXT:
-			return "String";
-		case TYPE_RAWDATA:
-			return "byte[]";
-		case TYPE_MESSAGE:
-			if (type.getFieldSubtype(field) == null) {
-				return "IMCMessage";
-			} else {
-				return type.getFieldSubtype(field);
-			}
-		case TYPE_MESSAGELIST:
-			if (type.getFieldSubtype(field) == null) {
-				return "java.util.Collection<IMCMessage>";
-			} else {
-				return "java.util.Collection<" + type.getFieldSubtype(field)
-				+ ">";
-			}
+			case TYPE_INT8:
+				return "byte";
+			case TYPE_UINT8:
+			case TYPE_INT16:
+				return "short";
+			case TYPE_UINT16:
+			case TYPE_INT32:
+				return "int";
+			case TYPE_FP32:
+				return "float";
+			case TYPE_FP64:
+				return "double";
+			case TYPE_INT64:
+			case TYPE_UINT32:
+				return "long";
+			case TYPE_PLAINTEXT:
+				return "String";
+			case TYPE_RAWDATA:
+				return "byte[]";
+			case TYPE_MESSAGE:
+				if (type.getFieldSubtype(field) == null) {
+					return "IMCMessage";
+				} else {
+					return type.getFieldSubtype(field);
+				}
+			case TYPE_MESSAGELIST:
+				if (type.getFieldSubtype(field) == null) {
+					return "java.util.Collection<IMCMessage>";
+				} else {
+					return "java.util.Collection<" + type.getFieldSubtype(field)
+							+ ">";
+				}
 
 		}
 		return "Object";
@@ -463,224 +469,224 @@ public class ClassGenerator {
 					+ type.getFullFieldName(field));
 		sb.append("\n\t */\n");
 		switch (type.getFieldType(field)) {
-		case TYPE_INT8:
-			if (("" + type.getFieldUnits(field)).equals("enumerated")) {
-				String capField = field.toUpperCase();
-				sb.append("\tpublic " + type.getShortName() + " set"
-						+ capitalizedField + "(" + capField + " " + field
-						+ ") {\n");
-				sb.append("\t\tvalues.put(\"" + field + "\", " + field
-						+ ".value());\n");
-				sb.append("\t\treturn this;\n");
-				sb.append("\t}\n\n");
+			case TYPE_INT8:
+				if (("" + type.getFieldUnits(field)).equals("enumerated")) {
+					String capField = field.toUpperCase();
+					sb.append("\tpublic " + type.getShortName() + " set"
+							+ capitalizedField + "(" + capField + " " + field
+							+ ") {\n");
+					sb.append("\t\tvalues.put(\"" + field + "\", " + field
+							+ ".value());\n");
+					sb.append("\t\treturn this;\n");
+					sb.append("\t}\n\n");
 
-				sb.append("\t/**\n\t *  @param " + field + " "
-						+ type.getFullFieldName(field)
-						+ " (as a String)\n\t */\n");
-				sb.append("\tpublic " + type.getShortName() + " set"
-						+ capitalizedField + "Str(String " + field + ") {\n");
-				sb.append("\t\tsetValue(\"" + field + "\", " + field + ");\n");
-				sb.append("\t\treturn this;\n");
-				sb.append("\t}\n\n");
+					sb.append("\t/**\n\t *  @param " + field + " "
+							+ type.getFullFieldName(field)
+							+ " (as a String)\n\t */\n");
+					sb.append("\tpublic " + type.getShortName() + " set"
+							+ capitalizedField + "Str(String " + field + ") {\n");
+					sb.append("\t\tsetValue(\"" + field + "\", " + field + ");\n");
+					sb.append("\t\treturn this;\n");
+					sb.append("\t}\n\n");
 
-				sb.append("\t/**\n\t *  @param " + field + " "
-						+ type.getFullFieldName(field)
-						+ " (integer value)\n\t */\n");
+					sb.append("\t/**\n\t *  @param " + field + " "
+							+ type.getFullFieldName(field)
+							+ " (integer value)\n\t */\n");
+					sb.append("\tpublic " + type.getShortName() + " set"
+							+ capitalizedField + "Val(byte " + field + ") {\n");
+					sb.append("\t\tsetValue(\"" + field + "\", " + field + ");\n");
+					sb.append("\t\treturn this;\n");
+					sb.append("\t}\n\n");
+				} else {
+					sb.append("\tpublic " + type.getShortName() + " set"
+							+ capitalizedField + "(byte " + field + ") {\n");
+					sb.append("\t\tvalues.put(\"" + field + "\", " + field + ");\n");
+					sb.append("\t\treturn this;\n");
+					sb.append("\t}\n\n");
+				}
+				break;
+			case TYPE_UINT8:
+			case TYPE_INT16:
+				if (("" + type.getFieldUnits(field)).equals("enumerated")) {
+					String capField = field.toUpperCase();
+					sb.append("\tpublic " + type.getShortName() + " set"
+							+ capitalizedField + "(" + capField + " " + field
+							+ ") {\n");
+					sb.append("\t\tvalues.put(\"" + field + "\", " + field
+							+ ".value());\n");
+					sb.append("\t\treturn this;\n");
+					sb.append("\t}\n\n");
+
+					sb.append("\t/**\n\t *  @param " + field + " "
+							+ type.getFullFieldName(field)
+							+ " (as a String)\n\t */\n");
+					sb.append("\tpublic " + type.getShortName() + " set"
+							+ capitalizedField + "Str(String " + field + ") {\n");
+					sb.append("\t\tsetValue(\"" + field + "\", " + field + ");\n");
+					sb.append("\t\treturn this;\n");
+					sb.append("\t}\n\n");
+
+					sb.append("\t/**\n\t *  @param " + field + " "
+							+ type.getFullFieldName(field)
+							+ " (integer value)\n\t */\n");
+					sb.append("\tpublic " + type.getShortName() + " set"
+							+ capitalizedField + "Val(short " + field + ") {\n");
+					sb.append("\t\tsetValue(\"" + field + "\", " + field + ");\n");
+					sb.append("\t\treturn this;\n");
+					sb.append("\t}\n\n");
+				} else {
+					sb.append("\tpublic " + type.getShortName() + " set"
+							+ capitalizedField + "(short " + field + ") {\n");
+					sb.append("\t\tvalues.put(\"" + field + "\", " + field + ");\n");
+					sb.append("\t\treturn this;\n");
+					sb.append("\t}\n\n");
+				}
+				break;
+			case TYPE_UINT16:
+			case TYPE_INT32:
+				if (("" + type.getFieldUnits(field)).equals("enumerated")) {
+					String capField = field.toUpperCase();
+					sb.append("\tpublic " + type.getShortName() + " set"
+							+ capitalizedField + "(" + capField + " " + field
+							+ ") {\n");
+					sb.append("\t\tvalues.put(\"" + field + "\", " + field
+							+ ".value());\n");
+					sb.append("\t\treturn this;\n");
+					sb.append("\t}\n\n");
+
+					sb.append("\t/**\n\t *  @param " + field + " "
+							+ type.getFullFieldName(field)
+							+ " (as a String)\n\t */\n");
+					sb.append("\tpublic " + type.getShortName() + " set"
+							+ capitalizedField + "Str(String " + field + ") {\n");
+					sb.append("\t\tsetValue(\"" + field + "\", " + field + ");\n");
+					sb.append("\t\treturn this;\n");
+					sb.append("\t}\n\n");
+
+					sb.append("\t/**\n\t *  @param " + field + " "
+							+ type.getFullFieldName(field)
+							+ " (integer value)\n\t */\n");
+					sb.append("\tpublic " + type.getShortName() + " set"
+							+ capitalizedField + "Val(int " + field + ") {\n");
+					sb.append("\t\tsetValue(\"" + field + "\", " + field + ");\n");
+					sb.append("\t\treturn this;\n");
+					sb.append("\t}\n\n");
+				} else {
+					sb.append("\tpublic " + type.getShortName() + " set"
+							+ capitalizedField + "(int " + field + ") {\n");
+					sb.append("\t\tvalues.put(\"" + field + "\", " + field + ");\n");
+					sb.append("\t\treturn this;\n");
+					sb.append("\t}\n\n");
+				}
+				break;
+			case TYPE_UINT32:
+			case TYPE_INT64:
+				if (("" + type.getFieldUnits(field)).equals("enumerated")) {
+					String capField = field.toUpperCase();
+					sb.append("\tpublic " + type.getShortName() + " set"
+							+ capitalizedField + "(" + capField + " " + field
+							+ ") {\n");
+					sb.append("\t\tvalues.put(\"" + field + "\", " + field
+							+ ".value());\n");
+					sb.append("\t\treturn this;\n");
+					sb.append("\t}\n\n");
+
+					sb.append("\t/**\n\t *  @param " + field + " "
+							+ type.getFullFieldName(field)
+							+ " (as a String)\n\t */\n");
+					sb.append("\tpublic " + type.getShortName() + " set"
+							+ capitalizedField + "(String " + field + ") {\n");
+					sb.append("\t\tsetValue(\"" + field + "\", " + field + ");\n");
+					sb.append("\t\treturn this;\n");
+					sb.append("\t}\n\n");
+
+					sb.append("\t/**\n\t *  @param " + field + " "
+							+ type.getFullFieldName(field)
+							+ " (integer value)\n\t */\n");
+					sb.append("\tpublic " + type.getShortName() + " set"
+							+ capitalizedField + "(long " + field + ") {\n");
+					sb.append("\t\tsetValue(\"" + field + "\", " + field + ");\n");
+					sb.append("\t\treturn this;\n");
+					sb.append("\t}\n\n");
+				} else {
+					sb.append("\tpublic " + type.getShortName() + " set"
+							+ capitalizedField + "(long " + field + ") {\n");
+					sb.append("\t\tvalues.put(\"" + field + "\", " + field + ");\n");
+					sb.append("\t\treturn this;\n");
+					sb.append("\t}\n\n");
+				}
+				break;
+			case TYPE_FP32:
+			case TYPE_FP64:
 				sb.append("\tpublic " + type.getShortName() + " set"
-						+ capitalizedField + "Val(byte " + field + ") {\n");
-				sb.append("\t\tsetValue(\"" + field + "\", " + field + ");\n");
-				sb.append("\t\treturn this;\n");
-				sb.append("\t}\n\n");
-			} else {
-				sb.append("\tpublic " + type.getShortName() + " set"
-						+ capitalizedField + "(byte " + field + ") {\n");
+						+ capitalizedField + "(double " + field + ") {\n");
 				sb.append("\t\tvalues.put(\"" + field + "\", " + field + ");\n");
 				sb.append("\t\treturn this;\n");
 				sb.append("\t}\n\n");
-			}
-			break;
-		case TYPE_UINT8:
-		case TYPE_INT16:
-			if (("" + type.getFieldUnits(field)).equals("enumerated")) {
-				String capField = field.toUpperCase();
-				sb.append("\tpublic " + type.getShortName() + " set"
-						+ capitalizedField + "(" + capField + " " + field
-						+ ") {\n");
-				sb.append("\t\tvalues.put(\"" + field + "\", " + field
-						+ ".value());\n");
-				sb.append("\t\treturn this;\n");
-				sb.append("\t}\n\n");
-
-				sb.append("\t/**\n\t *  @param " + field + " "
-						+ type.getFullFieldName(field)
-						+ " (as a String)\n\t */\n");
-				sb.append("\tpublic " + type.getShortName() + " set"
-						+ capitalizedField + "Str(String " + field + ") {\n");
-				sb.append("\t\tsetValue(\"" + field + "\", " + field + ");\n");
-				sb.append("\t\treturn this;\n");
-				sb.append("\t}\n\n");
-
-				sb.append("\t/**\n\t *  @param " + field + " "
-						+ type.getFullFieldName(field)
-						+ " (integer value)\n\t */\n");
-				sb.append("\tpublic " + type.getShortName() + " set"
-						+ capitalizedField + "Val(short " + field + ") {\n");
-				sb.append("\t\tsetValue(\"" + field + "\", " + field + ");\n");
-				sb.append("\t\treturn this;\n");
-				sb.append("\t}\n\n");
-			} else {
-				sb.append("\tpublic " + type.getShortName() + " set"
-						+ capitalizedField + "(short " + field + ") {\n");
-				sb.append("\t\tvalues.put(\"" + field + "\", " + field + ");\n");
-				sb.append("\t\treturn this;\n");
-				sb.append("\t}\n\n");
-			}
-			break;
-		case TYPE_UINT16:
-		case TYPE_INT32:
-			if (("" + type.getFieldUnits(field)).equals("enumerated")) {
-				String capField = field.toUpperCase();
-				sb.append("\tpublic " + type.getShortName() + " set"
-						+ capitalizedField + "(" + capField + " " + field
-						+ ") {\n");
-				sb.append("\t\tvalues.put(\"" + field + "\", " + field
-						+ ".value());\n");
-				sb.append("\t\treturn this;\n");
-				sb.append("\t}\n\n");
-
-				sb.append("\t/**\n\t *  @param " + field + " "
-						+ type.getFullFieldName(field)
-						+ " (as a String)\n\t */\n");
-				sb.append("\tpublic " + type.getShortName() + " set"
-						+ capitalizedField + "Str(String " + field + ") {\n");
-				sb.append("\t\tsetValue(\"" + field + "\", " + field + ");\n");
-				sb.append("\t\treturn this;\n");
-				sb.append("\t}\n\n");
-
-				sb.append("\t/**\n\t *  @param " + field + " "
-						+ type.getFullFieldName(field)
-						+ " (integer value)\n\t */\n");
-				sb.append("\tpublic " + type.getShortName() + " set"
-						+ capitalizedField + "Val(int " + field + ") {\n");
-				sb.append("\t\tsetValue(\"" + field + "\", " + field + ");\n");
-				sb.append("\t\treturn this;\n");
-				sb.append("\t}\n\n");
-			} else {
-				sb.append("\tpublic " + type.getShortName() + " set"
-						+ capitalizedField + "(int " + field + ") {\n");
-				sb.append("\t\tvalues.put(\"" + field + "\", " + field + ");\n");
-				sb.append("\t\treturn this;\n");
-				sb.append("\t}\n\n");
-			}
-			break;
-		case TYPE_UINT32:
-		case TYPE_INT64:
-			if (("" + type.getFieldUnits(field)).equals("enumerated")) {
-				String capField = field.toUpperCase();
-				sb.append("\tpublic " + type.getShortName() + " set"
-						+ capitalizedField + "(" + capField + " " + field
-						+ ") {\n");
-				sb.append("\t\tvalues.put(\"" + field + "\", " + field
-						+ ".value());\n");
-				sb.append("\t\treturn this;\n");
-				sb.append("\t}\n\n");
-
-				sb.append("\t/**\n\t *  @param " + field + " "
-						+ type.getFullFieldName(field)
-						+ " (as a String)\n\t */\n");
+				break;
+			case TYPE_PLAINTEXT:
+				if (("" + type.getFieldUnits(field)).equalsIgnoreCase("tuplelist")) {
+					sb.append("\tpublic " + type.getShortName() + " set"
+							+ capitalizedField
+							+ "(java.util.LinkedHashMap<String, ?> " + field
+							+ ") {\n");
+					sb.append("\t\tString val = encodeTupleList(" + field + ");\n");
+					sb.append("\t\tvalues.put(\"" + field + "\", val);\n");
+					sb.append("\t\treturn this;\n");
+					sb.append("\t}\n\n");
+				}
 				sb.append("\tpublic " + type.getShortName() + " set"
 						+ capitalizedField + "(String " + field + ") {\n");
-				sb.append("\t\tsetValue(\"" + field + "\", " + field + ");\n");
+				sb.append("\t\tvalues.put(\"" + field + "\", " + field + ");\n");
 				sb.append("\t\treturn this;\n");
 				sb.append("\t}\n\n");
+				break;
+			case TYPE_RAWDATA:
+				sb.append("\tpublic " + type.getShortName() + " set"
+						+ capitalizedField + "(byte[] " + field + ") {\n");
+				sb.append("\t\tvalues.put(\"" + field + "\", " + field + ");\n");
+				sb.append("\t\treturn this;\n");
+				sb.append("\t}\n\n");
+				break;
+			case TYPE_MESSAGE:
+				if (type.getFieldSubtype(field) != null) {
+					sb.append("\tpublic " + type.getShortName() + " set"
+							+ capitalizedField + "(" + type.getFieldSubtype(field)
+							+ " " + field + ") {\n");
+					sb.append("\t\tvalues.put(\"" + field + "\", " + field + ");\n");
+					sb.append("\t\treturn this;\n");
+					sb.append("\t}\n\n");
+				} else {
+					sb.append("\tpublic " + type.getShortName() + " set"
+							+ capitalizedField + "(IMCMessage " + field + ") {\n");
+					sb.append("\t\tvalues.put(\"" + field + "\", " + field + ");\n");
+					sb.append("\t\treturn this;\n");
+					sb.append("\t}\n\n");
+				}
+				break;
+			case TYPE_MESSAGELIST:
+				if (type.getFieldSubtype(field) != null) {
+					sb.append("\tpublic " + type.getShortName() + " set"
+							+ capitalizedField + "(java.util.Collection<"
+							+ type.getFieldSubtype(field) + "> " + field + ") {\n");
+					sb.append("\t\tvalues.put(\"" + field + "\", " + field + ");\n");
+					sb.append("\t\treturn this;\n");
+					sb.append("\t}\n\n");
+				} else {
+					sb.append("\tpublic " + type.getShortName() + " set"
+							+ capitalizedField
+							+ "(java.util.Collection<IMCMessage> " + field
+							+ ") {\n");
+					sb.append("\t\tvalues.put(\"" + field + "\", " + field + ");\n");
+					sb.append("\t\treturn this;\n");
+					sb.append("\t}\n\n");
+				}
+				break;
 
-				sb.append("\t/**\n\t *  @param " + field + " "
-						+ type.getFullFieldName(field)
-						+ " (integer value)\n\t */\n");
-				sb.append("\tpublic " + type.getShortName() + " set"
-						+ capitalizedField + "(long " + field + ") {\n");
-				sb.append("\t\tsetValue(\"" + field + "\", " + field + ");\n");
-				sb.append("\t\treturn this;\n");
-				sb.append("\t}\n\n");
-			} else {
-				sb.append("\tpublic " + type.getShortName() + " set"
-						+ capitalizedField + "(long " + field + ") {\n");
-				sb.append("\t\tvalues.put(\"" + field + "\", " + field + ");\n");
-				sb.append("\t\treturn this;\n");
-				sb.append("\t}\n\n");
-			}
-			break;
-		case TYPE_FP32:
-		case TYPE_FP64:
-			sb.append("\tpublic " + type.getShortName() + " set"
-					+ capitalizedField + "(double " + field + ") {\n");
-			sb.append("\t\tvalues.put(\"" + field + "\", " + field + ");\n");
-			sb.append("\t\treturn this;\n");
-			sb.append("\t}\n\n");
-			break;
-		case TYPE_PLAINTEXT:
-			if (("" + type.getFieldUnits(field)).equalsIgnoreCase("tuplelist")) {
-				sb.append("\tpublic " + type.getShortName() + " set"
-						+ capitalizedField
-						+ "(java.util.LinkedHashMap<String, ?> " + field
-						+ ") {\n");
-				sb.append("\t\tString val = encodeTupleList(" + field + ");\n");
-				sb.append("\t\tvalues.put(\"" + field + "\", val);\n");
-				sb.append("\t\treturn this;\n");
-				sb.append("\t}\n\n");
-			}
-			sb.append("\tpublic " + type.getShortName() + " set"
-					+ capitalizedField + "(String " + field + ") {\n");
-			sb.append("\t\tvalues.put(\"" + field + "\", " + field + ");\n");
-			sb.append("\t\treturn this;\n");
-			sb.append("\t}\n\n");
-			break;
-		case TYPE_RAWDATA:
-			sb.append("\tpublic " + type.getShortName() + " set"
-					+ capitalizedField + "(byte[] " + field + ") {\n");
-			sb.append("\t\tvalues.put(\"" + field + "\", " + field + ");\n");
-			sb.append("\t\treturn this;\n");
-			sb.append("\t}\n\n");
-			break;
-		case TYPE_MESSAGE:
-			if (type.getFieldSubtype(field) != null) {
-				sb.append("\tpublic " + type.getShortName() + " set"
-						+ capitalizedField + "(" + type.getFieldSubtype(field)
-						+ " " + field + ") {\n");
-				sb.append("\t\tvalues.put(\"" + field + "\", " + field + ");\n");
-				sb.append("\t\treturn this;\n");
-				sb.append("\t}\n\n");
-			} else {
-				sb.append("\tpublic " + type.getShortName() + " set"
-						+ capitalizedField + "(IMCMessage " + field + ") {\n");
-				sb.append("\t\tvalues.put(\"" + field + "\", " + field + ");\n");
-				sb.append("\t\treturn this;\n");
-				sb.append("\t}\n\n");
-			}
-			break;
-		case TYPE_MESSAGELIST:
-			if (type.getFieldSubtype(field) != null) {
-				sb.append("\tpublic " + type.getShortName() + " set"
-						+ capitalizedField + "(java.util.Collection<"
-						+ type.getFieldSubtype(field) + "> " + field + ") {\n");
-				sb.append("\t\tvalues.put(\"" + field + "\", " + field + ");\n");
-				sb.append("\t\treturn this;\n");
-				sb.append("\t}\n\n");
-			} else {
-				sb.append("\tpublic " + type.getShortName() + " set"
-						+ capitalizedField
-						+ "(java.util.Collection<IMCMessage> " + field
-						+ ") {\n");
-				sb.append("\t\tvalues.put(\"" + field + "\", " + field + ");\n");
-				sb.append("\t\treturn this;\n");
-				sb.append("\t}\n\n");
-			}
-			break;
-
-		default:
-			System.err.println("Setter for unknown field was not generated: "
-					+ type.getFieldType(field));
-			break;
+			default:
+				System.err.println("Setter for unknown field was not generated: "
+						+ type.getFieldType(field));
+				break;
 		}
 
 		return sb.toString();
@@ -724,155 +730,155 @@ public class ClassGenerator {
 		sb.append(" - " + type.getFieldType(field) + "\n\t */\n");
 
 		switch (type.getFieldType(field)) {
-		case TYPE_INT8:
-			if (("" + type.getFieldUnits(field)).equals("enumerated")) {
-				String capField = field.toUpperCase();
-				sb.append("\tpublic " + capField + " get" + capitalizedField
-						+ "() {\n");
-				sb.append("\t\ttry {\n");
-				sb.append("\t\t\t" + capField + " o = " + capField
-						+ ".valueOf(getMessageType().getFieldPossibleValues(\""
-						+ field + "\").get(getLong(\"" + field + "\")));\n");
-				sb.append("\t\t\treturn o;\n");
-				sb.append("\t\t}\n");
-				sb.append("\t\tcatch (Exception e) {\n");
-				sb.append("\t\t\treturn null;\n");
-				sb.append("\t\t}\n");
-				sb.append("\t}\n\n");
+			case TYPE_INT8:
+				if (("" + type.getFieldUnits(field)).equals("enumerated")) {
+					String capField = field.toUpperCase();
+					sb.append("\tpublic " + capField + " get" + capitalizedField
+							+ "() {\n");
+					sb.append("\t\ttry {\n");
+					sb.append("\t\t\t" + capField + " o = " + capField
+							+ ".valueOf(getMessageType().getFieldPossibleValues(\""
+							+ field + "\").get(getLong(\"" + field + "\")));\n");
+					sb.append("\t\t\treturn o;\n");
+					sb.append("\t\t}\n");
+					sb.append("\t\tcatch (Exception e) {\n");
+					sb.append("\t\t\treturn null;\n");
+					sb.append("\t\t}\n");
+					sb.append("\t}\n\n");
 
-				sb.append("\tpublic String get" + capitalizedField
-						+ "Str() {\n");
-				sb.append("\t\treturn getString(\"" + field + "\");\n");
-				sb.append("\t}\n\n");
+					sb.append("\tpublic String get" + capitalizedField
+							+ "Str() {\n");
+					sb.append("\t\treturn getString(\"" + field + "\");\n");
+					sb.append("\t}\n\n");
 
-				sb.append("\tpublic byte get" + capitalizedField
-						+ "Val() {\n");
-				sb.append("\t\treturn (byte) getInteger(\"" + field + "\");\n");
-				sb.append("\t}\n\n");
+					sb.append("\tpublic byte get" + capitalizedField
+							+ "Val() {\n");
+					sb.append("\t\treturn (byte) getInteger(\"" + field + "\");\n");
+					sb.append("\t}\n\n");
 
-			} else {
-				sb.append("\tpublic byte get" + capitalizedField + "() {\n");
-				sb.append("\t\treturn (byte) getInteger(\"" + field + "\");\n");
-				sb.append("\t}\n\n");
-			}
-			break;
-		case TYPE_UINT8:
-		case TYPE_INT16:
-			if (("" + type.getFieldUnits(field)).equals("enumerated")) {
-				String capField = field.toUpperCase();
-				sb.append("\tpublic " + capField + " get" + capitalizedField
-						+ "() {\n");
-				sb.append("\t\ttry {\n");
-				sb.append("\t\t\t" + capField + " o = " + capField
-						+ ".valueOf(getMessageType().getFieldPossibleValues(\""
-						+ field + "\").get(getLong(\"" + field + "\")));\n");
-				sb.append("\t\t\treturn o;\n");
-				sb.append("\t\t}\n");
-				sb.append("\t\tcatch (Exception e) {\n");
-				sb.append("\t\t\treturn null;\n");
-				sb.append("\t\t}\n");
-				sb.append("\t}\n\n");
+				} else {
+					sb.append("\tpublic byte get" + capitalizedField + "() {\n");
+					sb.append("\t\treturn (byte) getInteger(\"" + field + "\");\n");
+					sb.append("\t}\n\n");
+				}
+				break;
+			case TYPE_UINT8:
+			case TYPE_INT16:
+				if (("" + type.getFieldUnits(field)).equals("enumerated")) {
+					String capField = field.toUpperCase();
+					sb.append("\tpublic " + capField + " get" + capitalizedField
+							+ "() {\n");
+					sb.append("\t\ttry {\n");
+					sb.append("\t\t\t" + capField + " o = " + capField
+							+ ".valueOf(getMessageType().getFieldPossibleValues(\""
+							+ field + "\").get(getLong(\"" + field + "\")));\n");
+					sb.append("\t\t\treturn o;\n");
+					sb.append("\t\t}\n");
+					sb.append("\t\tcatch (Exception e) {\n");
+					sb.append("\t\t\treturn null;\n");
+					sb.append("\t\t}\n");
+					sb.append("\t}\n\n");
 
-				sb.append("\tpublic String get" + capitalizedField
-						+ "Str() {\n");
-				sb.append("\t\treturn getString(\"" + field + "\");\n");
-				sb.append("\t}\n\n");
+					sb.append("\tpublic String get" + capitalizedField
+							+ "Str() {\n");
+					sb.append("\t\treturn getString(\"" + field + "\");\n");
+					sb.append("\t}\n\n");
 
-				sb.append("\tpublic short get" + capitalizedField
-						+ "Val() {\n");
-				sb.append("\t\treturn (short) getInteger(\"" + field + "\");\n");
-				sb.append("\t}\n\n");
+					sb.append("\tpublic short get" + capitalizedField
+							+ "Val() {\n");
+					sb.append("\t\treturn (short) getInteger(\"" + field + "\");\n");
+					sb.append("\t}\n\n");
 
-			} else {
-				sb.append("\tpublic short get" + capitalizedField + "() {\n");
-				sb.append("\t\treturn (short) getInteger(\"" + field + "\");\n");
-				sb.append("\t}\n\n");
-			}
-			break;
-		case TYPE_UINT16:
-		case TYPE_INT32:
-			if (("" + type.getFieldUnits(field)).equals("enumerated")) {
-				String capField = field.toUpperCase();
-				sb.append("\tpublic " + capField + " get" + capitalizedField
-						+ "() {\n");
-				sb.append("\t\ttry {\n");
-				sb.append("\t\t\t" + capField + " o = " + capField
-						+ ".valueOf(getMessageType().getFieldPossibleValues(\""
-						+ field + "\").get(getLong(\"" + field + "\")));\n");
-				sb.append("\t\t\treturn o;\n");
-				sb.append("\t\t}\n");
-				sb.append("\t\tcatch (Exception e) {\n");
-				sb.append("\t\t\treturn null;\n");
-				sb.append("\t\t}\n");
-				sb.append("\t}\n\n");
+				} else {
+					sb.append("\tpublic short get" + capitalizedField + "() {\n");
+					sb.append("\t\treturn (short) getInteger(\"" + field + "\");\n");
+					sb.append("\t}\n\n");
+				}
+				break;
+			case TYPE_UINT16:
+			case TYPE_INT32:
+				if (("" + type.getFieldUnits(field)).equals("enumerated")) {
+					String capField = field.toUpperCase();
+					sb.append("\tpublic " + capField + " get" + capitalizedField
+							+ "() {\n");
+					sb.append("\t\ttry {\n");
+					sb.append("\t\t\t" + capField + " o = " + capField
+							+ ".valueOf(getMessageType().getFieldPossibleValues(\""
+							+ field + "\").get(getLong(\"" + field + "\")));\n");
+					sb.append("\t\t\treturn o;\n");
+					sb.append("\t\t}\n");
+					sb.append("\t\tcatch (Exception e) {\n");
+					sb.append("\t\t\treturn null;\n");
+					sb.append("\t\t}\n");
+					sb.append("\t}\n\n");
 
-				sb.append("\tpublic String get" + capitalizedField
-						+ "Str() {\n");
-				sb.append("\t\treturn getString(\"" + field + "\");\n");
-				sb.append("\t}\n\n");
+					sb.append("\tpublic String get" + capitalizedField
+							+ "Str() {\n");
+					sb.append("\t\treturn getString(\"" + field + "\");\n");
+					sb.append("\t}\n\n");
 
-				sb.append("\tpublic int get" + capitalizedField
-						+ "Val() {\n");
-				sb.append("\t\treturn getInteger(\"" + field + "\");\n");
-				sb.append("\t}\n\n");
+					sb.append("\tpublic int get" + capitalizedField
+							+ "Val() {\n");
+					sb.append("\t\treturn getInteger(\"" + field + "\");\n");
+					sb.append("\t}\n\n");
 
-			} else {
-				sb.append("\tpublic int get" + capitalizedField + "() {\n");
-				sb.append("\t\treturn getInteger(\"" + field + "\");\n");
+				} else {
+					sb.append("\tpublic int get" + capitalizedField + "() {\n");
+					sb.append("\t\treturn getInteger(\"" + field + "\");\n");
+					sb.append("\t}\n\n");
+				}
+				break;
+			case TYPE_UINT32:
+			case TYPE_INT64:
+				if (("" + type.getFieldUnits(field)).equals("enumerated")) {
+					String capField = field.toUpperCase();
+					sb.append("\tpublic " + capField + " get" + capitalizedField
+							+ "() {\n");
+					sb.append("\t\ttry {\n");
+					sb.append("\t\t\t" + capField + " o = " + capField
+							+ ".valueOf(getMessageType().getFieldPossibleValues(\""
+							+ field + "\").get(getLong(\"" + field + "\")));\n");
+					sb.append("\t\t\treturn o;\n");
+					sb.append("\t\t}\n");
+					sb.append("\t\tcatch (Exception e) {\n");
+					sb.append("\t\t\treturn null;\n");
+					sb.append("\t\t}\n");
+					sb.append("\t}\n\n");
+				} else {
+					sb.append("\tpublic long get" + capitalizedField + "() {\n");
+					sb.append("\t\treturn getLong(\"" + field + "\");\n");
+					sb.append("\t}\n\n");
+				}
+				break;
+			case TYPE_FP32:
+			case TYPE_FP64:
+				sb.append("\tpublic double get" + capitalizedField + "() {\n");
+				sb.append("\t\treturn getDouble(\"" + field + "\");\n");
 				sb.append("\t}\n\n");
-			}
-			break;
-		case TYPE_UINT32:
-		case TYPE_INT64:
-			if (("" + type.getFieldUnits(field)).equals("enumerated")) {
-				String capField = field.toUpperCase();
-				sb.append("\tpublic " + capField + " get" + capitalizedField
-						+ "() {\n");
-				sb.append("\t\ttry {\n");
-				sb.append("\t\t\t" + capField + " o = " + capField
-						+ ".valueOf(getMessageType().getFieldPossibleValues(\""
-						+ field + "\").get(getLong(\"" + field + "\")));\n");
-				sb.append("\t\t\treturn o;\n");
-				sb.append("\t\t}\n");
-				sb.append("\t\tcatch (Exception e) {\n");
-				sb.append("\t\t\treturn null;\n");
-				sb.append("\t\t}\n");
+				break;
+			case TYPE_PLAINTEXT:
+				if (("" + type.getFieldUnits(field)).equalsIgnoreCase("TupleList")) {
+					sb.append("\tpublic java.util.LinkedHashMap<String, String> get"
+							+ capitalizedField + "() {\n");
+					sb.append("\t\treturn getTupleList(\"" + field + "\");\n");
+					sb.append("\t}\n\n");
+				} else {
+					sb.append("\tpublic String get" + capitalizedField + "() {\n");
+					sb.append("\t\treturn getString(\"" + field + "\");\n");
+					sb.append("\t}\n\n");
+				}
+				break;
+			case TYPE_RAWDATA:
+				sb.append("\tpublic byte[] get" + capitalizedField + "() {\n");
+				sb.append("\t\treturn getRawData(\"" + field + "\");\n");
 				sb.append("\t}\n\n");
-			} else {
-				sb.append("\tpublic long get" + capitalizedField + "() {\n");
-				sb.append("\t\treturn getLong(\"" + field + "\");\n");
-				sb.append("\t}\n\n");
-			}
-			break;
-		case TYPE_FP32:
-		case TYPE_FP64:
-			sb.append("\tpublic double get" + capitalizedField + "() {\n");
-			sb.append("\t\treturn getDouble(\"" + field + "\");\n");
-			sb.append("\t}\n\n");
-			break;
-		case TYPE_PLAINTEXT:
-			if (("" + type.getFieldUnits(field)).equalsIgnoreCase("TupleList")) {
-				sb.append("\tpublic java.util.LinkedHashMap<String, String> get"
-						+ capitalizedField + "() {\n");
-				sb.append("\t\treturn getTupleList(\"" + field + "\");\n");
-				sb.append("\t}\n\n");
-			} else {
-				sb.append("\tpublic String get" + capitalizedField + "() {\n");
-				sb.append("\t\treturn getString(\"" + field + "\");\n");
-				sb.append("\t}\n\n");
-			}
-			break;
-		case TYPE_RAWDATA:
-			sb.append("\tpublic byte[] get" + capitalizedField + "() {\n");
-			sb.append("\t\treturn getRawData(\"" + field + "\");\n");
-			sb.append("\t}\n\n");
-			break;
-		case TYPE_MESSAGE:
-			if (type.getFieldSubtype(field) == null) {
-				sb.append("\tpublic IMCMessage get" + capitalizedField
-						+ "() {\n");
-				sb.append("\t\treturn getMessage(\"" + field + "\");\n");
-				sb.append("\t}\n\n");
+				break;
+			case TYPE_MESSAGE:
+				if (type.getFieldSubtype(field) == null) {
+					sb.append("\tpublic IMCMessage get" + capitalizedField
+							+ "() {\n");
+					sb.append("\t\treturn getMessage(\"" + field + "\");\n");
+					sb.append("\t}\n\n");
 
 					sb.append("\tpublic <T extends IMCMessage> T get"
 							+ capitalizedField
@@ -888,9 +894,10 @@ public class ClassGenerator {
 							+ "\");\n");
 					// sb.append("\t\t\tif (obj.getMessageType().getId() == " + subtype +
 					// ".ID_STATIC)\n");
-					// TODO:: Check if the following line can be optimized. instanceof doesn't work with inline messages.
+					// TODO:: Check if the following line can be optimized. instanceof doesn't work
+					// with inline messages.
 					sb.append("\t\t\treturn " + subtype + ".clone(obj);\n");
-																				// optimization
+					// optimization
 					// sb.append("\t\t\tif (obj instanceof " + subtype + ")\n");
 					// sb.append("\t\t\t\treturn (" + subtype + ") obj;\n");
 					// sb.append("\t\t\telse\n");
@@ -1074,7 +1081,7 @@ public class ClassGenerator {
 
 		bw.write("/**\n");
 		bw.write(" *  IMC Message " + type.getFullName() + " (" + type.getId()
-		+ ")<br/>\n");
+				+ ")<br/>\n");
 
 		if (type.getMessageDescription() != null) {
 			String desc = DescriptionToHtml.descToHtml(type
@@ -1115,22 +1122,21 @@ public class ClassGenerator {
 					+ msgName
 					+ "(IMCDefinition defs, int type) {\n\t\tsuper(defs, type);\n\t}\n\n");
 
-
-			bw.write("\tpublic static "+msgName+" clone(IMCMessage msg) throws Exception {\n" +
+			bw.write("\tpublic static " + msgName + " clone(IMCMessage msg) throws Exception {\n" +
 					"\t\tIMCMessage m = IMCDefinition.getInstance().create(msg.getAbbrev());\n" +
-					"\t\tif (!"+msgName+".class.isAssignableFrom(m.getClass()))\n"+
+					"\t\tif (!" + msgName + ".class.isAssignableFrom(m.getClass()))\n" +
 					"\t\t\tthrow new Exception(m.getClass().getSimpleName()+\" is not a subclass\");\n\n" +
 					"\t\tif(msg.definitions != m.definitions){\n" +
 					"\t\t\tmsg = msg.cloneMessage();\n" +
-					"\t\t\tIMCUtil.updateMessage(msg, m.definitions);\n"+
-					"\t\t}\n\n"+
-					"\t\tm.getHeader().values.putAll(msg.getHeader().values);\n"+
-					"\t\tm.values.putAll(msg.values);\n\n"+
-					"\t\treturn ("+msgName+")m;\n"+
+					"\t\t\tIMCUtil.updateMessage(msg, m.definitions);\n" +
+					"\t\t}\n\n" +
+					"\t\tm.getHeader().values.putAll(msg.getHeader().values);\n" +
+					"\t\tm.values.putAll(msg.values);\n\n" +
+					"\t\treturn (" + msgName + ")m;\n" +
 					"\t}\n\n");
 		} else {
 			bw.write("\tpublic static final int ID_STATIC = " + type.getId()
-			+ ";\n\n");
+					+ ";\n\n");
 			bw.write("\tpublic " + msgName
 					+ "() {\n\t\tsuper(ID_STATIC);\n\t}\n\n");
 			bw.write("\tpublic " + msgName + "(IMCMessage msg) {\n");
@@ -1145,6 +1151,9 @@ public class ClassGenerator {
 			bw.write("\tpublic "
 					+ msgName
 					+ "(IMCDefinition defs) {\n\t\tsuper(defs, ID_STATIC);\n\t}\n\n");
+			bw.write("\tpublic "
+					+ msgName
+					+ "(IMCDefinition defs, int type) {\n\t\tsuper(defs, type);\n\t}\n\n");
 
 			bw.write("\tpublic static " + msgName
 					+ " create(Object... values) {\n");
@@ -1163,7 +1172,8 @@ public class ClassGenerator {
 			bw.write("\t\t\tmsg = msg.cloneMessage();\n");
 			bw.write("\t\t\tIMCUtil.updateMessage(msg, m.definitions);\n\t\t}\n");
 			bw.write("\t\telse if (msg.getMgid()!=m.getMgid())\n");
-			bw.write("\t\t\tthrow new Exception(\"Argument \"+msg.getAbbrev()+\" is incompatible with message \"+m.getAbbrev());\n\n");
+			bw.write(
+					"\t\t\tthrow new Exception(\"Argument \"+msg.getAbbrev()+\" is incompatible with message \"+m.getAbbrev());\n\n");
 			bw.write("\t\tm.getHeader().values.putAll(msg.getHeader().values);\n");
 			bw.write("\t\tm.values.putAll(msg.values);\n");
 			bw.write("\t\treturn m;\n\t}\n\n");
@@ -1201,43 +1211,47 @@ public class ClassGenerator {
 	}
 
 	public static void main(String[] args) {
-		if (args.length != 2)
-		{
+		if (args.length != 2) {
 			System.err.format("Usage: generator <IMC_FOLDER> <DESTINATION_FOLDER>\n");
 			System.exit(1);
 		}
 
-		final File imcFolder = new File(args[0]).getAbsoluteFile();
-		final Path imcXml = FileSystems.getDefault().getPath(imcFolder.getAbsolutePath(), "IMC.xml");
+		// final File imcFolder = new File(args[0]).getAbsoluteFile();
+		// final Path imcXml =
+		// FileSystems.getDefault().getPath(imcFolder.getAbsolutePath(), "IMC.xml");
 		final Path genJava = FileSystems.getDefault().getPath(args[1], "java");
-		final Path genResources = FileSystems.getDefault().getPath(args[1], "resources", "xml", "IMC.xml");
+		// final Path genResources = FileSystems.getDefault().getPath(args[1],
+		// "resources", "xml", "IMC.xml");
 
-		System.err.format("IMC XML: %s\n", imcXml.toString());
+		// System.err.format("IMC XML: %s\n", imcXml.toString());
 
-		String sha = "N/A";
-		String branch = "N/A";
-		String commitDetails = "Not a GIT repository";
+		// String sha = "N/A";
+		// String branch = "N/A";
+		// String commitDetails = "Not a GIT repository";
+
+		// try {
+		// GenerationUtils.checkRepo(imcFolder);
+		// sha = GenerationUtils.getGitSha(imcFolder);
+		// branch = GenerationUtils.getGitBranch(imcFolder);
+		// commitDetails = GenerationUtils.getGitCommit(imcFolder);
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
 
 		try {
-			GenerationUtils.checkRepo(imcFolder);
-			sha = GenerationUtils.getGitSha(imcFolder);
-			branch = GenerationUtils.getGitBranch(imcFolder);
-			commitDetails = GenerationUtils.getGitCommit(imcFolder);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 
-		try {
-
-			IMCDefinition defs = new IMCDefinition(GenerationUtils.getImcXml(imcFolder));
-			Files.copy(imcXml, genResources, StandardCopyOption.REPLACE_EXISTING);
+			// IMCDefinition defs = new IMCDefinition(GenerationUtils.getImcXml(imcFolder));
+			// Files.copy(imcXml, genResources, StandardCopyOption.REPLACE_EXISTING);
 			Map<String, Integer> addrs = GenerationUtils.getImcAddresses();
 
 			File output = getOutputDir(genJava.toFile(), "pt.lsts.imc");
 			clearDir(output);
-			generateClasses("pt.lsts.imc", genJava.toFile(), defs);
-			generateStringDefinitions("pt.lsts.imc", addrs, sha, branch, commitDetails, genJava.toFile());
-			generateImcFactory(defs, genJava.toFile());
+
+			generateClasses("pt.lsts.imc", genJava.toFile(), MultiIMCDefinitions.getInstance());
+			System.out.println("Generate String Definitions");
+			generateStringDefinitions("pt.lsts.imc", addrs, "sha", "branch", "commit", genJava.toFile());
+			System.out.println("Generate IMC Factory");
+			generateImcFactory(MultiIMCDefinitions.getAllDefinitions(), genJava.toFile());
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
