@@ -58,6 +58,10 @@ public class RemoteCommand extends RemoteData {
 		super(defs, ID_STATIC);
 	}
 
+	public RemoteCommand(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static RemoteCommand create(Object... values) {
 		RemoteCommand m = new RemoteCommand();
 		for (int i = 0; i < values.length-1; i+= 2)

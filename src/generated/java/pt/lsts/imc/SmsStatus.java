@@ -73,6 +73,10 @@ public class SmsStatus extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public SmsStatus(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static SmsStatus create(Object... values) {
 		SmsStatus m = new SmsStatus();
 		for (int i = 0; i < values.length-1; i+= 2)

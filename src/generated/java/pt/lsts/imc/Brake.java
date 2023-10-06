@@ -72,6 +72,10 @@ public class Brake extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Brake(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Brake create(Object... values) {
 		Brake m = new Brake();
 		for (int i = 0; i < values.length-1; i+= 2)

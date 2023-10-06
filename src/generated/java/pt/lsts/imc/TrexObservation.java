@@ -56,6 +56,10 @@ public class TrexObservation extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public TrexObservation(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static TrexObservation create(Object... values) {
 		TrexObservation m = new TrexObservation();
 		for (int i = 0; i < values.length-1; i+= 2)

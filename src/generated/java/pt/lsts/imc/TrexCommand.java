@@ -75,6 +75,10 @@ public class TrexCommand extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public TrexCommand(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static TrexCommand create(Object... values) {
 		TrexCommand m = new TrexCommand();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -75,6 +75,10 @@ public class ClockControl extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public ClockControl(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static ClockControl create(Object... values) {
 		ClockControl m = new ClockControl();
 		for (int i = 0; i < values.length-1; i+= 2)

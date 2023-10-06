@@ -78,6 +78,10 @@ public class Dislodge extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public Dislodge(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Dislodge create(Object... values) {
 		Dislodge m = new Dislodge();
 		for (int i = 0; i < values.length-1; i+= 2)

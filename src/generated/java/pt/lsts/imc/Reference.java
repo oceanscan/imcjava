@@ -63,6 +63,10 @@ public class Reference extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Reference(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Reference create(Object... values) {
 		Reference m = new Reference();
 		for (int i = 0; i < values.length-1; i+= 2)

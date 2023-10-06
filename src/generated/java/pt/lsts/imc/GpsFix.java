@@ -84,6 +84,10 @@ public class GpsFix extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public GpsFix(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static GpsFix create(Object... values) {
 		GpsFix m = new GpsFix();
 		for (int i = 0; i < values.length-1; i+= 2)

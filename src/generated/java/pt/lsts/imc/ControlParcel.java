@@ -56,6 +56,10 @@ public class ControlParcel extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public ControlParcel(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static ControlParcel create(Object... values) {
 		ControlParcel m = new ControlParcel();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -59,6 +59,10 @@ public class NavigationData extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public NavigationData(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static NavigationData create(Object... values) {
 		NavigationData m = new NavigationData();
 		for (int i = 0; i < values.length-1; i+= 2)

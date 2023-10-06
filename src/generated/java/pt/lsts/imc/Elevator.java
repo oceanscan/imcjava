@@ -112,6 +112,10 @@ public class Elevator extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public Elevator(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Elevator create(Object... values) {
 		Elevator m = new Elevator();
 		for (int i = 0; i < values.length-1; i+= 2)

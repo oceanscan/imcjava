@@ -79,6 +79,10 @@ public class LblRangeAcceptance extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public LblRangeAcceptance(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static LblRangeAcceptance create(Object... values) {
 		LblRangeAcceptance m = new LblRangeAcceptance();
 		for (int i = 0; i < values.length-1; i+= 2)

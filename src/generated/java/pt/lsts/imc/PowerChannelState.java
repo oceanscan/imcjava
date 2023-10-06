@@ -71,6 +71,10 @@ public class PowerChannelState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public PowerChannelState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static PowerChannelState create(Object... values) {
 		PowerChannelState m = new PowerChannelState();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -71,6 +71,10 @@ public class HomePosition extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public HomePosition(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static HomePosition create(Object... values) {
 		HomePosition m = new HomePosition();
 		for (int i = 0; i < values.length-1; i+= 2)

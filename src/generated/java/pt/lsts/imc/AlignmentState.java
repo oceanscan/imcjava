@@ -77,6 +77,10 @@ public class AlignmentState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public AlignmentState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static AlignmentState create(Object... values) {
 		AlignmentState m = new AlignmentState();
 		for (int i = 0; i < values.length-1; i+= 2)

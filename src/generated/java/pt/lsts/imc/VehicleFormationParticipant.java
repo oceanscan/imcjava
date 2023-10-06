@@ -56,6 +56,10 @@ public class VehicleFormationParticipant extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public VehicleFormationParticipant(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static VehicleFormationParticipant create(Object... values) {
 		VehicleFormationParticipant m = new VehicleFormationParticipant();
 		for (int i = 0; i < values.length-1; i+= 2)

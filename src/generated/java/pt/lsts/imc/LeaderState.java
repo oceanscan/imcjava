@@ -84,6 +84,10 @@ public class LeaderState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public LeaderState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static LeaderState create(Object... values) {
 		LeaderState m = new LeaderState();
 		for (int i = 0; i < values.length-1; i+= 2)

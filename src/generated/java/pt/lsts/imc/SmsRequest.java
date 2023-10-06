@@ -56,6 +56,10 @@ public class SmsRequest extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public SmsRequest(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static SmsRequest create(Object... values) {
 		SmsRequest m = new SmsRequest();
 		for (int i = 0; i < values.length-1; i+= 2)

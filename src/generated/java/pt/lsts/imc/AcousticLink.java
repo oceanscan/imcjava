@@ -57,6 +57,10 @@ public class AcousticLink extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public AcousticLink(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static AcousticLink create(Object... values) {
 		AcousticLink m = new AcousticLink();
 		for (int i = 0; i < values.length-1; i+= 2)

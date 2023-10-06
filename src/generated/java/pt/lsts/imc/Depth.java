@@ -56,6 +56,10 @@ public class Depth extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Depth(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Depth create(Object... values) {
 		Depth m = new Depth();
 		for (int i = 0; i < values.length-1; i+= 2)

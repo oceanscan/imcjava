@@ -92,6 +92,10 @@ public class YoYo extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public YoYo(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static YoYo create(Object... values) {
 		YoYo m = new YoYo();
 		for (int i = 0; i < values.length-1; i+= 2)

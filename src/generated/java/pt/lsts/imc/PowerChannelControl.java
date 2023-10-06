@@ -77,6 +77,10 @@ public class PowerChannelControl extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public PowerChannelControl(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static PowerChannelControl create(Object... values) {
 		PowerChannelControl m = new PowerChannelControl();
 		for (int i = 0; i < values.length-1; i+= 2)

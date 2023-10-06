@@ -76,6 +76,10 @@ public class MapFeature extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public MapFeature(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static MapFeature create(Object... values) {
 		MapFeature m = new MapFeature();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -71,6 +71,10 @@ public class DataSanity extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public DataSanity(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static DataSanity create(Object... values) {
 		DataSanity m = new DataSanity();
 		for (int i = 0; i < values.length-1; i+= 2)

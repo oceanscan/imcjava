@@ -75,6 +75,10 @@ public class LoggingControl extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public LoggingControl(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static LoggingControl create(Object... values) {
 		LoggingControl m = new LoggingControl();
 		for (int i = 0; i < values.length-1; i+= 2)

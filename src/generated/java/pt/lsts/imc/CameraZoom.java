@@ -73,6 +73,10 @@ public class CameraZoom extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public CameraZoom(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static CameraZoom create(Object... values) {
 		CameraZoom m = new CameraZoom();
 		for (int i = 0; i < values.length-1; i+= 2)

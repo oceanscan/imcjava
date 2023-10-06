@@ -57,6 +57,10 @@ public class UsblPosition extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public UsblPosition(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static UsblPosition create(Object... values) {
 		UsblPosition m = new UsblPosition();
 		for (int i = 0; i < values.length-1; i+= 2)

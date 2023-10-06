@@ -101,6 +101,10 @@ public class VehicleState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public VehicleState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static VehicleState create(Object... values) {
 		VehicleState m = new VehicleState();
 		for (int i = 0; i < values.length-1; i+= 2)

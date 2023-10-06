@@ -126,6 +126,10 @@ public class Loiter extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public Loiter(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Loiter create(Object... values) {
 		Loiter m = new Loiter();
 		for (int i = 0; i < values.length-1; i+= 2)

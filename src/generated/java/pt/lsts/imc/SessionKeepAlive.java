@@ -56,6 +56,10 @@ public class SessionKeepAlive extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public SessionKeepAlive(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static SessionKeepAlive create(Object... values) {
 		SessionKeepAlive m = new SessionKeepAlive();
 		for (int i = 0; i < values.length-1; i+= 2)

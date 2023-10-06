@@ -57,6 +57,10 @@ public class HistoricData extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public HistoricData(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static HistoricData create(Object... values) {
 		HistoricData m = new HistoricData();
 		for (int i = 0; i < values.length-1; i+= 2)

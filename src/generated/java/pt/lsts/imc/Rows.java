@@ -93,6 +93,10 @@ public class Rows extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public Rows(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Rows create(Object... values) {
 		Rows m = new Rows();
 		for (int i = 0; i < values.length-1; i+= 2)

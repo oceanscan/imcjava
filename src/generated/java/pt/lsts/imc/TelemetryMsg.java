@@ -114,6 +114,10 @@ public class TelemetryMsg extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public TelemetryMsg(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static TelemetryMsg create(Object... values) {
 		TelemetryMsg m = new TelemetryMsg();
 		for (int i = 0; i < values.length-1; i+= 2)

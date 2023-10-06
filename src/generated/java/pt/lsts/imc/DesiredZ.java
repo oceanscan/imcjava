@@ -74,6 +74,10 @@ public class DesiredZ extends ControlCommand {
 		super(defs, ID_STATIC);
 	}
 
+	public DesiredZ(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static DesiredZ create(Object... values) {
 		DesiredZ m = new DesiredZ();
 		for (int i = 0; i < values.length-1; i+= 2)

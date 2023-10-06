@@ -71,6 +71,10 @@ public class ChargingState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public ChargingState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static ChargingState create(Object... values) {
 		ChargingState m = new ChargingState();
 		for (int i = 0; i < values.length-1; i+= 2)

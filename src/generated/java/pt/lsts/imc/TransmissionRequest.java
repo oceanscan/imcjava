@@ -94,6 +94,10 @@ public class TransmissionRequest extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public TransmissionRequest(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static TransmissionRequest create(Object... values) {
 		TransmissionRequest m = new TransmissionRequest();
 		for (int i = 0; i < values.length-1; i+= 2)

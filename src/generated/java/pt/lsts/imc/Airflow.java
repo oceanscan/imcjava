@@ -56,6 +56,10 @@ public class Airflow extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Airflow(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Airflow create(Object... values) {
 		Airflow m = new Airflow();
 		for (int i = 0; i < values.length-1; i+= 2)

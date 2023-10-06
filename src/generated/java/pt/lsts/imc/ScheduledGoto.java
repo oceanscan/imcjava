@@ -109,6 +109,10 @@ public class ScheduledGoto extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public ScheduledGoto(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static ScheduledGoto create(Object... values) {
 		ScheduledGoto m = new ScheduledGoto();
 		for (int i = 0; i < values.length-1; i+= 2)

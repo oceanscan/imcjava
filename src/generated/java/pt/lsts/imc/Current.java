@@ -56,6 +56,10 @@ public class Current extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Current(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Current create(Object... values) {
 		Current m = new Current();
 		for (int i = 0; i < values.length-1; i+= 2)

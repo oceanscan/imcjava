@@ -56,6 +56,10 @@ public class IndicatedSpeed extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public IndicatedSpeed(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static IndicatedSpeed create(Object... values) {
 		IndicatedSpeed m = new IndicatedSpeed();
 		for (int i = 0; i < values.length-1; i+= 2)

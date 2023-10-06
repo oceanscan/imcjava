@@ -89,6 +89,10 @@ public class PlanControlState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public PlanControlState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static PlanControlState create(Object... values) {
 		PlanControlState m = new PlanControlState();
 		for (int i = 0; i < values.length-1; i+= 2)

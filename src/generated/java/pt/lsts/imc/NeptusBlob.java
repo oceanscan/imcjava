@@ -55,6 +55,10 @@ public class NeptusBlob extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public NeptusBlob(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static NeptusBlob create(Object... values) {
 		NeptusBlob m = new NeptusBlob();
 		for (int i = 0; i < values.length-1; i+= 2)

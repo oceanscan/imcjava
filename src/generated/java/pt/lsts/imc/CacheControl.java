@@ -74,6 +74,10 @@ public class CacheControl extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public CacheControl(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static CacheControl create(Object... values) {
 		CacheControl m = new CacheControl();
 		for (int i = 0; i < values.length-1; i+= 2)

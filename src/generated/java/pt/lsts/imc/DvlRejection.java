@@ -78,6 +78,10 @@ public class DvlRejection extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public DvlRejection(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static DvlRejection create(Object... values) {
 		DvlRejection m = new DvlRejection();
 		for (int i = 0; i < values.length-1; i+= 2)

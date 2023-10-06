@@ -74,6 +74,10 @@ public class LcdControl extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public LcdControl(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static LcdControl create(Object... values) {
 		LcdControl m = new LcdControl();
 		for (int i = 0; i < values.length-1; i+= 2)

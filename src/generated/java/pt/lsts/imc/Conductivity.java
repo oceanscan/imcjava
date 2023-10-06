@@ -56,6 +56,10 @@ public class Conductivity extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Conductivity(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Conductivity create(Object... values) {
 		Conductivity m = new Conductivity();
 		for (int i = 0; i < values.length-1; i+= 2)

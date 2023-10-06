@@ -56,6 +56,10 @@ public class EntityParameters extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public EntityParameters(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static EntityParameters create(Object... values) {
 		EntityParameters m = new EntityParameters();
 		for (int i = 0; i < values.length-1; i+= 2)

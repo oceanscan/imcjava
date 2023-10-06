@@ -49,695 +49,1157 @@ public class MessageFactory {
 	}
 	private IMCMessage createTypedMessage(int mgid, IMCDefinition defs) {
 
-		switch(mgid) {
-			case EntityState.ID_STATIC:
-				return new EntityState(defs);
-			case QueryEntityState.ID_STATIC:
-				return new QueryEntityState(defs);
-			case EntityInfo.ID_STATIC:
-				return new EntityInfo(defs);
-			case QueryEntityInfo.ID_STATIC:
-				return new QueryEntityInfo(defs);
-			case EntityList.ID_STATIC:
-				return new EntityList(defs);
-			case CpuUsage.ID_STATIC:
-				return new CpuUsage(defs);
-			case TransportBindings.ID_STATIC:
-				return new TransportBindings(defs);
-			case RestartSystem.ID_STATIC:
-				return new RestartSystem(defs);
-			case DevCalibrationControl.ID_STATIC:
-				return new DevCalibrationControl(defs);
-			case DevCalibrationState.ID_STATIC:
-				return new DevCalibrationState(defs);
-			case EntityActivationState.ID_STATIC:
-				return new EntityActivationState(defs);
-			case QueryEntityActivationState.ID_STATIC:
-				return new QueryEntityActivationState(defs);
-			case VehicleOperationalLimits.ID_STATIC:
-				return new VehicleOperationalLimits(defs);
-			case MsgList.ID_STATIC:
-				return new MsgList(defs);
-			case SimulatedState.ID_STATIC:
-				return new SimulatedState(defs);
-			case LeakSimulation.ID_STATIC:
-				return new LeakSimulation(defs);
-			case UASimulation.ID_STATIC:
-				return new UASimulation(defs);
-			case DynamicsSimParam.ID_STATIC:
-				return new DynamicsSimParam(defs);
-			case StorageUsage.ID_STATIC:
-				return new StorageUsage(defs);
-			case CacheControl.ID_STATIC:
-				return new CacheControl(defs);
-			case LoggingControl.ID_STATIC:
-				return new LoggingControl(defs);
-			case LogBookEntry.ID_STATIC:
-				return new LogBookEntry(defs);
-			case LogBookControl.ID_STATIC:
-				return new LogBookControl(defs);
-			case ReplayControl.ID_STATIC:
-				return new ReplayControl(defs);
-			case ClockControl.ID_STATIC:
-				return new ClockControl(defs);
-			case HistoricCTD.ID_STATIC:
-				return new HistoricCTD(defs);
-			case HistoricTelemetry.ID_STATIC:
-				return new HistoricTelemetry(defs);
-			case HistoricSonarData.ID_STATIC:
-				return new HistoricSonarData(defs);
-			case HistoricEvent.ID_STATIC:
-				return new HistoricEvent(defs);
-			case VerticalProfile.ID_STATIC:
-				return new VerticalProfile(defs);
-			case ProfileSample.ID_STATIC:
-				return new ProfileSample(defs);
-			case Heartbeat.ID_STATIC:
-				return new Heartbeat(defs);
-			case Announce.ID_STATIC:
-				return new Announce(defs);
-			case AnnounceService.ID_STATIC:
-				return new AnnounceService(defs);
-			case RSSI.ID_STATIC:
-				return new RSSI(defs);
-			case VSWR.ID_STATIC:
-				return new VSWR(defs);
-			case LinkLevel.ID_STATIC:
-				return new LinkLevel(defs);
-			case Sms.ID_STATIC:
-				return new Sms(defs);
-			case SmsTx.ID_STATIC:
-				return new SmsTx(defs);
-			case SmsRx.ID_STATIC:
-				return new SmsRx(defs);
-			case SmsState.ID_STATIC:
-				return new SmsState(defs);
-			case TextMessage.ID_STATIC:
-				return new TextMessage(defs);
-			case IridiumMsgRx.ID_STATIC:
-				return new IridiumMsgRx(defs);
-			case IridiumMsgTx.ID_STATIC:
-				return new IridiumMsgTx(defs);
-			case IridiumTxStatus.ID_STATIC:
-				return new IridiumTxStatus(defs);
-			case GroupMembershipState.ID_STATIC:
-				return new GroupMembershipState(defs);
-			case SystemGroup.ID_STATIC:
-				return new SystemGroup(defs);
-			case LinkLatency.ID_STATIC:
-				return new LinkLatency(defs);
-			case ExtendedRSSI.ID_STATIC:
-				return new ExtendedRSSI(defs);
-			case HistoricData.ID_STATIC:
-				return new HistoricData(defs);
-			case CompressedHistory.ID_STATIC:
-				return new CompressedHistory(defs);
-			case HistoricSample.ID_STATIC:
-				return new HistoricSample(defs);
-			case HistoricDataQuery.ID_STATIC:
-				return new HistoricDataQuery(defs);
-			case RemoteCommand.ID_STATIC:
-				return new RemoteCommand(defs);
-			case CommSystemsQuery.ID_STATIC:
-				return new CommSystemsQuery(defs);
-			case TelemetryMsg.ID_STATIC:
-				return new TelemetryMsg(defs);
-			case LblRange.ID_STATIC:
-				return new LblRange(defs);
-			case LblBeacon.ID_STATIC:
-				return new LblBeacon(defs);
-			case LblConfig.ID_STATIC:
-				return new LblConfig(defs);
-			case AcousticMessage.ID_STATIC:
-				return new AcousticMessage(defs);
-			case SimAcousticMessage.ID_STATIC:
-				return new SimAcousticMessage(defs);
-			case AcousticOperation.ID_STATIC:
-				return new AcousticOperation(defs);
-			case AcousticSystemsQuery.ID_STATIC:
-				return new AcousticSystemsQuery(defs);
-			case AcousticSystems.ID_STATIC:
-				return new AcousticSystems(defs);
-			case AcousticLink.ID_STATIC:
-				return new AcousticLink(defs);
-			case AcousticRequest.ID_STATIC:
-				return new AcousticRequest(defs);
-			case AcousticStatus.ID_STATIC:
-				return new AcousticStatus(defs);
-			case Rpm.ID_STATIC:
-				return new Rpm(defs);
-			case Voltage.ID_STATIC:
-				return new Voltage(defs);
-			case Current.ID_STATIC:
-				return new Current(defs);
-			case GpsFix.ID_STATIC:
-				return new GpsFix(defs);
-			case EulerAngles.ID_STATIC:
-				return new EulerAngles(defs);
-			case EulerAnglesDelta.ID_STATIC:
-				return new EulerAnglesDelta(defs);
-			case AngularVelocity.ID_STATIC:
-				return new AngularVelocity(defs);
-			case Acceleration.ID_STATIC:
-				return new Acceleration(defs);
-			case MagneticField.ID_STATIC:
-				return new MagneticField(defs);
-			case GroundVelocity.ID_STATIC:
-				return new GroundVelocity(defs);
-			case WaterVelocity.ID_STATIC:
-				return new WaterVelocity(defs);
-			case VelocityDelta.ID_STATIC:
-				return new VelocityDelta(defs);
-			case Distance.ID_STATIC:
-				return new Distance(defs);
-			case Temperature.ID_STATIC:
-				return new Temperature(defs);
-			case Pressure.ID_STATIC:
-				return new Pressure(defs);
-			case Depth.ID_STATIC:
-				return new Depth(defs);
-			case DepthOffset.ID_STATIC:
-				return new DepthOffset(defs);
-			case SoundSpeed.ID_STATIC:
-				return new SoundSpeed(defs);
-			case WaterDensity.ID_STATIC:
-				return new WaterDensity(defs);
-			case Conductivity.ID_STATIC:
-				return new Conductivity(defs);
-			case Salinity.ID_STATIC:
-				return new Salinity(defs);
-			case WindSpeed.ID_STATIC:
-				return new WindSpeed(defs);
-			case RelativeHumidity.ID_STATIC:
-				return new RelativeHumidity(defs);
-			case DevDataText.ID_STATIC:
-				return new DevDataText(defs);
-			case DevDataBinary.ID_STATIC:
-				return new DevDataBinary(defs);
-			case Force.ID_STATIC:
-				return new Force(defs);
-			case SonarData.ID_STATIC:
-				return new SonarData(defs);
-			case Pulse.ID_STATIC:
-				return new Pulse(defs);
-			case PulseDetectionControl.ID_STATIC:
-				return new PulseDetectionControl(defs);
-			case FuelLevel.ID_STATIC:
-				return new FuelLevel(defs);
-			case GpsNavData.ID_STATIC:
-				return new GpsNavData(defs);
-			case ServoPosition.ID_STATIC:
-				return new ServoPosition(defs);
-			case DeviceState.ID_STATIC:
-				return new DeviceState(defs);
-			case BeamConfig.ID_STATIC:
-				return new BeamConfig(defs);
-			case DataSanity.ID_STATIC:
-				return new DataSanity(defs);
-			case RhodamineDye.ID_STATIC:
-				return new RhodamineDye(defs);
-			case CrudeOil.ID_STATIC:
-				return new CrudeOil(defs);
-			case FineOil.ID_STATIC:
-				return new FineOil(defs);
-			case Turbidity.ID_STATIC:
-				return new Turbidity(defs);
-			case Chlorophyll.ID_STATIC:
-				return new Chlorophyll(defs);
-			case Fluorescein.ID_STATIC:
-				return new Fluorescein(defs);
-			case Phycocyanin.ID_STATIC:
-				return new Phycocyanin(defs);
-			case Phycoerythrin.ID_STATIC:
-				return new Phycoerythrin(defs);
-			case GpsFixRtk.ID_STATIC:
-				return new GpsFixRtk(defs);
-			case ExternalNavData.ID_STATIC:
-				return new ExternalNavData(defs);
-			case DissolvedOxygen.ID_STATIC:
-				return new DissolvedOxygen(defs);
-			case AirSaturation.ID_STATIC:
-				return new AirSaturation(defs);
-			case Throttle.ID_STATIC:
-				return new Throttle(defs);
-			case PH.ID_STATIC:
-				return new PH(defs);
-			case Redox.ID_STATIC:
-				return new Redox(defs);
-			case CameraZoom.ID_STATIC:
-				return new CameraZoom(defs);
-			case SetThrusterActuation.ID_STATIC:
-				return new SetThrusterActuation(defs);
-			case SetServoPosition.ID_STATIC:
-				return new SetServoPosition(defs);
-			case SetControlSurfaceDeflection.ID_STATIC:
-				return new SetControlSurfaceDeflection(defs);
-			case RemoteActionsRequest.ID_STATIC:
-				return new RemoteActionsRequest(defs);
-			case RemoteActions.ID_STATIC:
-				return new RemoteActions(defs);
-			case ButtonEvent.ID_STATIC:
-				return new ButtonEvent(defs);
-			case LcdControl.ID_STATIC:
-				return new LcdControl(defs);
-			case PowerOperation.ID_STATIC:
-				return new PowerOperation(defs);
-			case PowerChannelControl.ID_STATIC:
-				return new PowerChannelControl(defs);
-			case QueryPowerChannelState.ID_STATIC:
-				return new QueryPowerChannelState(defs);
-			case PowerChannelState.ID_STATIC:
-				return new PowerChannelState(defs);
-			case LedBrightness.ID_STATIC:
-				return new LedBrightness(defs);
-			case QueryLedBrightness.ID_STATIC:
-				return new QueryLedBrightness(defs);
-			case SetLedBrightness.ID_STATIC:
-				return new SetLedBrightness(defs);
-			case SetPWM.ID_STATIC:
-				return new SetPWM(defs);
-			case PWM.ID_STATIC:
-				return new PWM(defs);
-			case EstimatedState.ID_STATIC:
-				return new EstimatedState(defs);
-			case EstimatedStreamVelocity.ID_STATIC:
-				return new EstimatedStreamVelocity(defs);
-			case IndicatedSpeed.ID_STATIC:
-				return new IndicatedSpeed(defs);
-			case TrueSpeed.ID_STATIC:
-				return new TrueSpeed(defs);
-			case NavigationUncertainty.ID_STATIC:
-				return new NavigationUncertainty(defs);
-			case NavigationData.ID_STATIC:
-				return new NavigationData(defs);
-			case GpsFixRejection.ID_STATIC:
-				return new GpsFixRejection(defs);
-			case LblRangeAcceptance.ID_STATIC:
-				return new LblRangeAcceptance(defs);
-			case DvlRejection.ID_STATIC:
-				return new DvlRejection(defs);
-			case LblEstimate.ID_STATIC:
-				return new LblEstimate(defs);
-			case AlignmentState.ID_STATIC:
-				return new AlignmentState(defs);
-			case GroupStreamVelocity.ID_STATIC:
-				return new GroupStreamVelocity(defs);
-			case Airflow.ID_STATIC:
-				return new Airflow(defs);
-			case DesiredHeading.ID_STATIC:
-				return new DesiredHeading(defs);
-			case DesiredZ.ID_STATIC:
-				return new DesiredZ(defs);
-			case DesiredSpeed.ID_STATIC:
-				return new DesiredSpeed(defs);
-			case DesiredRoll.ID_STATIC:
-				return new DesiredRoll(defs);
-			case DesiredPitch.ID_STATIC:
-				return new DesiredPitch(defs);
-			case DesiredVerticalRate.ID_STATIC:
-				return new DesiredVerticalRate(defs);
-			case DesiredPath.ID_STATIC:
-				return new DesiredPath(defs);
-			case DesiredControl.ID_STATIC:
-				return new DesiredControl(defs);
-			case DesiredHeadingRate.ID_STATIC:
-				return new DesiredHeadingRate(defs);
-			case DesiredVelocity.ID_STATIC:
-				return new DesiredVelocity(defs);
-			case PathControlState.ID_STATIC:
-				return new PathControlState(defs);
-			case AllocatedControlTorques.ID_STATIC:
-				return new AllocatedControlTorques(defs);
-			case ControlParcel.ID_STATIC:
-				return new ControlParcel(defs);
-			case Brake.ID_STATIC:
-				return new Brake(defs);
-			case DesiredLinearState.ID_STATIC:
-				return new DesiredLinearState(defs);
-			case DesiredThrottle.ID_STATIC:
-				return new DesiredThrottle(defs);
-			case Goto.ID_STATIC:
-				return new Goto(defs);
-			case PopUp.ID_STATIC:
-				return new PopUp(defs);
-			case Teleoperation.ID_STATIC:
-				return new Teleoperation(defs);
-			case Loiter.ID_STATIC:
-				return new Loiter(defs);
-			case IdleManeuver.ID_STATIC:
-				return new IdleManeuver(defs);
-			case LowLevelControl.ID_STATIC:
-				return new LowLevelControl(defs);
-			case Rows.ID_STATIC:
-				return new Rows(defs);
-			case FollowPath.ID_STATIC:
-				return new FollowPath(defs);
-			case PathPoint.ID_STATIC:
-				return new PathPoint(defs);
-			case YoYo.ID_STATIC:
-				return new YoYo(defs);
-			case TeleoperationDone.ID_STATIC:
-				return new TeleoperationDone(defs);
-			case StationKeeping.ID_STATIC:
-				return new StationKeeping(defs);
-			case Elevator.ID_STATIC:
-				return new Elevator(defs);
-			case FollowTrajectory.ID_STATIC:
-				return new FollowTrajectory(defs);
-			case TrajectoryPoint.ID_STATIC:
-				return new TrajectoryPoint(defs);
-			case CustomManeuver.ID_STATIC:
-				return new CustomManeuver(defs);
-			case VehicleFormation.ID_STATIC:
-				return new VehicleFormation(defs);
-			case VehicleFormationParticipant.ID_STATIC:
-				return new VehicleFormationParticipant(defs);
-			case StopManeuver.ID_STATIC:
-				return new StopManeuver(defs);
-			case RegisterManeuver.ID_STATIC:
-				return new RegisterManeuver(defs);
-			case ManeuverControlState.ID_STATIC:
-				return new ManeuverControlState(defs);
-			case FollowSystem.ID_STATIC:
-				return new FollowSystem(defs);
-			case CommsRelay.ID_STATIC:
-				return new CommsRelay(defs);
-			case CoverArea.ID_STATIC:
-				return new CoverArea(defs);
-			case PolygonVertex.ID_STATIC:
-				return new PolygonVertex(defs);
-			case CompassCalibration.ID_STATIC:
-				return new CompassCalibration(defs);
-			case FormationParameters.ID_STATIC:
-				return new FormationParameters(defs);
-			case FormationPlanExecution.ID_STATIC:
-				return new FormationPlanExecution(defs);
-			case FollowReference.ID_STATIC:
-				return new FollowReference(defs);
-			case Reference.ID_STATIC:
-				return new Reference(defs);
-			case FollowRefState.ID_STATIC:
-				return new FollowRefState(defs);
-			case FormationMonitor.ID_STATIC:
-				return new FormationMonitor(defs);
-			case RelativeState.ID_STATIC:
-				return new RelativeState(defs);
-			case Dislodge.ID_STATIC:
-				return new Dislodge(defs);
-			case Formation.ID_STATIC:
-				return new Formation(defs);
-			case Launch.ID_STATIC:
-				return new Launch(defs);
-			case Drop.ID_STATIC:
-				return new Drop(defs);
-			case ScheduledGoto.ID_STATIC:
-				return new ScheduledGoto(defs);
-			case RowsCoverage.ID_STATIC:
-				return new RowsCoverage(defs);
-			case Sample.ID_STATIC:
-				return new Sample(defs);
-			case ImageTracking.ID_STATIC:
-				return new ImageTracking(defs);
-			case Takeoff.ID_STATIC:
-				return new Takeoff(defs);
-			case Land.ID_STATIC:
-				return new Land(defs);
-			case AutonomousSection.ID_STATIC:
-				return new AutonomousSection(defs);
-			case FollowPoint.ID_STATIC:
-				return new FollowPoint(defs);
-			case Alignment.ID_STATIC:
-				return new Alignment(defs);
-			case FollowCommand.ID_STATIC:
-				return new FollowCommand(defs);
-			case Command.ID_STATIC:
-				return new Command(defs);
-			case FollowCommandState.ID_STATIC:
-				return new FollowCommandState(defs);
-			case Magnetometer.ID_STATIC:
-				return new Magnetometer(defs);
-			case VehicleState.ID_STATIC:
-				return new VehicleState(defs);
-			case VehicleCommand.ID_STATIC:
-				return new VehicleCommand(defs);
-			case MonitorEntityState.ID_STATIC:
-				return new MonitorEntityState(defs);
-			case EntityMonitoringState.ID_STATIC:
-				return new EntityMonitoringState(defs);
-			case OperationalLimits.ID_STATIC:
-				return new OperationalLimits(defs);
-			case GetOperationalLimits.ID_STATIC:
-				return new GetOperationalLimits(defs);
-			case Calibration.ID_STATIC:
-				return new Calibration(defs);
-			case ControlLoops.ID_STATIC:
-				return new ControlLoops(defs);
-			case VehicleMedium.ID_STATIC:
-				return new VehicleMedium(defs);
-			case Collision.ID_STATIC:
-				return new Collision(defs);
-			case FormState.ID_STATIC:
-				return new FormState(defs);
-			case AutopilotMode.ID_STATIC:
-				return new AutopilotMode(defs);
-			case FormationState.ID_STATIC:
-				return new FormationState(defs);
-			case ReportControl.ID_STATIC:
-				return new ReportControl(defs);
-			case StateReport.ID_STATIC:
-				return new StateReport(defs);
-			case TransmissionRequest.ID_STATIC:
-				return new TransmissionRequest(defs);
-			case TransmissionStatus.ID_STATIC:
-				return new TransmissionStatus(defs);
-			case SmsRequest.ID_STATIC:
-				return new SmsRequest(defs);
-			case SmsStatus.ID_STATIC:
-				return new SmsStatus(defs);
-			case VtolState.ID_STATIC:
-				return new VtolState(defs);
-			case ArmingState.ID_STATIC:
-				return new ArmingState(defs);
-			case TCPRequest.ID_STATIC:
-				return new TCPRequest(defs);
-			case TCPStatus.ID_STATIC:
-				return new TCPStatus(defs);
-			case AssetReport.ID_STATIC:
-				return new AssetReport(defs);
-			case Abort.ID_STATIC:
-				return new Abort(defs);
-			case PlanSpecification.ID_STATIC:
-				return new PlanSpecification(defs);
-			case PlanManeuver.ID_STATIC:
-				return new PlanManeuver(defs);
-			case PlanTransition.ID_STATIC:
-				return new PlanTransition(defs);
-			case EmergencyControl.ID_STATIC:
-				return new EmergencyControl(defs);
-			case EmergencyControlState.ID_STATIC:
-				return new EmergencyControlState(defs);
-			case PlanDB.ID_STATIC:
-				return new PlanDB(defs);
-			case PlanDBState.ID_STATIC:
-				return new PlanDBState(defs);
-			case PlanDBInformation.ID_STATIC:
-				return new PlanDBInformation(defs);
-			case PlanControl.ID_STATIC:
-				return new PlanControl(defs);
-			case PlanControlState.ID_STATIC:
-				return new PlanControlState(defs);
-			case PlanVariable.ID_STATIC:
-				return new PlanVariable(defs);
-			case PlanGeneration.ID_STATIC:
-				return new PlanGeneration(defs);
-			case LeaderState.ID_STATIC:
-				return new LeaderState(defs);
-			case PlanStatistics.ID_STATIC:
-				return new PlanStatistics(defs);
-			case ReportedState.ID_STATIC:
-				return new ReportedState(defs);
-			case RemoteSensorInfo.ID_STATIC:
-				return new RemoteSensorInfo(defs);
-			case Map.ID_STATIC:
-				return new Map(defs);
-			case MapFeature.ID_STATIC:
-				return new MapFeature(defs);
-			case MapPoint.ID_STATIC:
-				return new MapPoint(defs);
-			case CcuEvent.ID_STATIC:
-				return new CcuEvent(defs);
-			case VehicleLinks.ID_STATIC:
-				return new VehicleLinks(defs);
-			case TrexObservation.ID_STATIC:
-				return new TrexObservation(defs);
-			case TrexCommand.ID_STATIC:
-				return new TrexCommand(defs);
-			case TrexOperation.ID_STATIC:
-				return new TrexOperation(defs);
-			case TrexAttribute.ID_STATIC:
-				return new TrexAttribute(defs);
-			case TrexToken.ID_STATIC:
-				return new TrexToken(defs);
-			case TrexPlan.ID_STATIC:
-				return new TrexPlan(defs);
-			case Event.ID_STATIC:
-				return new Event(defs);
-			case CompressedImage.ID_STATIC:
-				return new CompressedImage(defs);
-			case ImageTxSettings.ID_STATIC:
-				return new ImageTxSettings(defs);
-			case ManeuverDone.ID_STATIC:
-				return new ManeuverDone(defs);
-			case StationKeepingExtended.ID_STATIC:
-				return new StationKeepingExtended(defs);
-			case RemoteState.ID_STATIC:
-				return new RemoteState(defs);
-			case Target.ID_STATIC:
-				return new Target(defs);
-			case EntityParameter.ID_STATIC:
-				return new EntityParameter(defs);
-			case EntityParameters.ID_STATIC:
-				return new EntityParameters(defs);
-			case QueryEntityParameters.ID_STATIC:
-				return new QueryEntityParameters(defs);
-			case SetEntityParameters.ID_STATIC:
-				return new SetEntityParameters(defs);
-			case SaveEntityParameters.ID_STATIC:
-				return new SaveEntityParameters(defs);
-			case CreateSession.ID_STATIC:
-				return new CreateSession(defs);
-			case CloseSession.ID_STATIC:
-				return new CloseSession(defs);
-			case SessionSubscription.ID_STATIC:
-				return new SessionSubscription(defs);
-			case SessionKeepAlive.ID_STATIC:
-				return new SessionKeepAlive(defs);
-			case SessionStatus.ID_STATIC:
-				return new SessionStatus(defs);
-			case PushEntityParameters.ID_STATIC:
-				return new PushEntityParameters(defs);
-			case PopEntityParameters.ID_STATIC:
-				return new PopEntityParameters(defs);
-			case IoEvent.ID_STATIC:
-				return new IoEvent(defs);
-			case UamTxFrame.ID_STATIC:
-				return new UamTxFrame(defs);
-			case UamRxFrame.ID_STATIC:
-				return new UamRxFrame(defs);
-			case UamTxStatus.ID_STATIC:
-				return new UamTxStatus(defs);
-			case UamRxRange.ID_STATIC:
-				return new UamRxRange(defs);
-			case UamTxRange.ID_STATIC:
-				return new UamTxRange(defs);
-			case FormCtrlParam.ID_STATIC:
-				return new FormCtrlParam(defs);
-			case FormationEval.ID_STATIC:
-				return new FormationEval(defs);
-			case FormationControlParams.ID_STATIC:
-				return new FormationControlParams(defs);
-			case FormationEvaluation.ID_STATIC:
-				return new FormationEvaluation(defs);
-			case SoiWaypoint.ID_STATIC:
-				return new SoiWaypoint(defs);
-			case SoiPlan.ID_STATIC:
-				return new SoiPlan(defs);
-			case SoiCommand.ID_STATIC:
-				return new SoiCommand(defs);
-			case SoiState.ID_STATIC:
-				return new SoiState(defs);
-			case MessagePart.ID_STATIC:
-				return new MessagePart(defs);
-			case NeptusBlob.ID_STATIC:
-				return new NeptusBlob(defs);
-			case Aborted.ID_STATIC:
-				return new Aborted(defs);
-			case UsblAngles.ID_STATIC:
-				return new UsblAngles(defs);
-			case UsblPosition.ID_STATIC:
-				return new UsblPosition(defs);
-			case UsblFix.ID_STATIC:
-				return new UsblFix(defs);
-			case ParametersXml.ID_STATIC:
-				return new ParametersXml(defs);
-			case GetParametersXml.ID_STATIC:
-				return new GetParametersXml(defs);
-			case SetImageCoords.ID_STATIC:
-				return new SetImageCoords(defs);
-			case GetImageCoords.ID_STATIC:
-				return new GetImageCoords(defs);
-			case GetWorldCoordinates.ID_STATIC:
-				return new GetWorldCoordinates(defs);
-			case UsblAnglesExtended.ID_STATIC:
-				return new UsblAnglesExtended(defs);
-			case UsblPositionExtended.ID_STATIC:
-				return new UsblPositionExtended(defs);
-			case UsblFixExtended.ID_STATIC:
-				return new UsblFixExtended(defs);
-			case UsblModem.ID_STATIC:
-				return new UsblModem(defs);
-			case UsblConfig.ID_STATIC:
-				return new UsblConfig(defs);
-			case DissolvedOrganicMatter.ID_STATIC:
-				return new DissolvedOrganicMatter(defs);
-			case OpticalBackscatter.ID_STATIC:
-				return new OpticalBackscatter(defs);
-			case Tachograph.ID_STATIC:
-				return new Tachograph(defs);
-			case ApmStatus.ID_STATIC:
-				return new ApmStatus(defs);
-			case SadcReadings.ID_STATIC:
-				return new SadcReadings(defs);
-			case DmsDetection.ID_STATIC:
-				return new DmsDetection(defs);
-			case HomePosition.ID_STATIC:
-				return new HomePosition(defs);
-			case ChargingState.ID_STATIC:
-				return new ChargingState(defs);
-			case CurrentProfile.ID_STATIC:
-				return new CurrentProfile(defs);
-			case CurrentProfileCell.ID_STATIC:
-				return new CurrentProfileCell(defs);
-			case ADCPBeam.ID_STATIC:
-				return new ADCPBeam(defs);
-			case GpioState.ID_STATIC:
-				return new GpioState(defs);
-			case GpioStateGet.ID_STATIC:
-				return new GpioStateGet(defs);
-			case GpioStateSet.ID_STATIC:
-				return new GpioStateSet(defs);
-			case ColoredDissolvedOrganicMatter.ID_STATIC:
-				return new ColoredDissolvedOrganicMatter(defs);
-			case FluorescentDissolvedOrganicMatter.ID_STATIC:
-				return new FluorescentDissolvedOrganicMatter(defs);
-			case IridiumMsgTxExtended.ID_STATIC:
-				return new IridiumMsgTxExtended(defs);
-			case TotalMagIntensity.ID_STATIC:
-				return new TotalMagIntensity(defs);
-			case ValidatePlan.ID_STATIC:
-				return new ValidatePlan(defs);
-			case TypedEntityParameter.ID_STATIC:
-				return new TypedEntityParameter(defs);
-			case TypedEntityParameters.ID_STATIC:
-				return new TypedEntityParameters(defs);
-			case CommRestriction.ID_STATIC:
-				return new CommRestriction(defs);
-			case WifiStats.ID_STATIC:
-				return new WifiStats(defs);
-			case WifiNetwork.ID_STATIC:
-				return new WifiNetwork(defs);
-			case SonarPulse.ID_STATIC:
-				return new SonarPulse(defs);
-			case HealthCheck.ID_STATIC:
-				return new HealthCheck(defs);
-			case QueryTypedEntityParameters.ID_STATIC:
-				return new QueryTypedEntityParameters(defs);
-			case ValuesIf.ID_STATIC:
-				return new ValuesIf(defs);
-			case DirSonarData.ID_STATIC:
-				return new DirSonarData(defs);
-			default:
-				return new IMCMessage(defs);
+		if (65108 == defs.getSyncWord()) {
+			switch(mgid) {
+				case 1:
+					return new EntityState(defs, 1);
+				case 2:
+					return new QueryEntityState(defs, 2);
+				case 3:
+					return new EntityInfo(defs, 3);
+				case 4:
+					return new QueryEntityInfo(defs, 4);
+				case 5:
+					return new EntityList(defs, 5);
+				case 7:
+					return new CpuUsage(defs, 7);
+				case 8:
+					return new TransportBindings(defs, 8);
+				case 9:
+					return new RestartSystem(defs, 9);
+				case 14:
+					return new EntityActivationState(defs, 14);
+				case 15:
+					return new QueryEntityActivationState(defs, 15);
+				case 16:
+					return new VehicleOperationalLimits(defs, 16);
+				case 20:
+					return new MsgList(defs, 20);
+				case 50:
+					return new SimulatedState(defs, 50);
+				case 100:
+					return new StorageUsage(defs, 100);
+				case 101:
+					return new CacheControl(defs, 101);
+				case 102:
+					return new LoggingControl(defs, 102);
+				case 103:
+					return new LogBookEntry(defs, 103);
+				case 104:
+					return new LogBookControl(defs, 104);
+				case 105:
+					return new ReplayControl(defs, 105);
+				case 106:
+					return new ClockControl(defs, 106);
+				case 150:
+					return new Heartbeat(defs, 150);
+				case 151:
+					return new Announce(defs, 151);
+				case 152:
+					return new AnnounceService(defs, 152);
+				case 153:
+					return new RSSI(defs, 153);
+				case 156:
+					return new Sms(defs, 156);
+				case 157:
+					return new SmsTx(defs, 157);
+				case 158:
+					return new SmsRx(defs, 158);
+				case 159:
+					return new SmsState(defs, 159);
+				case 160:
+					return new TextMessage(defs, 160);
+				case 170:
+					return new IridiumMsgRx(defs, 170);
+				case 171:
+					return new IridiumMsgTx(defs, 171);
+				case 172:
+					return new IridiumTxStatus(defs, 172);
+				case 183:
+					return new ExtendedRSSI(defs, 183);
+				case 200:
+					return new LblRange(defs, 200);
+				case 202:
+					return new LblBeacon(defs, 202);
+				case 203:
+					return new LblConfig(defs, 203);
+				case 211:
+					return new AcousticOperation(defs, 211);
+				case 212:
+					return new AcousticSystemsQuery(defs, 212);
+				case 213:
+					return new AcousticSystems(defs, 213);
+				case 214:
+					return new AcousticLink(defs, 214);
+				case 250:
+					return new Rpm(defs, 250);
+				case 251:
+					return new Voltage(defs, 251);
+				case 252:
+					return new Current(defs, 252);
+				case 253:
+					return new GpsFix(defs, 253);
+				case 254:
+					return new EulerAngles(defs, 254);
+				case 255:
+					return new EulerAnglesDelta(defs, 255);
+				case 256:
+					return new AngularVelocity(defs, 256);
+				case 257:
+					return new Acceleration(defs, 257);
+				case 258:
+					return new MagneticField(defs, 258);
+				case 259:
+					return new GroundVelocity(defs, 259);
+				case 260:
+					return new WaterVelocity(defs, 260);
+				case 261:
+					return new VelocityDelta(defs, 261);
+				case 262:
+					return new Distance(defs, 262);
+				case 263:
+					return new Temperature(defs, 263);
+				case 264:
+					return new Pressure(defs, 264);
+				case 265:
+					return new Depth(defs, 265);
+				case 267:
+					return new SoundSpeed(defs, 267);
+				case 268:
+					return new WaterDensity(defs, 268);
+				case 269:
+					return new Conductivity(defs, 269);
+				case 270:
+					return new Salinity(defs, 270);
+				case 272:
+					return new RelativeHumidity(defs, 272);
+				case 273:
+					return new DevDataText(defs, 273);
+				case 274:
+					return new DevDataBinary(defs, 274);
+				case 276:
+					return new SonarData(defs, 276);
+				case 277:
+					return new Pulse(defs, 277);
+				case 278:
+					return new PulseDetectionControl(defs, 278);
+				case 279:
+					return new FuelLevel(defs, 279);
+				case 281:
+					return new ServoPosition(defs, 281);
+				case 282:
+					return new DeviceState(defs, 282);
+				case 283:
+					return new BeamConfig(defs, 283);
+				case 284:
+					return new DataSanity(defs, 284);
+				case 285:
+					return new RhodamineDye(defs, 285);
+				case 286:
+					return new CrudeOil(defs, 286);
+				case 287:
+					return new FineOil(defs, 287);
+				case 288:
+					return new Turbidity(defs, 288);
+				case 289:
+					return new Chlorophyll(defs, 289);
+				case 290:
+					return new Fluorescein(defs, 290);
+				case 291:
+					return new Phycocyanin(defs, 291);
+				case 292:
+					return new Phycoerythrin(defs, 292);
+				case 295:
+					return new DissolvedOxygen(defs, 295);
+				case 296:
+					return new AirSaturation(defs, 296);
+				case 298:
+					return new PH(defs, 298);
+				case 299:
+					return new Redox(defs, 299);
+				case 301:
+					return new SetThrusterActuation(defs, 301);
+				case 302:
+					return new SetServoPosition(defs, 302);
+				case 304:
+					return new RemoteActionsRequest(defs, 304);
+				case 305:
+					return new RemoteActions(defs, 305);
+				case 306:
+					return new ButtonEvent(defs, 306);
+				case 307:
+					return new LcdControl(defs, 307);
+				case 308:
+					return new PowerOperation(defs, 308);
+				case 309:
+					return new PowerChannelControl(defs, 309);
+				case 310:
+					return new QueryPowerChannelState(defs, 310);
+				case 311:
+					return new PowerChannelState(defs, 311);
+				case 312:
+					return new LedBrightness(defs, 312);
+				case 313:
+					return new QueryLedBrightness(defs, 313);
+				case 314:
+					return new SetLedBrightness(defs, 314);
+				case 315:
+					return new SetPWM(defs, 315);
+				case 350:
+					return new EstimatedState(defs, 350);
+				case 351:
+					return new EstimatedStreamVelocity(defs, 351);
+				case 354:
+					return new NavigationUncertainty(defs, 354);
+				case 355:
+					return new NavigationData(defs, 355);
+				case 356:
+					return new GpsFixRejection(defs, 356);
+				case 357:
+					return new LblRangeAcceptance(defs, 357);
+				case 358:
+					return new DvlRejection(defs, 358);
+				case 360:
+					return new LblEstimate(defs, 360);
+				case 361:
+					return new AlignmentState(defs, 361);
+				case 400:
+					return new DesiredHeading(defs, 400);
+				case 401:
+					return new DesiredZ(defs, 401);
+				case 402:
+					return new DesiredSpeed(defs, 402);
+				case 403:
+					return new DesiredRoll(defs, 403);
+				case 404:
+					return new DesiredPitch(defs, 404);
+				case 406:
+					return new DesiredPath(defs, 406);
+				case 407:
+					return new DesiredControl(defs, 407);
+				case 408:
+					return new DesiredHeadingRate(defs, 408);
+				case 410:
+					return new PathControlState(defs, 410);
+				case 411:
+					return new AllocatedControlTorques(defs, 411);
+				case 412:
+					return new ControlParcel(defs, 412);
+				case 413:
+					return new Brake(defs, 413);
+				case 450:
+					return new Goto(defs, 450);
+				case 451:
+					return new PopUp(defs, 451);
+				case 452:
+					return new Teleoperation(defs, 452);
+				case 453:
+					return new Loiter(defs, 453);
+				case 454:
+					return new IdleManeuver(defs, 454);
+				case 456:
+					return new Rows(defs, 456);
+				case 457:
+					return new FollowPath(defs, 457);
+				case 458:
+					return new PathPoint(defs, 458);
+				case 459:
+					return new YoYo(defs, 459);
+				case 460:
+					return new TeleoperationDone(defs, 460);
+				case 461:
+					return new StationKeeping(defs, 461);
+				case 462:
+					return new Elevator(defs, 462);
+				case 463:
+					return new FollowTrajectory(defs, 463);
+				case 464:
+					return new TrajectoryPoint(defs, 464);
+				case 465:
+					return new CustomManeuver(defs, 465);
+				case 468:
+					return new StopManeuver(defs, 468);
+				case 469:
+					return new RegisterManeuver(defs, 469);
+				case 470:
+					return new ManeuverControlState(defs, 470);
+				case 474:
+					return new PolygonVertex(defs, 474);
+				case 475:
+					return new CompassCalibration(defs, 475);
+				case 478:
+					return new FollowReference(defs, 478);
+				case 479:
+					return new Reference(defs, 479);
+				case 480:
+					return new FollowRefState(defs, 480);
+				case 483:
+					return new Dislodge(defs, 483);
+				case 485:
+					return new Launch(defs, 485);
+				case 495:
+					return new Alignment(defs, 495);
+				case 496:
+					return new FollowCommand(defs, 496);
+				case 497:
+					return new Command(defs, 497);
+				case 498:
+					return new FollowCommandState(defs, 498);
+				case 499:
+					return new Magnetometer(defs, 499);
+				case 500:
+					return new VehicleState(defs, 500);
+				case 501:
+					return new VehicleCommand(defs, 501);
+				case 502:
+					return new MonitorEntityState(defs, 502);
+				case 503:
+					return new EntityMonitoringState(defs, 503);
+				case 504:
+					return new OperationalLimits(defs, 504);
+				case 505:
+					return new GetOperationalLimits(defs, 505);
+				case 506:
+					return new Calibration(defs, 506);
+				case 507:
+					return new ControlLoops(defs, 507);
+				case 508:
+					return new VehicleMedium(defs, 508);
+				case 509:
+					return new Collision(defs, 509);
+				case 513:
+					return new ReportControl(defs, 513);
+				case 515:
+					return new AssetReport(defs, 515);
+				case 517:
+					return new SmsRequest(defs, 517);
+				case 518:
+					return new SmsStatus(defs, 518);
+				case 550:
+					return new Abort(defs, 550);
+				case 551:
+					return new PlanSpecification(defs, 551);
+				case 552:
+					return new PlanManeuver(defs, 552);
+				case 553:
+					return new PlanTransition(defs, 553);
+				case 556:
+					return new PlanDB(defs, 556);
+				case 557:
+					return new PlanDBState(defs, 557);
+				case 558:
+					return new PlanDBInformation(defs, 558);
+				case 559:
+					return new PlanControl(defs, 559);
+				case 560:
+					return new PlanControlState(defs, 560);
+				case 561:
+					return new PlanVariable(defs, 561);
+				case 562:
+					return new PlanGeneration(defs, 562);
+				case 564:
+					return new PlanStatistics(defs, 564);
+				case 606:
+					return new CcuEvent(defs, 606);
+				case 650:
+					return new VehicleLinks(defs, 650);
+				case 655:
+					return new TrexOperation(defs, 655);
+				case 656:
+					return new TrexAttribute(defs, 656);
+				case 657:
+					return new TrexToken(defs, 657);
+				case 801:
+					return new EntityParameter(defs, 801);
+				case 802:
+					return new EntityParameters(defs, 802);
+				case 803:
+					return new QueryEntityParameters(defs, 803);
+				case 804:
+					return new SetEntityParameters(defs, 804);
+				case 805:
+					return new SaveEntityParameters(defs, 805);
+				case 811:
+					return new PushEntityParameters(defs, 811);
+				case 812:
+					return new PopEntityParameters(defs, 812);
+				case 813:
+					return new IoEvent(defs, 813);
+				case 814:
+					return new UamTxFrame(defs, 814);
+				case 815:
+					return new UamRxFrame(defs, 815);
+				case 816:
+					return new UamTxStatus(defs, 816);
+				case 817:
+					return new UamRxRange(defs, 817);
+				case 818:
+					return new UamTxRange(defs, 818);
+				case 877:
+					return new MessagePart(defs, 877);
+				case 889:
+					return new Aborted(defs, 889);
+				case 890:
+					return new UsblAngles(defs, 890);
+				case 891:
+					return new UsblPosition(defs, 891);
+				case 892:
+					return new UsblFix(defs, 892);
+				case 898:
+					return new UsblAnglesExtended(defs, 898);
+				case 899:
+					return new UsblPositionExtended(defs, 899);
+				case 900:
+					return new UsblFixExtended(defs, 900);
+				case 901:
+					return new UsblModem(defs, 901);
+				case 902:
+					return new UsblConfig(defs, 902);
+				case 903:
+					return new DissolvedOrganicMatter(defs, 903);
+				case 904:
+					return new OpticalBackscatter(defs, 904);
+				case 905:
+					return new Tachograph(defs, 905);
+				case 1014:
+					return new CurrentProfile(defs, 1014);
+				case 1015:
+					return new CurrentProfileCell(defs, 1015);
+				case 1016:
+					return new ADCPBeam(defs, 1016);
+				case 2000:
+					return new GpioState(defs, 2000);
+				case 2001:
+					return new GpioStateGet(defs, 2001);
+				case 2002:
+					return new GpioStateSet(defs, 2002);
+				case 2003:
+					return new ColoredDissolvedOrganicMatter(defs, 2003);
+				case 2004:
+					return new FluorescentDissolvedOrganicMatter(defs, 2004);
+				case 2005:
+					return new IridiumMsgTxExtended(defs, 2005);
+				case 2006:
+					return new TotalMagIntensity(defs, 2006);
+				case 2007:
+					return new ValidatePlan(defs, 2007);
+				case 2010:
+					return new CommRestriction(defs, 2010);
+				case 2011:
+					return new WifiStats(defs, 2011);
+				case 2012:
+					return new WifiNetwork(defs, 2012);
+				case 2013:
+					return new SonarPulse(defs, 2013);
+				case 2014:
+					return new ChargingState(defs, 2014);
+				case 2015:
+					return new HealthCheck(defs, 2015);
+				case 2016:
+					return new QueryTypedEntityParameters(defs, 2016);
+				case 2017:
+					return new TypedEntityParameter(defs, 2017);
+				case 2018:
+					return new ValuesIf(defs, 2018);
+				case 2019:
+					return new DirSonarData(defs, 2019);
+				default:
+					return new IMCMessage(defs);
+			}
 		}
-	}
+		if (65109 == defs.getSyncWord()) {
+			switch(mgid) {
+				case 1:
+					return new EntityState(defs, 1);
+				case 2:
+					return new QueryEntityState(defs, 2);
+				case 3:
+					return new EntityInfo(defs, 3);
+				case 4:
+					return new QueryEntityInfo(defs, 4);
+				case 5:
+					return new EntityList(defs, 5);
+				case 7:
+					return new CpuUsage(defs, 7);
+				case 8:
+					return new TransportBindings(defs, 8);
+				case 9:
+					return new RestartSystem(defs, 9);
+				case 12:
+					return new DevCalibrationControl(defs, 12);
+				case 13:
+					return new DevCalibrationState(defs, 13);
+				case 14:
+					return new EntityActivationState(defs, 14);
+				case 15:
+					return new QueryEntityActivationState(defs, 15);
+				case 16:
+					return new VehicleOperationalLimits(defs, 16);
+				case 20:
+					return new MsgList(defs, 20);
+				case 50:
+					return new SimulatedState(defs, 50);
+				case 51:
+					return new LeakSimulation(defs, 51);
+				case 52:
+					return new UASimulation(defs, 52);
+				case 53:
+					return new DynamicsSimParam(defs, 53);
+				case 100:
+					return new StorageUsage(defs, 100);
+				case 101:
+					return new CacheControl(defs, 101);
+				case 102:
+					return new LoggingControl(defs, 102);
+				case 103:
+					return new LogBookEntry(defs, 103);
+				case 104:
+					return new LogBookControl(defs, 104);
+				case 105:
+					return new ReplayControl(defs, 105);
+				case 106:
+					return new ClockControl(defs, 106);
+				case 107:
+					return new HistoricCTD(defs, 107);
+				case 108:
+					return new HistoricTelemetry(defs, 108);
+				case 109:
+					return new HistoricSonarData(defs, 109);
+				case 110:
+					return new HistoricEvent(defs, 110);
+				case 111:
+					return new VerticalProfile(defs, 111);
+				case 112:
+					return new ProfileSample(defs, 112);
+				case 150:
+					return new Heartbeat(defs, 150);
+				case 151:
+					return new Announce(defs, 151);
+				case 152:
+					return new AnnounceService(defs, 152);
+				case 153:
+					return new RSSI(defs, 153);
+				case 154:
+					return new VSWR(defs, 154);
+				case 155:
+					return new LinkLevel(defs, 155);
+				case 156:
+					return new Sms(defs, 156);
+				case 157:
+					return new SmsTx(defs, 157);
+				case 158:
+					return new SmsRx(defs, 158);
+				case 159:
+					return new SmsState(defs, 159);
+				case 160:
+					return new TextMessage(defs, 160);
+				case 170:
+					return new IridiumMsgRx(defs, 170);
+				case 171:
+					return new IridiumMsgTx(defs, 171);
+				case 172:
+					return new IridiumTxStatus(defs, 172);
+				case 180:
+					return new GroupMembershipState(defs, 180);
+				case 181:
+					return new SystemGroup(defs, 181);
+				case 182:
+					return new LinkLatency(defs, 182);
+				case 183:
+					return new ExtendedRSSI(defs, 183);
+				case 184:
+					return new HistoricData(defs, 184);
+				case 185:
+					return new CompressedHistory(defs, 185);
+				case 186:
+					return new HistoricSample(defs, 186);
+				case 187:
+					return new HistoricDataQuery(defs, 187);
+				case 188:
+					return new RemoteCommand(defs, 188);
+				case 189:
+					return new CommSystemsQuery(defs, 189);
+				case 190:
+					return new TelemetryMsg(defs, 190);
+				case 200:
+					return new LblRange(defs, 200);
+				case 202:
+					return new LblBeacon(defs, 202);
+				case 203:
+					return new LblConfig(defs, 203);
+				case 206:
+					return new AcousticMessage(defs, 206);
+				case 207:
+					return new SimAcousticMessage(defs, 207);
+				case 211:
+					return new AcousticOperation(defs, 211);
+				case 212:
+					return new AcousticSystemsQuery(defs, 212);
+				case 213:
+					return new AcousticSystems(defs, 213);
+				case 214:
+					return new AcousticLink(defs, 214);
+				case 215:
+					return new AcousticRequest(defs, 215);
+				case 216:
+					return new AcousticStatus(defs, 216);
+				case 250:
+					return new Rpm(defs, 250);
+				case 251:
+					return new Voltage(defs, 251);
+				case 252:
+					return new Current(defs, 252);
+				case 253:
+					return new GpsFix(defs, 253);
+				case 254:
+					return new EulerAngles(defs, 254);
+				case 255:
+					return new EulerAnglesDelta(defs, 255);
+				case 256:
+					return new AngularVelocity(defs, 256);
+				case 257:
+					return new Acceleration(defs, 257);
+				case 258:
+					return new MagneticField(defs, 258);
+				case 259:
+					return new GroundVelocity(defs, 259);
+				case 260:
+					return new WaterVelocity(defs, 260);
+				case 261:
+					return new VelocityDelta(defs, 261);
+				case 262:
+					return new Distance(defs, 262);
+				case 263:
+					return new Temperature(defs, 263);
+				case 264:
+					return new Pressure(defs, 264);
+				case 265:
+					return new Depth(defs, 265);
+				case 266:
+					return new DepthOffset(defs, 266);
+				case 267:
+					return new SoundSpeed(defs, 267);
+				case 268:
+					return new WaterDensity(defs, 268);
+				case 269:
+					return new Conductivity(defs, 269);
+				case 270:
+					return new Salinity(defs, 270);
+				case 271:
+					return new WindSpeed(defs, 271);
+				case 272:
+					return new RelativeHumidity(defs, 272);
+				case 273:
+					return new DevDataText(defs, 273);
+				case 274:
+					return new DevDataBinary(defs, 274);
+				case 275:
+					return new Force(defs, 275);
+				case 276:
+					return new SonarData(defs, 276);
+				case 277:
+					return new Pulse(defs, 277);
+				case 278:
+					return new PulseDetectionControl(defs, 278);
+				case 279:
+					return new FuelLevel(defs, 279);
+				case 280:
+					return new GpsNavData(defs, 280);
+				case 281:
+					return new ServoPosition(defs, 281);
+				case 282:
+					return new DeviceState(defs, 282);
+				case 283:
+					return new BeamConfig(defs, 283);
+				case 284:
+					return new DataSanity(defs, 284);
+				case 285:
+					return new RhodamineDye(defs, 285);
+				case 286:
+					return new CrudeOil(defs, 286);
+				case 287:
+					return new FineOil(defs, 287);
+				case 288:
+					return new Turbidity(defs, 288);
+				case 289:
+					return new Chlorophyll(defs, 289);
+				case 290:
+					return new Fluorescein(defs, 290);
+				case 291:
+					return new Phycocyanin(defs, 291);
+				case 292:
+					return new Phycoerythrin(defs, 292);
+				case 293:
+					return new GpsFixRtk(defs, 293);
+				case 294:
+					return new ExternalNavData(defs, 294);
+				case 295:
+					return new DissolvedOxygen(defs, 295);
+				case 296:
+					return new AirSaturation(defs, 296);
+				case 297:
+					return new Throttle(defs, 297);
+				case 298:
+					return new PH(defs, 298);
+				case 299:
+					return new Redox(defs, 299);
+				case 300:
+					return new CameraZoom(defs, 300);
+				case 301:
+					return new SetThrusterActuation(defs, 301);
+				case 302:
+					return new SetServoPosition(defs, 302);
+				case 303:
+					return new SetControlSurfaceDeflection(defs, 303);
+				case 304:
+					return new RemoteActionsRequest(defs, 304);
+				case 305:
+					return new RemoteActions(defs, 305);
+				case 306:
+					return new ButtonEvent(defs, 306);
+				case 307:
+					return new LcdControl(defs, 307);
+				case 308:
+					return new PowerOperation(defs, 308);
+				case 309:
+					return new PowerChannelControl(defs, 309);
+				case 310:
+					return new QueryPowerChannelState(defs, 310);
+				case 311:
+					return new PowerChannelState(defs, 311);
+				case 312:
+					return new LedBrightness(defs, 312);
+				case 313:
+					return new QueryLedBrightness(defs, 313);
+				case 314:
+					return new SetLedBrightness(defs, 314);
+				case 315:
+					return new SetPWM(defs, 315);
+				case 316:
+					return new PWM(defs, 316);
+				case 350:
+					return new EstimatedState(defs, 350);
+				case 351:
+					return new EstimatedStreamVelocity(defs, 351);
+				case 352:
+					return new IndicatedSpeed(defs, 352);
+				case 353:
+					return new TrueSpeed(defs, 353);
+				case 354:
+					return new NavigationUncertainty(defs, 354);
+				case 355:
+					return new NavigationData(defs, 355);
+				case 356:
+					return new GpsFixRejection(defs, 356);
+				case 357:
+					return new LblRangeAcceptance(defs, 357);
+				case 358:
+					return new DvlRejection(defs, 358);
+				case 360:
+					return new LblEstimate(defs, 360);
+				case 361:
+					return new AlignmentState(defs, 361);
+				case 362:
+					return new GroupStreamVelocity(defs, 362);
+				case 363:
+					return new Airflow(defs, 363);
+				case 400:
+					return new DesiredHeading(defs, 400);
+				case 401:
+					return new DesiredZ(defs, 401);
+				case 402:
+					return new DesiredSpeed(defs, 402);
+				case 403:
+					return new DesiredRoll(defs, 403);
+				case 404:
+					return new DesiredPitch(defs, 404);
+				case 405:
+					return new DesiredVerticalRate(defs, 405);
+				case 406:
+					return new DesiredPath(defs, 406);
+				case 407:
+					return new DesiredControl(defs, 407);
+				case 408:
+					return new DesiredHeadingRate(defs, 408);
+				case 409:
+					return new DesiredVelocity(defs, 409);
+				case 410:
+					return new PathControlState(defs, 410);
+				case 411:
+					return new AllocatedControlTorques(defs, 411);
+				case 412:
+					return new ControlParcel(defs, 412);
+				case 413:
+					return new Brake(defs, 413);
+				case 414:
+					return new DesiredLinearState(defs, 414);
+				case 415:
+					return new DesiredThrottle(defs, 415);
+				case 450:
+					return new Goto(defs, 450);
+				case 451:
+					return new PopUp(defs, 451);
+				case 452:
+					return new Teleoperation(defs, 452);
+				case 453:
+					return new Loiter(defs, 453);
+				case 454:
+					return new IdleManeuver(defs, 454);
+				case 455:
+					return new LowLevelControl(defs, 455);
+				case 456:
+					return new Rows(defs, 456);
+				case 457:
+					return new FollowPath(defs, 457);
+				case 458:
+					return new PathPoint(defs, 458);
+				case 459:
+					return new YoYo(defs, 459);
+				case 460:
+					return new TeleoperationDone(defs, 460);
+				case 461:
+					return new StationKeeping(defs, 461);
+				case 462:
+					return new Elevator(defs, 462);
+				case 463:
+					return new FollowTrajectory(defs, 463);
+				case 464:
+					return new TrajectoryPoint(defs, 464);
+				case 465:
+					return new CustomManeuver(defs, 465);
+				case 466:
+					return new VehicleFormation(defs, 466);
+				case 467:
+					return new VehicleFormationParticipant(defs, 467);
+				case 468:
+					return new StopManeuver(defs, 468);
+				case 469:
+					return new RegisterManeuver(defs, 469);
+				case 470:
+					return new ManeuverControlState(defs, 470);
+				case 471:
+					return new FollowSystem(defs, 471);
+				case 472:
+					return new CommsRelay(defs, 472);
+				case 473:
+					return new CoverArea(defs, 473);
+				case 474:
+					return new PolygonVertex(defs, 474);
+				case 475:
+					return new CompassCalibration(defs, 475);
+				case 476:
+					return new FormationParameters(defs, 476);
+				case 477:
+					return new FormationPlanExecution(defs, 477);
+				case 478:
+					return new FollowReference(defs, 478);
+				case 479:
+					return new Reference(defs, 479);
+				case 480:
+					return new FollowRefState(defs, 480);
+				case 481:
+					return new FormationMonitor(defs, 481);
+				case 482:
+					return new RelativeState(defs, 482);
+				case 483:
+					return new Dislodge(defs, 483);
+				case 484:
+					return new Formation(defs, 484);
+				case 485:
+					return new Launch(defs, 485);
+				case 486:
+					return new Drop(defs, 486);
+				case 487:
+					return new ScheduledGoto(defs, 487);
+				case 488:
+					return new RowsCoverage(defs, 488);
+				case 489:
+					return new Sample(defs, 489);
+				case 490:
+					return new ImageTracking(defs, 490);
+				case 491:
+					return new Takeoff(defs, 491);
+				case 492:
+					return new Land(defs, 492);
+				case 493:
+					return new AutonomousSection(defs, 493);
+				case 494:
+					return new FollowPoint(defs, 494);
+				case 495:
+					return new Alignment(defs, 495);
+				case 496:
+					return new FollowCommand(defs, 496);
+				case 497:
+					return new Command(defs, 497);
+				case 498:
+					return new FollowCommandState(defs, 498);
+				case 499:
+					return new Magnetometer(defs, 499);
+				case 500:
+					return new VehicleState(defs, 500);
+				case 501:
+					return new VehicleCommand(defs, 501);
+				case 502:
+					return new MonitorEntityState(defs, 502);
+				case 503:
+					return new EntityMonitoringState(defs, 503);
+				case 504:
+					return new OperationalLimits(defs, 504);
+				case 505:
+					return new GetOperationalLimits(defs, 505);
+				case 506:
+					return new Calibration(defs, 506);
+				case 507:
+					return new ControlLoops(defs, 507);
+				case 508:
+					return new VehicleMedium(defs, 508);
+				case 509:
+					return new Collision(defs, 509);
+				case 510:
+					return new FormState(defs, 510);
+				case 511:
+					return new AutopilotMode(defs, 511);
+				case 512:
+					return new FormationState(defs, 512);
+				case 513:
+					return new ReportControl(defs, 513);
+				case 514:
+					return new StateReport(defs, 514);
+				case 515:
+					return new TransmissionRequest(defs, 515);
+				case 516:
+					return new TransmissionStatus(defs, 516);
+				case 517:
+					return new SmsRequest(defs, 517);
+				case 518:
+					return new SmsStatus(defs, 518);
+				case 519:
+					return new VtolState(defs, 519);
+				case 520:
+					return new ArmingState(defs, 520);
+				case 521:
+					return new TCPRequest(defs, 521);
+				case 522:
+					return new TCPStatus(defs, 522);
+				case 525:
+					return new AssetReport(defs, 525);
+				case 550:
+					return new Abort(defs, 550);
+				case 551:
+					return new PlanSpecification(defs, 551);
+				case 552:
+					return new PlanManeuver(defs, 552);
+				case 553:
+					return new PlanTransition(defs, 553);
+				case 554:
+					return new EmergencyControl(defs, 554);
+				case 555:
+					return new EmergencyControlState(defs, 555);
+				case 556:
+					return new PlanDB(defs, 556);
+				case 557:
+					return new PlanDBState(defs, 557);
+				case 558:
+					return new PlanDBInformation(defs, 558);
+				case 559:
+					return new PlanControl(defs, 559);
+				case 560:
+					return new PlanControlState(defs, 560);
+				case 561:
+					return new PlanVariable(defs, 561);
+				case 562:
+					return new PlanGeneration(defs, 562);
+				case 563:
+					return new LeaderState(defs, 563);
+				case 564:
+					return new PlanStatistics(defs, 564);
+				case 600:
+					return new ReportedState(defs, 600);
+				case 601:
+					return new RemoteSensorInfo(defs, 601);
+				case 602:
+					return new Map(defs, 602);
+				case 603:
+					return new MapFeature(defs, 603);
+				case 604:
+					return new MapPoint(defs, 604);
+				case 606:
+					return new CcuEvent(defs, 606);
+				case 650:
+					return new VehicleLinks(defs, 650);
+				case 651:
+					return new TrexObservation(defs, 651);
+				case 652:
+					return new TrexCommand(defs, 652);
+				case 655:
+					return new TrexOperation(defs, 655);
+				case 656:
+					return new TrexAttribute(defs, 656);
+				case 657:
+					return new TrexToken(defs, 657);
+				case 658:
+					return new TrexPlan(defs, 658);
+				case 660:
+					return new Event(defs, 660);
+				case 702:
+					return new CompressedImage(defs, 702);
+				case 703:
+					return new ImageTxSettings(defs, 703);
+				case 719:
+					return new ManeuverDone(defs, 719);
+				case 720:
+					return new StationKeepingExtended(defs, 720);
+				case 750:
+					return new RemoteState(defs, 750);
+				case 800:
+					return new Target(defs, 800);
+				case 801:
+					return new EntityParameter(defs, 801);
+				case 802:
+					return new EntityParameters(defs, 802);
+				case 803:
+					return new QueryEntityParameters(defs, 803);
+				case 804:
+					return new SetEntityParameters(defs, 804);
+				case 805:
+					return new SaveEntityParameters(defs, 805);
+				case 806:
+					return new CreateSession(defs, 806);
+				case 807:
+					return new CloseSession(defs, 807);
+				case 808:
+					return new SessionSubscription(defs, 808);
+				case 809:
+					return new SessionKeepAlive(defs, 809);
+				case 810:
+					return new SessionStatus(defs, 810);
+				case 811:
+					return new PushEntityParameters(defs, 811);
+				case 812:
+					return new PopEntityParameters(defs, 812);
+				case 813:
+					return new IoEvent(defs, 813);
+				case 814:
+					return new UamTxFrame(defs, 814);
+				case 815:
+					return new UamRxFrame(defs, 815);
+				case 816:
+					return new UamTxStatus(defs, 816);
+				case 817:
+					return new UamRxRange(defs, 817);
+				case 818:
+					return new UamTxRange(defs, 818);
+				case 820:
+					return new FormCtrlParam(defs, 820);
+				case 821:
+					return new FormationEval(defs, 821);
+				case 822:
+					return new FormationControlParams(defs, 822);
+				case 823:
+					return new FormationEvaluation(defs, 823);
+				case 850:
+					return new SoiWaypoint(defs, 850);
+				case 851:
+					return new SoiPlan(defs, 851);
+				case 852:
+					return new SoiCommand(defs, 852);
+				case 853:
+					return new SoiState(defs, 853);
+				case 877:
+					return new MessagePart(defs, 877);
+				case 888:
+					return new NeptusBlob(defs, 888);
+				case 889:
+					return new Aborted(defs, 889);
+				case 890:
+					return new UsblAngles(defs, 890);
+				case 891:
+					return new UsblPosition(defs, 891);
+				case 892:
+					return new UsblFix(defs, 892);
+				case 893:
+					return new ParametersXml(defs, 893);
+				case 894:
+					return new GetParametersXml(defs, 894);
+				case 895:
+					return new SetImageCoords(defs, 895);
+				case 896:
+					return new GetImageCoords(defs, 896);
+				case 897:
+					return new GetWorldCoordinates(defs, 897);
+				case 898:
+					return new UsblAnglesExtended(defs, 898);
+				case 899:
+					return new UsblPositionExtended(defs, 899);
+				case 900:
+					return new UsblFixExtended(defs, 900);
+				case 901:
+					return new UsblModem(defs, 901);
+				case 902:
+					return new UsblConfig(defs, 902);
+				case 903:
+					return new DissolvedOrganicMatter(defs, 903);
+				case 904:
+					return new OpticalBackscatter(defs, 904);
+				case 905:
+					return new Tachograph(defs, 905);
+				case 906:
+					return new ApmStatus(defs, 906);
+				case 907:
+					return new SadcReadings(defs, 907);
+				case 908:
+					return new DmsDetection(defs, 908);
+				case 909:
+					return new HomePosition(defs, 909);
+				case 910:
+					return new ChargingState(defs, 910);
+				case 1014:
+					return new CurrentProfile(defs, 1014);
+				case 1015:
+					return new CurrentProfileCell(defs, 1015);
+				case 1016:
+					return new ADCPBeam(defs, 1016);
+				case 2000:
+					return new GpioState(defs, 2000);
+				case 2001:
+					return new GpioStateGet(defs, 2001);
+				case 2002:
+					return new GpioStateSet(defs, 2002);
+				case 2003:
+					return new ColoredDissolvedOrganicMatter(defs, 2003);
+				case 2004:
+					return new FluorescentDissolvedOrganicMatter(defs, 2004);
+				case 2005:
+					return new IridiumMsgTxExtended(defs, 2005);
+				case 2006:
+					return new TotalMagIntensity(defs, 2006);
+				case 2007:
+					return new ValidatePlan(defs, 2007);
+				case 2017:
+					return new TypedEntityParameter(defs, 2017);
+				case 2009:
+					return new TypedEntityParameters(defs, 2009);
+				case 2010:
+					return new CommRestriction(defs, 2010);
+				case 2011:
+					return new WifiStats(defs, 2011);
+				case 2012:
+					return new WifiNetwork(defs, 2012);
+				case 2013:
+					return new SonarPulse(defs, 2013);
+				case 2015:
+					return new HealthCheck(defs, 2015);
+				case 2016:
+					return new QueryTypedEntityParameters(defs, 2016);
+				case 2018:
+					return new ValuesIf(defs, 2018);
+				case 2019:
+					return new DirSonarData(defs, 2019);
+				default:
+					return new IMCMessage(defs);
+			}
+		}
+		return new IMCMessage(defs);
+}
+
 }

@@ -56,6 +56,10 @@ public class ButtonEvent extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public ButtonEvent(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static ButtonEvent create(Object... values) {
 		ButtonEvent m = new ButtonEvent();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -57,6 +57,10 @@ public class GpioStateGet extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public GpioStateGet(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static GpioStateGet create(Object... values) {
 		GpioStateGet m = new GpioStateGet();
 		for (int i = 0; i < values.length-1; i+= 2)

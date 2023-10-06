@@ -56,6 +56,10 @@ public class Temperature extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Temperature(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Temperature create(Object... values) {
 		Temperature m = new Temperature();
 		for (int i = 0; i < values.length-1; i+= 2)

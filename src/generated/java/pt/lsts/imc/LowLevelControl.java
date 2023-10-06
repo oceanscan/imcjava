@@ -59,6 +59,10 @@ public class LowLevelControl extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public LowLevelControl(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static LowLevelControl create(Object... values) {
 		LowLevelControl m = new LowLevelControl();
 		for (int i = 0; i < values.length-1; i+= 2)

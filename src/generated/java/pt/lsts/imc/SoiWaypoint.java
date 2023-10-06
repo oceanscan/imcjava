@@ -55,6 +55,10 @@ public class SoiWaypoint extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public SoiWaypoint(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static SoiWaypoint create(Object... values) {
 		SoiWaypoint m = new SoiWaypoint();
 		for (int i = 0; i < values.length-1; i+= 2)

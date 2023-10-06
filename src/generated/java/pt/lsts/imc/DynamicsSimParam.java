@@ -72,6 +72,10 @@ public class DynamicsSimParam extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public DynamicsSimParam(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static DynamicsSimParam create(Object... values) {
 		DynamicsSimParam m = new DynamicsSimParam();
 		for (int i = 0; i < values.length-1; i+= 2)

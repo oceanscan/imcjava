@@ -89,6 +89,10 @@ public class PlanVariable extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public PlanVariable(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static PlanVariable create(Object... values) {
 		PlanVariable m = new PlanVariable();
 		for (int i = 0; i < values.length-1; i+= 2)

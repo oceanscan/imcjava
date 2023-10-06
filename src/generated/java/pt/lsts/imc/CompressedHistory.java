@@ -57,6 +57,10 @@ public class CompressedHistory extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public CompressedHistory(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static CompressedHistory create(Object... values) {
 		CompressedHistory m = new CompressedHistory();
 		for (int i = 0; i < values.length-1; i+= 2)

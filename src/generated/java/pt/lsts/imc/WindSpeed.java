@@ -56,6 +56,10 @@ public class WindSpeed extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public WindSpeed(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static WindSpeed create(Object... values) {
 		WindSpeed m = new WindSpeed();
 		for (int i = 0; i < values.length-1; i+= 2)

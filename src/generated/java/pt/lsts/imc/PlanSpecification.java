@@ -62,6 +62,10 @@ public class PlanSpecification extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public PlanSpecification(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static PlanSpecification create(Object... values) {
 		PlanSpecification m = new PlanSpecification();
 		for (int i = 0; i < values.length-1; i+= 2)

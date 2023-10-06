@@ -55,6 +55,10 @@ public class IridiumMsgTxExtended extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public IridiumMsgTxExtended(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static IridiumMsgTxExtended create(Object... values) {
 		IridiumMsgTxExtended m = new IridiumMsgTxExtended();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -57,6 +57,10 @@ public class Tachograph extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Tachograph(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Tachograph create(Object... values) {
 		Tachograph m = new Tachograph();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -56,6 +56,10 @@ public class VSWR extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public VSWR(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static VSWR create(Object... values) {
 		VSWR m = new VSWR();
 		for (int i = 0; i < values.length-1; i+= 2)

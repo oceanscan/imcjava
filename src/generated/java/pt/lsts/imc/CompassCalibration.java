@@ -109,6 +109,10 @@ public class CompassCalibration extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public CompassCalibration(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static CompassCalibration create(Object... values) {
 		CompassCalibration m = new CompassCalibration();
 		for (int i = 0; i < values.length-1; i+= 2)

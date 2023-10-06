@@ -56,6 +56,10 @@ public class SetImageCoords extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public SetImageCoords(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static SetImageCoords create(Object... values) {
 		SetImageCoords m = new SetImageCoords();
 		for (int i = 0; i < values.length-1; i+= 2)

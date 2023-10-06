@@ -57,6 +57,10 @@ public class PolygonVertex extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public PolygonVertex(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static PolygonVertex create(Object... values) {
 		PolygonVertex m = new PolygonVertex();
 		for (int i = 0; i < values.length-1; i+= 2)

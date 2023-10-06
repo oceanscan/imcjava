@@ -55,6 +55,10 @@ public class ImageTxSettings extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public ImageTxSettings(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static ImageTxSettings create(Object... values) {
 		ImageTxSettings m = new ImageTxSettings();
 		for (int i = 0; i < values.length-1; i+= 2)

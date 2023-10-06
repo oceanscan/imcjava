@@ -56,6 +56,10 @@ public class SonarPulse extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public SonarPulse(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static SonarPulse create(Object... values) {
 		SonarPulse m = new SonarPulse();
 		for (int i = 0; i < values.length-1; i+= 2)

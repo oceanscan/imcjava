@@ -71,6 +71,10 @@ public class ArmingState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public ArmingState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static ArmingState create(Object... values) {
 		ArmingState m = new ArmingState();
 		for (int i = 0; i < values.length-1; i+= 2)

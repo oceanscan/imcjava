@@ -58,6 +58,10 @@ public class LinkLevel extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public LinkLevel(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static LinkLevel create(Object... values) {
 		LinkLevel m = new LinkLevel();
 		for (int i = 0; i < values.length-1; i+= 2)

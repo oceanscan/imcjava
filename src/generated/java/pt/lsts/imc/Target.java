@@ -73,6 +73,10 @@ public class Target extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Target(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Target create(Object... values) {
 		Target m = new Target();
 		for (int i = 0; i < values.length-1; i+= 2)

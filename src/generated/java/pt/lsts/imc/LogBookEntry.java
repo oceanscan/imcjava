@@ -74,6 +74,10 @@ public class LogBookEntry extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public LogBookEntry(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static LogBookEntry create(Object... values) {
 		LogBookEntry m = new LogBookEntry();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -98,6 +98,10 @@ public class Goto extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public Goto(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Goto create(Object... values) {
 		Goto m = new Goto();
 		for (int i = 0; i < values.length-1; i+= 2)

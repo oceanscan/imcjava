@@ -58,6 +58,10 @@ public class Teleoperation extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public Teleoperation(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Teleoperation create(Object... values) {
 		Teleoperation m = new Teleoperation();
 		for (int i = 0; i < values.length-1; i+= 2)

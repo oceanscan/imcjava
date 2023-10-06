@@ -58,6 +58,10 @@ public class SimulatedState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public SimulatedState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static SimulatedState create(Object... values) {
 		SimulatedState m = new SimulatedState();
 		for (int i = 0; i < values.length-1; i+= 2)

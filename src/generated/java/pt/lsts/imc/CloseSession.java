@@ -56,6 +56,10 @@ public class CloseSession extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public CloseSession(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static CloseSession create(Object... values) {
 		CloseSession m = new CloseSession();
 		for (int i = 0; i < values.length-1; i+= 2)

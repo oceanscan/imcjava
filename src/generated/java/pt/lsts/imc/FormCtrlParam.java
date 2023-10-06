@@ -72,6 +72,10 @@ public class FormCtrlParam extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public FormCtrlParam(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static FormCtrlParam create(Object... values) {
 		FormCtrlParam m = new FormCtrlParam();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -72,6 +72,10 @@ public class HistoricSonarData extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public HistoricSonarData(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static HistoricSonarData create(Object... values) {
 		HistoricSonarData m = new HistoricSonarData();
 		for (int i = 0; i < values.length-1; i+= 2)

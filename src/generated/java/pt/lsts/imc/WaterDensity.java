@@ -56,6 +56,10 @@ public class WaterDensity extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public WaterDensity(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static WaterDensity create(Object... values) {
 		WaterDensity m = new WaterDensity();
 		for (int i = 0; i < values.length-1; i+= 2)

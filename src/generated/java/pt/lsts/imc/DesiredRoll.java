@@ -57,6 +57,10 @@ public class DesiredRoll extends ControlCommand {
 		super(defs, ID_STATIC);
 	}
 
+	public DesiredRoll(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static DesiredRoll create(Object... values) {
 		DesiredRoll m = new DesiredRoll();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -61,6 +61,10 @@ public class Collision extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Collision(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Collision create(Object... values) {
 		Collision m = new Collision();
 		for (int i = 0; i < values.length-1; i+= 2)

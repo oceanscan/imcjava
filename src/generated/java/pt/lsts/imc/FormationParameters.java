@@ -84,6 +84,10 @@ public class FormationParameters extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public FormationParameters(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static FormationParameters create(Object... values) {
 		FormationParameters m = new FormationParameters();
 		for (int i = 0; i < values.length-1; i+= 2)

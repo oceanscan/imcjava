@@ -58,6 +58,10 @@ public class ImageTracking extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public ImageTracking(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static ImageTracking create(Object... values) {
 		ImageTracking m = new ImageTracking();
 		for (int i = 0; i < values.length-1; i+= 2)

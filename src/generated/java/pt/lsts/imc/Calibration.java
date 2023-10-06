@@ -56,6 +56,10 @@ public class Calibration extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Calibration(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Calibration create(Object... values) {
 		Calibration m = new Calibration();
 		for (int i = 0; i < values.length-1; i+= 2)

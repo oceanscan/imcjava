@@ -56,6 +56,10 @@ public class StateReport extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public StateReport(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static StateReport create(Object... values) {
 		StateReport m = new StateReport();
 		for (int i = 0; i < values.length-1; i+= 2)

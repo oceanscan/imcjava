@@ -56,6 +56,10 @@ public class StopManeuver extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public StopManeuver(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static StopManeuver create(Object... values) {
 		StopManeuver m = new StopManeuver();
 		for (int i = 0; i < values.length-1; i+= 2)

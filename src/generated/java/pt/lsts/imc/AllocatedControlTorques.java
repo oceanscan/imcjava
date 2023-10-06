@@ -56,6 +56,10 @@ public class AllocatedControlTorques extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public AllocatedControlTorques(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static AllocatedControlTorques create(Object... values) {
 		AllocatedControlTorques m = new AllocatedControlTorques();
 		for (int i = 0; i < values.length-1; i+= 2)

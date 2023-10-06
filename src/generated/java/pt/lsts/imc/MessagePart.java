@@ -55,6 +55,10 @@ public class MessagePart extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public MessagePart(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static MessagePart create(Object... values) {
 		MessagePart m = new MessagePart();
 		for (int i = 0; i < values.length-1; i+= 2)

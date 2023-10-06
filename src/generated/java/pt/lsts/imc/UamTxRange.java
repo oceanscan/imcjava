@@ -56,6 +56,10 @@ public class UamTxRange extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public UamTxRange(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static UamTxRange create(Object... values) {
 		UamTxRange m = new UamTxRange();
 		for (int i = 0; i < values.length-1; i+= 2)

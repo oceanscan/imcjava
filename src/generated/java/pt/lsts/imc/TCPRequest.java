@@ -56,6 +56,10 @@ public class TCPRequest extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public TCPRequest(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static TCPRequest create(Object... values) {
 		TCPRequest m = new TCPRequest();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -56,6 +56,10 @@ public class RelativeHumidity extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public RelativeHumidity(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static RelativeHumidity create(Object... values) {
 		RelativeHumidity m = new RelativeHumidity();
 		for (int i = 0; i < values.length-1; i+= 2)

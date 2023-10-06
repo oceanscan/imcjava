@@ -56,6 +56,10 @@ public class RelativeState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public RelativeState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static RelativeState create(Object... values) {
 		RelativeState m = new RelativeState();
 		for (int i = 0; i < values.length-1; i+= 2)

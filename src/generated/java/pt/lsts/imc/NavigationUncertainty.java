@@ -58,6 +58,10 @@ public class NavigationUncertainty extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public NavigationUncertainty(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static NavigationUncertainty create(Object... values) {
 		NavigationUncertainty m = new NavigationUncertainty();
 		for (int i = 0; i < values.length-1; i+= 2)

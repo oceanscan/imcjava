@@ -56,6 +56,10 @@ public class RemoteSensorInfo extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public RemoteSensorInfo(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static RemoteSensorInfo create(Object... values) {
 		RemoteSensorInfo m = new RemoteSensorInfo();
 		for (int i = 0; i < values.length-1; i+= 2)

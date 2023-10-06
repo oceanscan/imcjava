@@ -76,6 +76,10 @@ public class VerticalProfile extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public VerticalProfile(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static VerticalProfile create(Object... values) {
 		VerticalProfile m = new VerticalProfile();
 		for (int i = 0; i < values.length-1; i+= 2)

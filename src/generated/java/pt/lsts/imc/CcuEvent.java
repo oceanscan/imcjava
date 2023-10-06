@@ -78,6 +78,10 @@ public class CcuEvent extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public CcuEvent(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static CcuEvent create(Object... values) {
 		CcuEvent m = new CcuEvent();
 		for (int i = 0; i < values.length-1; i+= 2)

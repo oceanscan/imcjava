@@ -64,6 +64,10 @@ public class DesiredControl extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public DesiredControl(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static DesiredControl create(Object... values) {
 		DesiredControl m = new DesiredControl();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -96,6 +96,10 @@ public class PathControlState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public PathControlState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static PathControlState create(Object... values) {
 		PathControlState m = new PathControlState();
 		for (int i = 0; i < values.length-1; i+= 2)

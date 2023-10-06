@@ -61,6 +61,10 @@ public class CommRestriction extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public CommRestriction(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static CommRestriction create(Object... values) {
 		CommRestriction m = new CommRestriction();
 		for (int i = 0; i < values.length-1; i+= 2)

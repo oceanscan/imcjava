@@ -56,6 +56,10 @@ public class WifiNetwork extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public WifiNetwork(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static WifiNetwork create(Object... values) {
 		WifiNetwork m = new WifiNetwork();
 		for (int i = 0; i < values.length-1; i+= 2)

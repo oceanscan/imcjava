@@ -72,6 +72,10 @@ public class UsblConfig extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public UsblConfig(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static UsblConfig create(Object... values) {
 		UsblConfig m = new UsblConfig();
 		for (int i = 0; i < values.length-1; i+= 2)

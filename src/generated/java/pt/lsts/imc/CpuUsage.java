@@ -56,6 +56,10 @@ public class CpuUsage extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public CpuUsage(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static CpuUsage create(Object... values) {
 		CpuUsage m = new CpuUsage();
 		for (int i = 0; i < values.length-1; i+= 2)

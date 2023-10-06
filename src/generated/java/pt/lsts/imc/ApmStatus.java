@@ -77,6 +77,10 @@ public class ApmStatus extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public ApmStatus(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static ApmStatus create(Object... values) {
 		ApmStatus m = new ApmStatus();
 		for (int i = 0; i < values.length-1; i+= 2)

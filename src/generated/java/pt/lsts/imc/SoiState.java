@@ -71,6 +71,10 @@ public class SoiState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public SoiState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static SoiState create(Object... values) {
 		SoiState m = new SoiState();
 		for (int i = 0; i < values.length-1; i+= 2)

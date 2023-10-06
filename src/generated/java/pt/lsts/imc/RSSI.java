@@ -57,6 +57,10 @@ public class RSSI extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public RSSI(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static RSSI create(Object... values) {
 		RSSI m = new RSSI();
 		for (int i = 0; i < values.length-1; i+= 2)

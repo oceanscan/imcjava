@@ -59,6 +59,10 @@ public class LblRange extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public LblRange(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static LblRange create(Object... values) {
 		LblRange m = new LblRange();
 		for (int i = 0; i < values.length-1; i+= 2)

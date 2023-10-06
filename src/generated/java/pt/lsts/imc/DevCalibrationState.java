@@ -62,6 +62,10 @@ public class DevCalibrationState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public DevCalibrationState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static DevCalibrationState create(Object... values) {
 		DevCalibrationState m = new DevCalibrationState();
 		for (int i = 0; i < values.length-1; i+= 2)

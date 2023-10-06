@@ -106,6 +106,10 @@ public class Magnetometer extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public Magnetometer(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Magnetometer create(Object... values) {
 		Magnetometer m = new Magnetometer();
 		for (int i = 0; i < values.length-1; i+= 2)

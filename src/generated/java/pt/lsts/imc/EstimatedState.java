@@ -68,6 +68,10 @@ public class EstimatedState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public EstimatedState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static EstimatedState create(Object... values) {
 		EstimatedState m = new EstimatedState();
 		for (int i = 0; i < values.length-1; i+= 2)

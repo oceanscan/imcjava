@@ -64,6 +64,10 @@ public class FormationPlanExecution extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public FormationPlanExecution(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static FormationPlanExecution create(Object... values) {
 		FormationPlanExecution m = new FormationPlanExecution();
 		for (int i = 0; i < values.length-1; i+= 2)

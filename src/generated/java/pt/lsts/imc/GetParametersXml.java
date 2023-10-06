@@ -57,6 +57,10 @@ public class GetParametersXml extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public GetParametersXml(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static GetParametersXml create(Object... values) {
 		GetParametersXml m = new GetParametersXml();
 		for (int i = 0; i < values.length-1; i+= 2)

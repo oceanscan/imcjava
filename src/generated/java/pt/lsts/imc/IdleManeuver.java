@@ -57,6 +57,10 @@ public class IdleManeuver extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public IdleManeuver(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static IdleManeuver create(Object... values) {
 		IdleManeuver m = new IdleManeuver();
 		for (int i = 0; i < values.length-1; i+= 2)

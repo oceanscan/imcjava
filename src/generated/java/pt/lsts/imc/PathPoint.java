@@ -56,6 +56,10 @@ public class PathPoint extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public PathPoint(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static PathPoint create(Object... values) {
 		PathPoint m = new PathPoint();
 		for (int i = 0; i < values.length-1; i+= 2)

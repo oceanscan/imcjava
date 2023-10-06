@@ -83,6 +83,10 @@ public class ExternalNavData extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public ExternalNavData(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static ExternalNavData create(Object... values) {
 		ExternalNavData m = new ExternalNavData();
 		for (int i = 0; i < values.length-1; i+= 2)

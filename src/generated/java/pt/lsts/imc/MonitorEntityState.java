@@ -74,6 +74,10 @@ public class MonitorEntityState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public MonitorEntityState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static MonitorEntityState create(Object... values) {
 		MonitorEntityState m = new MonitorEntityState();
 		for (int i = 0; i < values.length-1; i+= 2)

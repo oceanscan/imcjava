@@ -56,6 +56,10 @@ public class FluorescentDissolvedOrganicMatter extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public FluorescentDissolvedOrganicMatter(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static FluorescentDissolvedOrganicMatter create(Object... values) {
 		FluorescentDissolvedOrganicMatter m = new FluorescentDissolvedOrganicMatter();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -57,6 +57,10 @@ public class EulerAngles extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public EulerAngles(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static EulerAngles create(Object... values) {
 		EulerAngles m = new EulerAngles();
 		for (int i = 0; i < values.length-1; i+= 2)

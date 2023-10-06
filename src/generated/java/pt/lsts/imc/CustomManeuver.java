@@ -60,6 +60,10 @@ public class CustomManeuver extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public CustomManeuver(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static CustomManeuver create(Object... values) {
 		CustomManeuver m = new CustomManeuver();
 		for (int i = 0; i < values.length-1; i+= 2)

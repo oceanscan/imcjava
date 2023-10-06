@@ -66,6 +66,10 @@ public class DesiredLinearState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public DesiredLinearState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static DesiredLinearState create(Object... values) {
 		DesiredLinearState m = new DesiredLinearState();
 		for (int i = 0; i < values.length-1; i+= 2)

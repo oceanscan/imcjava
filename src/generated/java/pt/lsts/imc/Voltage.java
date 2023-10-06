@@ -56,6 +56,10 @@ public class Voltage extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Voltage(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Voltage create(Object... values) {
 		Voltage m = new Voltage();
 		for (int i = 0; i < values.length-1; i+= 2)

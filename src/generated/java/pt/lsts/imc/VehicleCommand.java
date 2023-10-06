@@ -90,6 +90,10 @@ public class VehicleCommand extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public VehicleCommand(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static VehicleCommand create(Object... values) {
 		VehicleCommand m = new VehicleCommand();
 		for (int i = 0; i < values.length-1; i+= 2)

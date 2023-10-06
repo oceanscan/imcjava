@@ -73,6 +73,10 @@ public class DesiredSpeed extends ControlCommand {
 		super(defs, ID_STATIC);
 	}
 
+	public DesiredSpeed(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static DesiredSpeed create(Object... values) {
 		DesiredSpeed m = new DesiredSpeed();
 		for (int i = 0; i < values.length-1; i+= 2)

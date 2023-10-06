@@ -56,6 +56,10 @@ public class SoundSpeed extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public SoundSpeed(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static SoundSpeed create(Object... values) {
 		SoundSpeed m = new SoundSpeed();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -95,6 +95,10 @@ public class PopUp extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public PopUp(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static PopUp create(Object... values) {
 		PopUp m = new PopUp();
 		for (int i = 0; i < values.length-1; i+= 2)

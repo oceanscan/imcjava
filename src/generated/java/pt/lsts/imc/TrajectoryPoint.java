@@ -56,6 +56,10 @@ public class TrajectoryPoint extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public TrajectoryPoint(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static TrajectoryPoint create(Object... values) {
 		TrajectoryPoint m = new TrajectoryPoint();
 		for (int i = 0; i < values.length-1; i+= 2)

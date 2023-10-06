@@ -56,6 +56,10 @@ public class VehicleLinks extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public VehicleLinks(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static VehicleLinks create(Object... values) {
 		VehicleLinks m = new VehicleLinks();
 		for (int i = 0; i < values.length-1; i+= 2)

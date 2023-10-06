@@ -64,6 +64,10 @@ public class OperationalLimits extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public OperationalLimits(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static OperationalLimits create(Object... values) {
 		OperationalLimits m = new OperationalLimits();
 		for (int i = 0; i < values.length-1; i+= 2)

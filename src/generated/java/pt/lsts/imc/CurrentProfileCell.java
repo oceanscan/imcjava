@@ -56,6 +56,10 @@ public class CurrentProfileCell extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public CurrentProfileCell(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static CurrentProfileCell create(Object... values) {
 		CurrentProfileCell m = new CurrentProfileCell();
 		for (int i = 0; i < values.length-1; i+= 2)

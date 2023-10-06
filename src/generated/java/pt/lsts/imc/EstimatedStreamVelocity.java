@@ -57,6 +57,10 @@ public class EstimatedStreamVelocity extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public EstimatedStreamVelocity(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static EstimatedStreamVelocity create(Object... values) {
 		EstimatedStreamVelocity m = new EstimatedStreamVelocity();
 		for (int i = 0; i < values.length-1; i+= 2)

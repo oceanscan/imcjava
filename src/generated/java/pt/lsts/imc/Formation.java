@@ -124,6 +124,10 @@ public class Formation extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Formation(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Formation create(Object... values) {
 		Formation m = new Formation();
 		for (int i = 0; i < values.length-1; i+= 2)

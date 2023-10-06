@@ -88,6 +88,10 @@ public class AcousticOperation extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public AcousticOperation(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static AcousticOperation create(Object... values) {
 		AcousticOperation m = new AcousticOperation();
 		for (int i = 0; i < values.length-1; i+= 2)

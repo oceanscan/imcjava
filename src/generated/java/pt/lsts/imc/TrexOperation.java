@@ -74,6 +74,10 @@ public class TrexOperation extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public TrexOperation(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static TrexOperation create(Object... values) {
 		TrexOperation m = new TrexOperation();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -56,6 +56,10 @@ public class SetThrusterActuation extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public SetThrusterActuation(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static SetThrusterActuation create(Object... values) {
 		SetThrusterActuation m = new SetThrusterActuation();
 		for (int i = 0; i < values.length-1; i+= 2)

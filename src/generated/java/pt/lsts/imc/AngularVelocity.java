@@ -57,6 +57,10 @@ public class AngularVelocity extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public AngularVelocity(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static AngularVelocity create(Object... values) {
 		AngularVelocity m = new AngularVelocity();
 		for (int i = 0; i < values.length-1; i+= 2)

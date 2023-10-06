@@ -92,6 +92,10 @@ public class StationKeeping extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public StationKeeping(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static StationKeeping create(Object... values) {
 		StationKeeping m = new StationKeeping();
 		for (int i = 0; i < values.length-1; i+= 2)

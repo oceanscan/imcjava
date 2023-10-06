@@ -55,6 +55,10 @@ public class TrexPlan extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public TrexPlan(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static TrexPlan create(Object... values) {
 		TrexPlan m = new TrexPlan();
 		for (int i = 0; i < values.length-1; i+= 2)

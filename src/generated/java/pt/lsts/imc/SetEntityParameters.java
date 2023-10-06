@@ -55,6 +55,10 @@ public class SetEntityParameters extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public SetEntityParameters(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static SetEntityParameters create(Object... values) {
 		SetEntityParameters m = new SetEntityParameters();
 		for (int i = 0; i < values.length-1; i+= 2)

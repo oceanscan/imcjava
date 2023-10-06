@@ -56,6 +56,10 @@ public class RhodamineDye extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public RhodamineDye(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static RhodamineDye create(Object... values) {
 		RhodamineDye m = new RhodamineDye();
 		for (int i = 0; i < values.length-1; i+= 2)

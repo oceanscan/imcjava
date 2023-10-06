@@ -56,6 +56,10 @@ public class Redox extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Redox(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Redox create(Object... values) {
 		Redox m = new Redox();
 		for (int i = 0; i < values.length-1; i+= 2)

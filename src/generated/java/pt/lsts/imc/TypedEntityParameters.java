@@ -71,6 +71,10 @@ public class TypedEntityParameters extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public TypedEntityParameters(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static TypedEntityParameters create(Object... values) {
 		TypedEntityParameters m = new TypedEntityParameters();
 		for (int i = 0; i < values.length-1; i+= 2)

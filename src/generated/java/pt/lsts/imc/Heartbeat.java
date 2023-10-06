@@ -58,6 +58,10 @@ public class Heartbeat extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Heartbeat(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Heartbeat create(Object... values) {
 		Heartbeat m = new Heartbeat();
 		for (int i = 0; i < values.length-1; i+= 2)

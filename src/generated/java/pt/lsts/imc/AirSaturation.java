@@ -56,6 +56,10 @@ public class AirSaturation extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public AirSaturation(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static AirSaturation create(Object... values) {
 		AirSaturation m = new AirSaturation();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -56,6 +56,10 @@ public class DeviceState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public DeviceState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static DeviceState create(Object... values) {
 		DeviceState m = new DeviceState();
 		for (int i = 0; i < values.length-1; i+= 2)

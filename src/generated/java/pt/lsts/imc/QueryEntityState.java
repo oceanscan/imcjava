@@ -57,6 +57,10 @@ public class QueryEntityState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public QueryEntityState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static QueryEntityState create(Object... values) {
 		QueryEntityState m = new QueryEntityState();
 		for (int i = 0; i < values.length-1; i+= 2)

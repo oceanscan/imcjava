@@ -72,6 +72,10 @@ public class SadcReadings extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public SadcReadings(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static SadcReadings create(Object... values) {
 		SadcReadings m = new SadcReadings();
 		for (int i = 0; i < values.length-1; i+= 2)

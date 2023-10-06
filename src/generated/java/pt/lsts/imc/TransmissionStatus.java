@@ -77,6 +77,10 @@ public class TransmissionStatus extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public TransmissionStatus(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static TransmissionStatus create(Object... values) {
 		TransmissionStatus m = new TransmissionStatus();
 		for (int i = 0; i < values.length-1; i+= 2)

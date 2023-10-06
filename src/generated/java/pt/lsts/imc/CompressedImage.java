@@ -55,6 +55,10 @@ public class CompressedImage extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public CompressedImage(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static CompressedImage create(Object... values) {
 		CompressedImage m = new CompressedImage();
 		for (int i = 0; i < values.length-1; i+= 2)

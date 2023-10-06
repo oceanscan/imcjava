@@ -71,6 +71,10 @@ public class SessionStatus extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public SessionStatus(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static SessionStatus create(Object... values) {
 		SessionStatus m = new SessionStatus();
 		for (int i = 0; i < values.length-1; i+= 2)

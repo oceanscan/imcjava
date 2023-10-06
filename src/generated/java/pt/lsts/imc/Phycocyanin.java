@@ -56,6 +56,10 @@ public class Phycocyanin extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Phycocyanin(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Phycocyanin create(Object... values) {
 		Phycocyanin m = new Phycocyanin();
 		for (int i = 0; i < values.length-1; i+= 2)

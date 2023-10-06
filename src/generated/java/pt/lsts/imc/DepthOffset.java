@@ -56,6 +56,10 @@ public class DepthOffset extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public DepthOffset(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static DepthOffset create(Object... values) {
 		DepthOffset m = new DepthOffset();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -96,6 +96,10 @@ public class AcousticStatus extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public AcousticStatus(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static AcousticStatus create(Object... values) {
 		AcousticStatus m = new AcousticStatus();
 		for (int i = 0; i < values.length-1; i+= 2)

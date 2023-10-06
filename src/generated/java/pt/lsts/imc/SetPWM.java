@@ -56,6 +56,10 @@ public class SetPWM extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public SetPWM(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static SetPWM create(Object... values) {
 		SetPWM m = new SetPWM();
 		for (int i = 0; i < values.length-1; i+= 2)

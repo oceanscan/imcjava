@@ -56,6 +56,10 @@ public class LedBrightness extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public LedBrightness(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static LedBrightness create(Object... values) {
 		LedBrightness m = new LedBrightness();
 		for (int i = 0; i < values.length-1; i+= 2)

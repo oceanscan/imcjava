@@ -56,6 +56,10 @@ public class HistoricTelemetry extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public HistoricTelemetry(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static HistoricTelemetry create(Object... values) {
 		HistoricTelemetry m = new HistoricTelemetry();
 		for (int i = 0; i < values.length-1; i+= 2)

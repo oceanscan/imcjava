@@ -77,6 +77,10 @@ public class PlanStatistics extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public PlanStatistics(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static PlanStatistics create(Object... values) {
 		PlanStatistics m = new PlanStatistics();
 		for (int i = 0; i < values.length-1; i+= 2)

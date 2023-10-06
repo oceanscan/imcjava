@@ -56,6 +56,10 @@ public class ValuesIf extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public ValuesIf(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static ValuesIf create(Object... values) {
 		ValuesIf m = new ValuesIf();
 		for (int i = 0; i < values.length-1; i+= 2)

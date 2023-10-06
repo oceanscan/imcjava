@@ -56,6 +56,10 @@ public class AcousticMessage extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public AcousticMessage(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static AcousticMessage create(Object... values) {
 		AcousticMessage m = new AcousticMessage();
 		for (int i = 0; i < values.length-1; i+= 2)

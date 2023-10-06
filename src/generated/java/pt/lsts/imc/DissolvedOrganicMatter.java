@@ -71,6 +71,10 @@ public class DissolvedOrganicMatter extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public DissolvedOrganicMatter(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static DissolvedOrganicMatter create(Object... values) {
 		DissolvedOrganicMatter m = new DissolvedOrganicMatter();
 		for (int i = 0; i < values.length-1; i+= 2)

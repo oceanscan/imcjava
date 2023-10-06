@@ -56,6 +56,10 @@ public class Aborted extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Aborted(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Aborted create(Object... values) {
 		Aborted m = new Aborted();
 		for (int i = 0; i < values.length-1; i+= 2)

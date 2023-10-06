@@ -74,6 +74,10 @@ public class EmergencyControlState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public EmergencyControlState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static EmergencyControlState create(Object... values) {
 		EmergencyControlState m = new EmergencyControlState();
 		for (int i = 0; i < values.length-1; i+= 2)

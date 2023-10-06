@@ -75,6 +75,10 @@ public class TCPStatus extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public TCPStatus(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static TCPStatus create(Object... values) {
 		TCPStatus m = new TCPStatus();
 		for (int i = 0; i < values.length-1; i+= 2)

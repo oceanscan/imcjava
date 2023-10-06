@@ -73,6 +73,10 @@ public class AssetReport extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public AssetReport(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static AssetReport create(Object... values) {
 		AssetReport m = new AssetReport();
 		for (int i = 0; i < values.length-1; i+= 2)

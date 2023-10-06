@@ -56,6 +56,10 @@ public class Map extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Map(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Map create(Object... values) {
 		Map m = new Map();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -73,6 +73,10 @@ public class FormationControlParams extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public FormationControlParams(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static FormationControlParams create(Object... values) {
 		FormationControlParams m = new FormationControlParams();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -80,6 +80,10 @@ public class FollowRefState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public FollowRefState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static FollowRefState create(Object... values) {
 		FollowRefState m = new FollowRefState();
 		for (int i = 0; i < values.length-1; i+= 2)

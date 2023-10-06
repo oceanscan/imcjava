@@ -58,6 +58,10 @@ public class AcousticSystems extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public AcousticSystems(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static AcousticSystems create(Object... values) {
 		AcousticSystems m = new AcousticSystems();
 		for (int i = 0; i < values.length-1; i+= 2)

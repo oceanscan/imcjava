@@ -73,6 +73,10 @@ public class ManeuverControlState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public ManeuverControlState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static ManeuverControlState create(Object... values) {
 		ManeuverControlState m = new ManeuverControlState();
 		for (int i = 0; i < values.length-1; i+= 2)

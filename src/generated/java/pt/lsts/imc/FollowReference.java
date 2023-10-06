@@ -57,6 +57,10 @@ public class FollowReference extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public FollowReference(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static FollowReference create(Object... values) {
 		FollowReference m = new FollowReference();
 		for (int i = 0; i < values.length-1; i+= 2)

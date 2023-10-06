@@ -56,6 +56,10 @@ public class GpsNavData extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public GpsNavData(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static GpsNavData create(Object... values) {
 		GpsNavData m = new GpsNavData();
 		for (int i = 0; i < values.length-1; i+= 2)

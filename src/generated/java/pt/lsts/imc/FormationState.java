@@ -132,6 +132,10 @@ public class FormationState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public FormationState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static FormationState create(Object... values) {
 		FormationState m = new FormationState();
 		for (int i = 0; i < values.length-1; i+= 2)

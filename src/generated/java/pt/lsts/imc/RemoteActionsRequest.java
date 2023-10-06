@@ -76,6 +76,10 @@ public class RemoteActionsRequest extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public RemoteActionsRequest(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static RemoteActionsRequest create(Object... values) {
 		RemoteActionsRequest m = new RemoteActionsRequest();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -57,6 +57,10 @@ public class DesiredHeading extends ControlCommand {
 		super(defs, ID_STATIC);
 	}
 
+	public DesiredHeading(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static DesiredHeading create(Object... values) {
 		DesiredHeading m = new DesiredHeading();
 		for (int i = 0; i < values.length-1; i+= 2)

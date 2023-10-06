@@ -56,6 +56,10 @@ public class PlanDBState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public PlanDBState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static PlanDBState create(Object... values) {
 		PlanDBState m = new PlanDBState();
 		for (int i = 0; i < values.length-1; i+= 2)

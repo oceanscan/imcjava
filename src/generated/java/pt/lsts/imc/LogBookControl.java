@@ -73,6 +73,10 @@ public class LogBookControl extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public LogBookControl(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static LogBookControl create(Object... values) {
 		LogBookControl m = new LogBookControl();
 		for (int i = 0; i < values.length-1; i+= 2)

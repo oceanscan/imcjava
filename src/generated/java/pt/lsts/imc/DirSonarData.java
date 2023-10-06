@@ -56,6 +56,10 @@ public class DirSonarData extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public DirSonarData(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static DirSonarData create(Object... values) {
 		DirSonarData m = new DirSonarData();
 		for (int i = 0; i < values.length-1; i+= 2)

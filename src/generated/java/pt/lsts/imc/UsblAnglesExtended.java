@@ -57,6 +57,10 @@ public class UsblAnglesExtended extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public UsblAnglesExtended(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static UsblAnglesExtended create(Object... values) {
 		UsblAnglesExtended m = new UsblAnglesExtended();
 		for (int i = 0; i < values.length-1; i+= 2)

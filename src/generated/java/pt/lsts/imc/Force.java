@@ -56,6 +56,10 @@ public class Force extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Force(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Force create(Object... values) {
 		Force m = new Force();
 		for (int i = 0; i < values.length-1; i+= 2)

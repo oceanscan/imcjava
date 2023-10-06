@@ -57,6 +57,10 @@ public class DesiredThrottle extends ControlCommand {
 		super(defs, ID_STATIC);
 	}
 
+	public DesiredThrottle(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static DesiredThrottle create(Object... values) {
 		DesiredThrottle m = new DesiredThrottle();
 		for (int i = 0; i < values.length-1; i+= 2)

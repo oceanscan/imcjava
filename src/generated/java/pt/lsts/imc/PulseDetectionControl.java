@@ -71,6 +71,10 @@ public class PulseDetectionControl extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public PulseDetectionControl(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static PulseDetectionControl create(Object... values) {
 		PulseDetectionControl m = new PulseDetectionControl();
 		for (int i = 0; i < values.length-1; i+= 2)

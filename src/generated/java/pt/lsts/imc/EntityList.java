@@ -72,6 +72,10 @@ public class EntityList extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public EntityList(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static EntityList create(Object... values) {
 		EntityList m = new EntityList();
 		for (int i = 0; i < values.length-1; i+= 2)

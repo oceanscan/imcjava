@@ -56,6 +56,10 @@ public class DevDataBinary extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public DevDataBinary(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static DevDataBinary create(Object... values) {
 		DevDataBinary m = new DevDataBinary();
 		for (int i = 0; i < values.length-1; i+= 2)

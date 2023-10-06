@@ -71,6 +71,10 @@ public class IoEvent extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public IoEvent(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static IoEvent create(Object... values) {
 		IoEvent m = new IoEvent();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -102,6 +102,10 @@ public class FormState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public FormState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static FormState create(Object... values) {
 		FormState m = new FormState();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -56,6 +56,10 @@ public class DesiredVerticalRate extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public DesiredVerticalRate(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static DesiredVerticalRate create(Object... values) {
 		DesiredVerticalRate m = new DesiredVerticalRate();
 		for (int i = 0; i < values.length-1; i+= 2)

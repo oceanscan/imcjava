@@ -80,6 +80,10 @@ public class AutonomousSection extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public AutonomousSection(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static AutonomousSection create(Object... values) {
 		AutonomousSection m = new AutonomousSection();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -89,6 +89,10 @@ public class FollowSystem extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public FollowSystem(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static FollowSystem create(Object... values) {
 		FollowSystem m = new FollowSystem();
 		for (int i = 0; i < values.length-1; i+= 2)

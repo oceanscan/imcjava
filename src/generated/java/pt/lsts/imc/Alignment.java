@@ -75,6 +75,10 @@ public class Alignment extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public Alignment(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Alignment create(Object... values) {
 		Alignment m = new Alignment();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -56,6 +56,10 @@ public class QueryPowerChannelState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public QueryPowerChannelState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static QueryPowerChannelState create(Object... values) {
 		QueryPowerChannelState m = new QueryPowerChannelState();
 		for (int i = 0; i < values.length-1; i+= 2)

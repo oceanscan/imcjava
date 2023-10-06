@@ -56,6 +56,10 @@ public class Chlorophyll extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Chlorophyll(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Chlorophyll create(Object... values) {
 		Chlorophyll m = new Chlorophyll();
 		for (int i = 0; i < values.length-1; i+= 2)

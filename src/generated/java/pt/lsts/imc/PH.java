@@ -56,6 +56,10 @@ public class PH extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public PH(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static PH create(Object... values) {
 		PH m = new PH();
 		for (int i = 0; i < values.length-1; i+= 2)

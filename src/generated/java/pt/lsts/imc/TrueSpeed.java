@@ -56,6 +56,10 @@ public class TrueSpeed extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public TrueSpeed(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static TrueSpeed create(Object... values) {
 		TrueSpeed m = new TrueSpeed();
 		for (int i = 0; i < values.length-1; i+= 2)

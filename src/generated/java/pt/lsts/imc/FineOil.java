@@ -56,6 +56,10 @@ public class FineOil extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public FineOil(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static FineOil create(Object... values) {
 		FineOil m = new FineOil();
 		for (int i = 0; i < values.length-1; i+= 2)

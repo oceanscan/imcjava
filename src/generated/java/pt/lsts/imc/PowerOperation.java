@@ -76,6 +76,10 @@ public class PowerOperation extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public PowerOperation(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static PowerOperation create(Object... values) {
 		PowerOperation m = new PowerOperation();
 		for (int i = 0; i < values.length-1; i+= 2)

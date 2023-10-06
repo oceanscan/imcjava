@@ -73,6 +73,10 @@ public class FollowCommandState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public FollowCommandState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static FollowCommandState create(Object... values) {
 		FollowCommandState m = new FollowCommandState();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -56,6 +56,10 @@ public class TeleoperationDone extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public TeleoperationDone(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static TeleoperationDone create(Object... values) {
 		TeleoperationDone m = new TeleoperationDone();
 		for (int i = 0; i < values.length-1; i+= 2)

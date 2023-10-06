@@ -56,6 +56,10 @@ public class CrudeOil extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public CrudeOil(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static CrudeOil create(Object... values) {
 		CrudeOil m = new CrudeOil();
 		for (int i = 0; i < values.length-1; i+= 2)

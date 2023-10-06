@@ -56,6 +56,10 @@ public class DissolvedOxygen extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public DissolvedOxygen(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static DissolvedOxygen create(Object... values) {
 		DissolvedOxygen m = new DissolvedOxygen();
 		for (int i = 0; i < values.length-1; i+= 2)

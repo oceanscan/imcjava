@@ -88,6 +88,10 @@ public class PlanGeneration extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public PlanGeneration(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static PlanGeneration create(Object... values) {
 		PlanGeneration m = new PlanGeneration();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -56,6 +56,10 @@ public class BeamConfig extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public BeamConfig(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static BeamConfig create(Object... values) {
 		BeamConfig m = new BeamConfig();
 		for (int i = 0; i < values.length-1; i+= 2)

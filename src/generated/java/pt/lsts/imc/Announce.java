@@ -78,6 +78,10 @@ public class Announce extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Announce(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Announce create(Object... values) {
 		Announce m = new Announce();
 		for (int i = 0; i < values.length-1; i+= 2)

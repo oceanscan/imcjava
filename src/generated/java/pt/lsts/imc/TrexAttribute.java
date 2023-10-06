@@ -73,6 +73,10 @@ public class TrexAttribute extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public TrexAttribute(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static TrexAttribute create(Object... values) {
 		TrexAttribute m = new TrexAttribute();
 		for (int i = 0; i < values.length-1; i+= 2)

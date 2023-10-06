@@ -90,6 +90,10 @@ public class FollowPoint extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public FollowPoint(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static FollowPoint create(Object... values) {
 		FollowPoint m = new FollowPoint();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -56,6 +56,10 @@ public class StorageUsage extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public StorageUsage(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static StorageUsage create(Object... values) {
 		StorageUsage m = new StorageUsage();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -56,6 +56,10 @@ public class HistoricSample extends RemoteData {
 		super(defs, ID_STATIC);
 	}
 
+	public HistoricSample(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static HistoricSample create(Object... values) {
 		HistoricSample m = new HistoricSample();
 		for (int i = 0; i < values.length-1; i+= 2)

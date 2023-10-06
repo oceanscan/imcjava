@@ -94,6 +94,10 @@ public class PlanDB extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public PlanDB(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static PlanDB create(Object... values) {
 		PlanDB m = new PlanDB();
 		for (int i = 0; i < values.length-1; i+= 2)

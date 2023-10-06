@@ -71,6 +71,10 @@ public class HistoricDataQuery extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public HistoricDataQuery(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static HistoricDataQuery create(Object... values) {
 		HistoricDataQuery m = new HistoricDataQuery();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -56,6 +56,10 @@ public class SmsRx extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public SmsRx(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static SmsRx create(Object... values) {
 		SmsRx m = new SmsRx();
 		for (int i = 0; i < values.length-1; i+= 2)

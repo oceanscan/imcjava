@@ -61,6 +61,10 @@ public class WaterVelocity extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public WaterVelocity(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static WaterVelocity create(Object... values) {
 		WaterVelocity m = new WaterVelocity();
 		for (int i = 0; i < values.length-1; i+= 2)

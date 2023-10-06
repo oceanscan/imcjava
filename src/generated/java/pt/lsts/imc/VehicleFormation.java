@@ -90,6 +90,10 @@ public class VehicleFormation extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public VehicleFormation(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static VehicleFormation create(Object... values) {
 		VehicleFormation m = new VehicleFormation();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -56,6 +56,10 @@ public class MapPoint extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public MapPoint(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static MapPoint create(Object... values) {
 		MapPoint m = new MapPoint();
 		for (int i = 0; i < values.length-1; i+= 2)

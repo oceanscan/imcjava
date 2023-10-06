@@ -74,6 +74,10 @@ public class UsblFix extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public UsblFix(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static UsblFix create(Object... values) {
 		UsblFix m = new UsblFix();
 		for (int i = 0; i < values.length-1; i+= 2)

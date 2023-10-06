@@ -56,6 +56,10 @@ public class TextMessage extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public TextMessage(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static TextMessage create(Object... values) {
 		TextMessage m = new TextMessage();
 		for (int i = 0; i < values.length-1; i+= 2)

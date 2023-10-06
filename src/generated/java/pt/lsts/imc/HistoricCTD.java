@@ -56,6 +56,10 @@ public class HistoricCTD extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public HistoricCTD(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static HistoricCTD create(Object... values) {
 		HistoricCTD m = new HistoricCTD();
 		for (int i = 0; i < values.length-1; i+= 2)

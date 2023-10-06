@@ -81,6 +81,10 @@ public class UamTxStatus extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public UamTxStatus(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static UamTxStatus create(Object... values) {
 		UamTxStatus m = new UamTxStatus();
 		for (int i = 0; i < values.length-1; i+= 2)

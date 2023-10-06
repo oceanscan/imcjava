@@ -90,6 +90,10 @@ public class ControlLoops extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public ControlLoops(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static ControlLoops create(Object... values) {
 		ControlLoops m = new ControlLoops();
 		for (int i = 0; i < values.length-1; i+= 2)

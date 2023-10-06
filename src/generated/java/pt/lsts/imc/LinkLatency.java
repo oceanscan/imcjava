@@ -56,6 +56,10 @@ public class LinkLatency extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public LinkLatency(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static LinkLatency create(Object... values) {
 		LinkLatency m = new LinkLatency();
 		for (int i = 0; i < values.length-1; i+= 2)

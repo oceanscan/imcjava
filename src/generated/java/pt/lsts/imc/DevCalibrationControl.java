@@ -75,6 +75,10 @@ public class DevCalibrationControl extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public DevCalibrationControl(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static DevCalibrationControl create(Object... values) {
 		DevCalibrationControl m = new DevCalibrationControl();
 		for (int i = 0; i < values.length-1; i+= 2)

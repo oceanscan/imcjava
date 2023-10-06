@@ -56,6 +56,10 @@ public class Turbidity extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Turbidity(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Turbidity create(Object... values) {
 		Turbidity m = new Turbidity();
 		for (int i = 0; i < values.length-1; i+= 2)

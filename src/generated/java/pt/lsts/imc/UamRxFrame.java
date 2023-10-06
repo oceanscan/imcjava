@@ -60,6 +60,10 @@ public class UamRxFrame extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public UamRxFrame(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static UamRxFrame create(Object... values) {
 		UamRxFrame m = new UamRxFrame();
 		for (int i = 0; i < values.length-1; i+= 2)

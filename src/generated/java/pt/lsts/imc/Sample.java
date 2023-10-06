@@ -139,6 +139,10 @@ public class Sample extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public Sample(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Sample create(Object... values) {
 		Sample m = new Sample();
 		for (int i = 0; i < values.length-1; i+= 2)

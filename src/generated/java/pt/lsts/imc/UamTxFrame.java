@@ -61,6 +61,10 @@ public class UamTxFrame extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public UamTxFrame(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static UamTxFrame create(Object... values) {
 		UamTxFrame m = new UamTxFrame();
 		for (int i = 0; i < values.length-1; i+= 2)

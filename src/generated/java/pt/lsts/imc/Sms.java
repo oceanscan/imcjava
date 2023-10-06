@@ -56,6 +56,10 @@ public class Sms extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Sms(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Sms create(Object... values) {
 		Sms m = new Sms();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -56,6 +56,10 @@ public class Fluorescein extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Fluorescein(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Fluorescein create(Object... values) {
 		Fluorescein m = new Fluorescein();
 		for (int i = 0; i < values.length-1; i+= 2)

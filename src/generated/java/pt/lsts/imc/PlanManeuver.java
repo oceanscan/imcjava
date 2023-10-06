@@ -56,6 +56,10 @@ public class PlanManeuver extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public PlanManeuver(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static PlanManeuver create(Object... values) {
 		PlanManeuver m = new PlanManeuver();
 		for (int i = 0; i < values.length-1; i+= 2)

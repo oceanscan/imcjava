@@ -74,6 +74,10 @@ public class CommsRelay extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public CommsRelay(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static CommsRelay create(Object... values) {
 		CommsRelay m = new CommsRelay();
 		for (int i = 0; i < values.length-1; i+= 2)

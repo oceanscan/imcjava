@@ -58,6 +58,10 @@ public class ADCPBeam extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public ADCPBeam(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static ADCPBeam create(Object... values) {
 		ADCPBeam m = new ADCPBeam();
 		for (int i = 0; i < values.length-1; i+= 2)

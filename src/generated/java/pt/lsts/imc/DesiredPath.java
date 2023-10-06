@@ -136,6 +136,10 @@ public class DesiredPath extends ControlCommand {
 		super(defs, ID_STATIC);
 	}
 
+	public DesiredPath(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static DesiredPath create(Object... values) {
 		DesiredPath m = new DesiredPath();
 		for (int i = 0; i < values.length-1; i+= 2)

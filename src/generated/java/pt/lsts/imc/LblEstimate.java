@@ -56,6 +56,10 @@ public class LblEstimate extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public LblEstimate(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static LblEstimate create(Object... values) {
 		LblEstimate m = new LblEstimate();
 		for (int i = 0; i < values.length-1; i+= 2)

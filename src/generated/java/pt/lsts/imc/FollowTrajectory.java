@@ -90,6 +90,10 @@ public class FollowTrajectory extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public FollowTrajectory(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static FollowTrajectory create(Object... values) {
 		FollowTrajectory m = new FollowTrajectory();
 		for (int i = 0; i < values.length-1; i+= 2)

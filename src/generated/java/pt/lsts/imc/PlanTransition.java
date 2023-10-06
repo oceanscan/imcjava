@@ -60,6 +60,10 @@ public class PlanTransition extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public PlanTransition(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static PlanTransition create(Object... values) {
 		PlanTransition m = new PlanTransition();
 		for (int i = 0; i < values.length-1; i+= 2)

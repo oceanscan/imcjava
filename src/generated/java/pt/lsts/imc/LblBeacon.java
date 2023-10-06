@@ -56,6 +56,10 @@ public class LblBeacon extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public LblBeacon(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static LblBeacon create(Object... values) {
 		LblBeacon m = new LblBeacon();
 		for (int i = 0; i < values.length-1; i+= 2)

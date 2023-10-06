@@ -56,6 +56,10 @@ public class Pulse extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Pulse(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Pulse create(Object... values) {
 		Pulse m = new Pulse();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -56,6 +56,10 @@ public class Rpm extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Rpm(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Rpm create(Object... values) {
 		Rpm m = new Rpm();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -90,6 +90,10 @@ public class FollowPath extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public FollowPath(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static FollowPath create(Object... values) {
 		FollowPath m = new FollowPath();
 		for (int i = 0; i < values.length-1; i+= 2)

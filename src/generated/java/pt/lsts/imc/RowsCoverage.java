@@ -93,6 +93,10 @@ public class RowsCoverage extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public RowsCoverage(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static RowsCoverage create(Object... values) {
 		RowsCoverage m = new RowsCoverage();
 		for (int i = 0; i < values.length-1; i+= 2)

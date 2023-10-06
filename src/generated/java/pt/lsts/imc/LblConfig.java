@@ -72,6 +72,10 @@ public class LblConfig extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public LblConfig(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static LblConfig create(Object... values) {
 		LblConfig m = new LblConfig();
 		for (int i = 0; i < values.length-1; i+= 2)

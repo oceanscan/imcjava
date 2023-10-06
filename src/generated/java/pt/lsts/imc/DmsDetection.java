@@ -57,6 +57,10 @@ public class DmsDetection extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public DmsDetection(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static DmsDetection create(Object... values) {
 		DmsDetection m = new DmsDetection();
 		for (int i = 0; i < values.length-1; i+= 2)

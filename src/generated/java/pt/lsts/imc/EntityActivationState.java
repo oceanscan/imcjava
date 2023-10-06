@@ -77,6 +77,10 @@ public class EntityActivationState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public EntityActivationState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static EntityActivationState create(Object... values) {
 		EntityActivationState m = new EntityActivationState();
 		for (int i = 0; i < values.length-1; i+= 2)

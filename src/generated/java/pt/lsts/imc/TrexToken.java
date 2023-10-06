@@ -55,6 +55,10 @@ public class TrexToken extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public TrexToken(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static TrexToken create(Object... values) {
 		TrexToken m = new TrexToken();
 		for (int i = 0; i < values.length-1; i+= 2)

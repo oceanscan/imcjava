@@ -73,6 +73,10 @@ public class ReplayControl extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public ReplayControl(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static ReplayControl create(Object... values) {
 		ReplayControl m = new ReplayControl();
 		for (int i = 0; i < values.length-1; i+= 2)

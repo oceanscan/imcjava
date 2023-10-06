@@ -56,6 +56,10 @@ public class EntityInfo extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public EntityInfo(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static EntityInfo create(Object... values) {
 		EntityInfo m = new EntityInfo();
 		for (int i = 0; i < values.length-1; i+= 2)

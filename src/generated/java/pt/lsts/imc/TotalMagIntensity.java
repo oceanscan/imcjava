@@ -55,6 +55,10 @@ public class TotalMagIntensity extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public TotalMagIntensity(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static TotalMagIntensity create(Object... values) {
 		TotalMagIntensity m = new TotalMagIntensity();
 		for (int i = 0; i < values.length-1; i+= 2)

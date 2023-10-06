@@ -91,6 +91,10 @@ public class Land extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public Land(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Land create(Object... values) {
 		Land m = new Land();
 		for (int i = 0; i < values.length-1; i+= 2)

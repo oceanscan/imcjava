@@ -71,6 +71,10 @@ public class RestartSystem extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public RestartSystem(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static RestartSystem create(Object... values) {
 		RestartSystem m = new RestartSystem();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -81,6 +81,10 @@ public class CommSystemsQuery extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public CommSystemsQuery(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static CommSystemsQuery create(Object... values) {
 		CommSystemsQuery m = new CommSystemsQuery();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -56,6 +56,10 @@ public class FormationMonitor extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public FormationMonitor(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static FormationMonitor create(Object... values) {
 		FormationMonitor m = new FormationMonitor();
 		for (int i = 0; i < values.length-1; i+= 2)

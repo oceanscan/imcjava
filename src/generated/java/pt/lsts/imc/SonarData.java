@@ -128,6 +128,10 @@ public class SonarData extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public SonarData(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static SonarData create(Object... values) {
 		SonarData m = new SonarData();
 		for (int i = 0; i < values.length-1; i+= 2)

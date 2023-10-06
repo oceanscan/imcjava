@@ -56,6 +56,10 @@ public class Event extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Event(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Event create(Object... values) {
 		Event m = new Event();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -56,6 +56,10 @@ public class SetServoPosition extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public SetServoPosition(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static SetServoPosition create(Object... values) {
 		SetServoPosition m = new SetServoPosition();
 		for (int i = 0; i < values.length-1; i+= 2)

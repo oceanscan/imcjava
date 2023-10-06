@@ -57,6 +57,10 @@ public class RegisterManeuver extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public RegisterManeuver(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static RegisterManeuver create(Object... values) {
 		RegisterManeuver m = new RegisterManeuver();
 		for (int i = 0; i < values.length-1; i+= 2)

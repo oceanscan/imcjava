@@ -56,6 +56,10 @@ public class FormationEval extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public FormationEval(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static FormationEval create(Object... values) {
 		FormationEval m = new FormationEval();
 		for (int i = 0; i < values.length-1; i+= 2)

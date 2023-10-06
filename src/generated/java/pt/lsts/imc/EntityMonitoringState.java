@@ -55,6 +55,10 @@ public class EntityMonitoringState extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public EntityMonitoringState(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static EntityMonitoringState create(Object... values) {
 		EntityMonitoringState m = new EntityMonitoringState();
 		for (int i = 0; i < values.length-1; i+= 2)

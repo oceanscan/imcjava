@@ -71,6 +71,10 @@ public class Distance extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Distance(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Distance create(Object... values) {
 		Distance m = new Distance();
 		for (int i = 0; i < values.length-1; i+= 2)

@@ -56,6 +56,10 @@ public class ProfileSample extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public ProfileSample(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static ProfileSample create(Object... values) {
 		ProfileSample m = new ProfileSample();
 		for (int i = 0; i < values.length-1; i+= 2)

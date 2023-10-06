@@ -57,6 +57,10 @@ public class OpticalBackscatter extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public OpticalBackscatter(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static OpticalBackscatter create(Object... values) {
 		OpticalBackscatter m = new OpticalBackscatter();
 		for (int i = 0; i < values.length-1; i+= 2)

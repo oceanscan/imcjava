@@ -56,6 +56,10 @@ public class ColoredDissolvedOrganicMatter extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public ColoredDissolvedOrganicMatter(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static ColoredDissolvedOrganicMatter create(Object... values) {
 		ColoredDissolvedOrganicMatter m = new ColoredDissolvedOrganicMatter();
 		for (int i = 0; i < values.length-1; i+= 2)

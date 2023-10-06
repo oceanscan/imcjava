@@ -72,6 +72,10 @@ public class ValidatePlan extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public ValidatePlan(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static ValidatePlan create(Object... values) {
 		ValidatePlan m = new ValidatePlan();
 		for (int i = 0; i < values.length-1; i+= 2)

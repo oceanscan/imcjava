@@ -56,6 +56,10 @@ public class TransportBindings extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public TransportBindings(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static TransportBindings create(Object... values) {
 		TransportBindings m = new TransportBindings();
 		for (int i = 0; i < values.length-1; i+= 2)

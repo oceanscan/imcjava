@@ -57,6 +57,10 @@ public class DesiredPitch extends ControlCommand {
 		super(defs, ID_STATIC);
 	}
 
+	public DesiredPitch(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static DesiredPitch create(Object... values) {
 		DesiredPitch m = new DesiredPitch();
 		for (int i = 0; i < values.length-1; i+= 2)

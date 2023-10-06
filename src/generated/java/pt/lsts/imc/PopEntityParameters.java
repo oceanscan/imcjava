@@ -55,6 +55,10 @@ public class PopEntityParameters extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public PopEntityParameters(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static PopEntityParameters create(Object... values) {
 		PopEntityParameters m = new PopEntityParameters();
 		for (int i = 0; i < values.length-1; i+= 2)

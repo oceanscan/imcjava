@@ -66,6 +66,10 @@ public class Command extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Command(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Command create(Object... values) {
 		Command m = new Command();
 		for (int i = 0; i < values.length-1; i+= 2)

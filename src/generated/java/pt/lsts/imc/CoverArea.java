@@ -91,6 +91,10 @@ public class CoverArea extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public CoverArea(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static CoverArea create(Object... values) {
 		CoverArea m = new CoverArea();
 		for (int i = 0; i < values.length-1; i+= 2)

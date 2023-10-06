@@ -94,6 +94,10 @@ public class Drop extends Maneuver {
 		super(defs, ID_STATIC);
 	}
 
+	public Drop(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Drop create(Object... values) {
 		Drop m = new Drop();
 		for (int i = 0; i < values.length-1; i+= 2)

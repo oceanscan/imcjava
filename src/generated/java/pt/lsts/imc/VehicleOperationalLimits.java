@@ -73,6 +73,10 @@ public class VehicleOperationalLimits extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public VehicleOperationalLimits(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static VehicleOperationalLimits create(Object... values) {
 		VehicleOperationalLimits m = new VehicleOperationalLimits();
 		for (int i = 0; i < values.length-1; i+= 2)

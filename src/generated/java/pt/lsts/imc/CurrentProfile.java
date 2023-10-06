@@ -61,6 +61,10 @@ public class CurrentProfile extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public CurrentProfile(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static CurrentProfile create(Object... values) {
 		CurrentProfile m = new CurrentProfile();
 		for (int i = 0; i < values.length-1; i+= 2)

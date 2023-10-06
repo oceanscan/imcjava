@@ -58,6 +58,10 @@ public class SetLedBrightness extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public SetLedBrightness(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static SetLedBrightness create(Object... values) {
 		SetLedBrightness m = new SetLedBrightness();
 		for (int i = 0; i < values.length-1; i+= 2)

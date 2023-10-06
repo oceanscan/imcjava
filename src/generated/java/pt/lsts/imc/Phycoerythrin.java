@@ -56,6 +56,10 @@ public class Phycoerythrin extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public Phycoerythrin(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static Phycoerythrin create(Object... values) {
 		Phycoerythrin m = new Phycoerythrin();
 		for (int i = 0; i < values.length-1; i+= 2)

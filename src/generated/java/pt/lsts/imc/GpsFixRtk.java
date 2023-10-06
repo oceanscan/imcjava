@@ -78,6 +78,10 @@ public class GpsFixRtk extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public GpsFixRtk(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static GpsFixRtk create(Object... values) {
 		GpsFixRtk m = new GpsFixRtk();
 		for (int i = 0; i < values.length-1; i+= 2)

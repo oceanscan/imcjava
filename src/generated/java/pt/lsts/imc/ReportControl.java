@@ -81,6 +81,10 @@ public class ReportControl extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public ReportControl(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static ReportControl create(Object... values) {
 		ReportControl m = new ReportControl();
 		for (int i = 0; i < values.length-1; i+= 2)

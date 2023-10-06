@@ -56,6 +56,10 @@ public class ManeuverDone extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public ManeuverDone(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static ManeuverDone create(Object... values) {
 		ManeuverDone m = new ManeuverDone();
 		for (int i = 0; i < values.length-1; i+= 2)

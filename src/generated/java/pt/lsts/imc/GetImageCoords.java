@@ -56,6 +56,10 @@ public class GetImageCoords extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public GetImageCoords(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static GetImageCoords create(Object... values) {
 		GetImageCoords m = new GetImageCoords();
 		for (int i = 0; i < values.length-1; i+= 2)

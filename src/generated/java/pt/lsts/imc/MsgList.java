@@ -55,6 +55,10 @@ public class MsgList extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public MsgList(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static MsgList create(Object... values) {
 		MsgList m = new MsgList();
 		for (int i = 0; i < values.length-1; i+= 2)

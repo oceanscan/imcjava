@@ -56,6 +56,10 @@ public class EulerAnglesDelta extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public EulerAnglesDelta(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static EulerAnglesDelta create(Object... values) {
 		EulerAnglesDelta m = new EulerAnglesDelta();
 		for (int i = 0; i < values.length-1; i+= 2)

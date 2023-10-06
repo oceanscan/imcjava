@@ -56,6 +56,10 @@ public class VelocityDelta extends IMCMessage {
 		super(defs, ID_STATIC);
 	}
 
+	public VelocityDelta(IMCDefinition defs, int type) {
+		super(defs, type);
+	}
+
 	public static VelocityDelta create(Object... values) {
 		VelocityDelta m = new VelocityDelta();
 		for (int i = 0; i < values.length-1; i+= 2)
