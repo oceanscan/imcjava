@@ -36,9 +36,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.file.FileSystems;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.Formatter;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -61,57 +59,59 @@ import pt.lsts.imc.MultiIMCDefinitions;
 public class ClassGenerator {
 
 	public static void generateImcFactory(HashSet<IMCDefinition> definitionsSet,
-			File outputFolder) throws Exception {
+			File outputFolder) {
 		File outputDir = getOutputDir(outputFolder, "pt.lsts.imc");
 		File outputFile = new File(outputDir, "MessageFactory.java");
+		try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
+				new FileOutputStream(outputFile), "UTF-8"))) {
 
-		// BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
-				new FileOutputStream(outputFile), "UTF-8"));
+			bw.write(getCopyRightHeader());
 
-		bw.write(getCopyRightHeader());
+			bw.write("package pt.lsts.imc;\n\n");
 
-		bw.write("package pt.lsts.imc;\n\n");
+			bw.write("public class MessageFactory {\n\n");
 
-		bw.write("public class MessageFactory {\n\n");
+			bw.write("\tprivate static MessageFactory instance = null;\n\n");
 
-		bw.write("\tprivate static MessageFactory instance = null;\n\n");
+			bw.write("\tprivate MessageFactory() {}\n\n");
 
-		bw.write("\tprivate MessageFactory() {}\n\n");
+			bw.write("\tpublic static MessageFactory getInstance() {\n\n");
+			bw.write("\t\t if (instance == null)\n");
+			bw.write("\t\t\tinstance = new MessageFactory();\n\n");
+			bw.write("\t\treturn instance;\n\t}\n\n");
 
-		bw.write("\tpublic static MessageFactory getInstance() {\n\n");
-		bw.write("\t\t if (instance == null)\n");
-		bw.write("\t\t\tinstance = new MessageFactory();\n\n");
-		bw.write("\t\treturn instance;\n\t}\n\n");
+			bw.write("\tpublic IMCMessage createTypedMessage(String msgName, IMCDefinition defs) {\n");
+			bw.write("\t\tint msgId = defs.getMessageId(msgName);\n");
+			bw.write("\t\treturn createTypedMessage(msgId, defs);\n");
+			bw.write("\t}\n");
 
-		bw.write("\tpublic IMCMessage createTypedMessage(String msgName, IMCDefinition defs) {\n");
-		bw.write("\t\tint msgId = defs.getMessageId(msgName);\n");
-		bw.write("\t\treturn createTypedMessage(msgId, defs);\n");
-		bw.write("\t}\n");
+			bw.write("\tprivate IMCMessage createTypedMessage(int mgid, IMCDefinition defs) {\n\n");
 
-		bw.write("\tprivate IMCMessage createTypedMessage(int mgid, IMCDefinition defs) {\n\n");
+			for (IMCDefinition def : definitionsSet) {
+				bw.write("\t\tif (" + def.getSyncWord() + " == defs.getSyncWord()) {\n");
+				bw.write("\t\t\tswitch(mgid) {\n");
+				for (String msg : def.getConcreteMessages()) {
+					bw.write("\t\t\t\tcase " + def.getMessageId(msg) + ":\n");
+					bw.write("\t\t\t\t\treturn new " + msg + "(defs, " + def.getMessageId(msg) + ");\n");
+				}
+				bw.write("\t\t\t\tdefault:\n");
+				bw.write("\t\t\t\t\treturn new IMCMessage(defs);\n");
 
-		for (IMCDefinition def : definitionsSet) {
-			bw.write("\t\tif (" + def.getSyncWord() + " == defs.getSyncWord()) {\n");
-			bw.write("\t\t\tswitch(mgid) {\n");
-			for (String msg : def.getConcreteMessages()) {
-				bw.write("\t\t\t\tcase " +  def.getMessageId(msg) + ":\n");
-				bw.write("\t\t\t\t\treturn new " + msg + "(defs, " + def.getMessageId(msg) + ");\n");
+				bw.write("\t\t\t}\n");
+				bw.write("\t\t}\n");
+
 			}
-			bw.write("\t\t\t\tdefault:\n");
-			bw.write("\t\t\t\t\treturn new IMCMessage(defs);\n");
+			bw.write("\t\treturn new IMCMessage(defs);\n");
 
-			bw.write("\t\t\t}\n");
-			bw.write("\t\t}\n");
+			bw.write("}\n\n");
+			bw.write("}\n");
 
+			bw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.err.println("Imc Factory failed");
+			System.exit(1);
 		}
-		bw.write("\t\treturn new IMCMessage(defs);\n");
-
-		bw.write("}\n\n");
-		bw.write("}\n");
-
-
-		bw.close();
 		System.out.println("Imc Factory complete");
 	}
 
@@ -1210,38 +1210,15 @@ public class ClassGenerator {
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void 
+	main(String[] args) {
 		if (args.length != 2) {
 			System.err.format("Usage: generator <IMC_FOLDER> <DESTINATION_FOLDER>\n");
 			System.exit(1);
 		}
-
-		// final File imcFolder = new File(args[0]).getAbsoluteFile();
-		// final Path imcXml =
-		// FileSystems.getDefault().getPath(imcFolder.getAbsolutePath(), "IMC.xml");
 		final Path genJava = FileSystems.getDefault().getPath(args[1], "java");
-		// final Path genResources = FileSystems.getDefault().getPath(args[1],
-		// "resources", "xml", "IMC.xml");
-
-		// System.err.format("IMC XML: %s\n", imcXml.toString());
-
-		// String sha = "N/A";
-		// String branch = "N/A";
-		// String commitDetails = "Not a GIT repository";
-
-		// try {
-		// GenerationUtils.checkRepo(imcFolder);
-		// sha = GenerationUtils.getGitSha(imcFolder);
-		// branch = GenerationUtils.getGitBranch(imcFolder);
-		// commitDetails = GenerationUtils.getGitCommit(imcFolder);
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// }
 
 		try {
-
-			// IMCDefinition defs = new IMCDefinition(GenerationUtils.getImcXml(imcFolder));
-			// Files.copy(imcXml, genResources, StandardCopyOption.REPLACE_EXISTING);
 			Map<String, Integer> addrs = GenerationUtils.getImcAddresses();
 
 			File output = getOutputDir(genJava.toFile(), "pt.lsts.imc");
@@ -1252,6 +1229,7 @@ public class ClassGenerator {
 			generateStringDefinitions("pt.lsts.imc", addrs, "sha", "branch", "commit", genJava.toFile());
 			System.out.println("Generate IMC Factory");
 			generateImcFactory(MultiIMCDefinitions.getAllDefinitions(), genJava.toFile());
+			System.exit(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);

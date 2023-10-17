@@ -544,17 +544,6 @@
     </description>
   </message>
 
-  <message id="10" name="Memory Usage" abbrev="MemUsage" source="vehicle" flags="periodic" category="Core">
-    <description>
-      Report of memory usage.
-    </description>
-    <field name="Usage percentage" abbrev="value" type="uint8_t" max="100" unit="%">
-      <description>
-        The memory usage, in percentage.
-      </description>
-    </field>
-  </message>
-
   <message id="14" name="Entity Activation State" abbrev="EntityActivationState" source="vehicle,ccu" category="Core">
     <description>
       State of entity activation/deactivation.
