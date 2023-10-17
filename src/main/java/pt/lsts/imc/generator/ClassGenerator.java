@@ -892,16 +892,7 @@ public class ClassGenerator {
 					sb.append("\t\ttry {\n");
 					sb.append("\t\t\tIMCMessage obj = getMessage(\"" + field
 							+ "\");\n");
-					// sb.append("\t\t\tif (obj.getMessageType().getId() == " + subtype +
-					// ".ID_STATIC)\n");
-					// TODO:: Check if the following line can be optimized. instanceof doesn't work
-					// with inline messages.
 					sb.append("\t\t\treturn " + subtype + ".clone(obj);\n");
-					// optimization
-					// sb.append("\t\t\tif (obj instanceof " + subtype + ")\n");
-					// sb.append("\t\t\t\treturn (" + subtype + ") obj;\n");
-					// sb.append("\t\t\telse\n");
-					// sb.append("\t\t\t\treturn null;\n");
 					sb.append("\t\t}\n");
 					sb.append("\t\tcatch (Exception e) {\n");
 					sb.append("\t\t\treturn null;\n");
@@ -1224,6 +1215,9 @@ public class ClassGenerator {
 			File output = getOutputDir(genJava.toFile(), "pt.lsts.imc");
 			clearDir(output);
 
+			for (IMCDefinition def : MultiIMCDefinitions.getAllDefinitions()) {
+				generateClasses("pt.lsts.imc", genJava.toFile(), def);
+			}
 			generateClasses("pt.lsts.imc", genJava.toFile(), MultiIMCDefinitions.getInstance());
 			System.out.println("Generate String Definitions");
 			generateStringDefinitions("pt.lsts.imc", addrs, "sha", "branch", "commit", genJava.toFile());

@@ -627,6 +627,10 @@ public class MessageFactory {
 					return new LblBeacon(defs, 202);
 				case 203:
 					return new LblConfig(defs, 203);
+				case 204:
+					return new LblBeaconExtended(defs, 204);
+				case 205:
+					return new LblConfigExtended(defs, 205);
 				case 206:
 					return new AcousticMessage(defs, 206);
 				case 207:
@@ -1175,10 +1179,6 @@ public class MessageFactory {
 					return new TotalMagIntensity(defs, 2006);
 				case 2007:
 					return new ValidatePlan(defs, 2007);
-				case 2017:
-					return new TypedEntityParameter(defs, 2017);
-				case 2009:
-					return new TypedEntityParameters(defs, 2009);
 				case 2010:
 					return new CommRestriction(defs, 2010);
 				case 2011:
@@ -1191,6 +1191,8 @@ public class MessageFactory {
 					return new HealthCheck(defs, 2015);
 				case 2016:
 					return new QueryTypedEntityParameters(defs, 2016);
+				case 2017:
+					return new TypedEntityParameter(defs, 2017);
 				case 2018:
 					return new ValuesIf(defs, 2018);
 				case 2019:
