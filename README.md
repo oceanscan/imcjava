@@ -8,5 +8,5 @@ Java bindings for IMC.
 * IMC.xml resides in PROJECT_ROOT/..:
 gradle generate
 
-* IMC.xml resides in <FOLDER>:
-gradle generate -PimcDir=<FOLDER>
+* IMC.xml resides in \<FOLDER\>:
+gradle generate -PimcDir=\<FOLDER\>
