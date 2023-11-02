@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-gradle publishToMavenLocal
-version=`gradle printVersion | sed -n 3p`
+./gradlew publishToMavenLocal
+version=`./gradlew printVersion | sed -n 3p`
 
 echo ""
 echo "Publishing ICMJava v$version to omst's Maven repository..."
