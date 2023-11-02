@@ -32,11 +32,15 @@ package pt.lsts.imc.generator;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.file.CopyOption;
 import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Formatter;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -935,7 +939,7 @@ public class ClassGenerator {
 		String msgName = "Header";
 		File outputDir = getOutputDir(outputFolder, packageName);
 		File outputFile = new File(outputDir, msgName + ".java");
-		LOG.info("Generating " + outputFile.getPath());
+		LOG.finest("Generating " + outputFile.getPath());
 
 		// BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
@@ -1214,8 +1218,14 @@ public class ClassGenerator {
 			defsFile = FileSystems.getDefault().getPath(args[0]).toAbsolutePath().toFile();
 			if (!defsFile.getName().endsWith("xml") || defsFile.isDirectory())
 				defsFile = new File(defsFile, "IMC.xml");
-			
-			MultiIMCDefinitions.loadAlternativeDefinitions();
+			IMCDefinition newDef = IMCDefinition.getInstance(new FileInputStream(defsFile));
+			if (newDef == null) {
+				LOG.severe("Error loading definitions from "+defsFile.getAbsolutePath());
+				return;
+			}
+			Files.copy(defsFile.toPath(), FileSystems.getDefault().getPath(args[1], "resources/xml/IMC.xml"),
+					StandardCopyOption.REPLACE_EXISTING);
+			MultiIMCDefinitions.getAllDefinitions();
 			LOG.info("Adding definitions from "+defsFile);
 			MultiIMCDefinitions.setDefinition(defsFile);
 			
