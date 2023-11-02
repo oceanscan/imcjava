@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PushbackInputStream;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -12,8 +13,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-
 
 public class MultiIMCDefinitions {
 
@@ -35,11 +34,10 @@ public class MultiIMCDefinitions {
             loadAlternativeDefinitions();
         if (definitionsBySystem.containsKey(sys_id))
             return definitionsBySystem.get(sys_id);
-        else
-        {
-            LOG.fine("Using default definitions for system "+sys_id);
+        else {
+            LOG.fine("Using default definitions for system " + sys_id);
             return IMCDefinition.getInstance();
-        }            
+        }
     }
 
     public static String resolveSystemName(int sysId) {
@@ -50,7 +48,6 @@ public class MultiIMCDefinitions {
         return defaultDefinitions;
     }
 
-   
     public synchronized static HashSet<IMCDefinition> getAllDefinitions() {
         if (alternativeDefinitions == null)
             loadAlternativeDefinitions();
@@ -58,13 +55,13 @@ public class MultiIMCDefinitions {
     }
 
     public static pt.lsts.imc.IMCMessage nextMessage(java.io.InputStream in) throws java.io.IOException {
-        PushbackInputStream pb = new PushbackInputStream(in,2);
+        PushbackInputStream pb = new PushbackInputStream(in, 2);
         byte[] syncBuf = new byte[2];
         pb.read(syncBuf);
         long sync = syncBuf[0] & 0xFF | (syncBuf[1] & 0xFF) << 8;
         IMCDefinition def = getInstance(sync);
         boolean swapped = def.getSwappedWord() == sync;
-        pb.unread(syncBuf);        
+        pb.unread(syncBuf);
         IMCInputStream iis = new IMCInputStream(pb, def);
         if (swapped)
             iis.setBigEndian(false);
@@ -106,6 +103,27 @@ public class MultiIMCDefinitions {
         return baos.toByteArray();
     }
 
+    public static synchronized void setDefinition(File f) {
+        if (!f.exists()) {
+            LOG.severe("File does not exist: " + f.getAbsolutePath());
+            return;
+        }
+        if (!f.getName().endsWith("xml")) {
+            LOG.severe("File name is invalid: " + f.getAbsolutePath());
+            return;
+        }
+
+        try {
+            InputStream is = new FileInputStream(f);
+            IMCDefinition def = IMCDefinition.getInstance(is);
+            alternativeDefinitions.put(def.getSyncWord(), def);
+            alternativeDefinitions.put(def.getSwappedWord(), def);
+            LOG.info("Loaded IMC definition: " + def.getSyncWord() + " from " + f.getAbsolutePath());
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE, "Could not load alternative IMC definition: " + f.getName(), e);
+        }
+    }
+
     public static synchronized void loadAlternativeDefinitions() {
 
         if (alternativeDefinitions == null) {
@@ -127,7 +145,7 @@ public class MultiIMCDefinitions {
                         if (!alternativeDefinitions.containsKey(def.getSyncWord())) {
                             alternativeDefinitions.put(def.getSyncWord(), def);
                             alternativeDefinitions.put(def.getSwappedWord(), def);
-                            LOG.info("Loaded alternative IMC definition: " + def.getSyncWord());
+                            LOG.info("Loaded IMC definition: " + def.getSyncWord() + " from " + f.getAbsolutePath());
                         }
                     } catch (Exception e) {
                         LOG.log(Level.SEVERE, "Could not load alternative IMC definition: " + f.getName(), e);
@@ -139,7 +157,7 @@ public class MultiIMCDefinitions {
 
             Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
                 IMCDefinition defaults = IMCDefinition.getInstance();
-                Map<String,Integer> addrs = defaults.getResolver().getAddresses();
+                Map<String, Integer> addrs = defaults.getResolver().getAddresses();
                 HashSet<IMCDefinition> updated = new HashSet<>();
                 updated.add(defaults);
                 for (IMCDefinition def : alternativeDefinitions.values()) {
@@ -148,12 +166,12 @@ public class MultiIMCDefinitions {
                         addrs.entrySet().forEach(e -> {
                             def.getResolver().addEntry(e.getValue(), e.getKey());
                         });
-                        def.getResolver().getAddresses().forEach((k,v) -> {
+                        def.getResolver().getAddresses().forEach((k, v) -> {
                             defaults.getResolver().addEntry(v, k);
                         });
                     }
                 }
-            }, 0, 10, TimeUnit.SECONDS);            
+            }, 0, 10, TimeUnit.SECONDS);
         }
     }
 }

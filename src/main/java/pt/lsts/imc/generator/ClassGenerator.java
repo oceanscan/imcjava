@@ -43,6 +43,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Vector;
+import java.util.logging.Logger;
 
 import pt.lsts.imc.IMCDefinition;
 import pt.lsts.imc.IMCFieldType;
@@ -57,6 +58,8 @@ import pt.lsts.imc.MultiIMCDefinitions;
  *
  */
 public class ClassGenerator {
+
+	private final static Logger LOG = Logger.getLogger("ClassGenerator");
 
 	public static void generateImcFactory(HashSet<IMCDefinition> definitionsSet,
 			File outputFolder) {
@@ -109,10 +112,10 @@ public class ClassGenerator {
 			bw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.err.println("Imc Factory failed");
+			LOG.severe("Imc Factory failed");
 			System.exit(1);
 		}
-		System.out.println("Imc Factory complete");
+		LOG.info("Imc Factory complete");
 	}
 
 	@Deprecated
@@ -684,7 +687,7 @@ public class ClassGenerator {
 				break;
 
 			default:
-				System.err.println("Setter for unknown field was not generated: "
+				LOG.severe("Setter for unknown field was not generated: "
 						+ type.getFieldType(field));
 				break;
 		}
@@ -941,7 +944,7 @@ public class ClassGenerator {
 		String msgName = "Header";
 		File outputDir = getOutputDir(outputFolder, packageName);
 		File outputFile = new File(outputDir, msgName + ".java");
-		System.out.println("Generating " + outputFile.getPath());
+		LOG.info("Generating " + outputFile.getPath());
 
 		// BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
@@ -1069,7 +1072,7 @@ public class ClassGenerator {
 
 		File outputDir = getOutputDir(outputFolder, packageName);
 		File outputFile = new File(outputDir, msgName + ".java");
-		System.out.println("Generating " + outputFile.getPath());
+		LOG.info("Generating " + outputFile.getPath());
 
 		// BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
@@ -1204,30 +1207,44 @@ public class ClassGenerator {
 	private static void clearDir(File outputFolder) {
 		for (File f : outputFolder.listFiles()) {
 			if (f.getName().endsWith(".java")) {
-				System.out.println("Deleting " + f.getPath());
+				LOG.info("Deleting " + f.getPath());
 				f.delete();
 			}
 		}
 	}
 
-	public static void 
-	main(String[] args) {
+	public static void main(String[] args) {
 		if (args.length != 2) {
 			System.err.format("Usage: generator <IMC_FOLDER> <DESTINATION_FOLDER>\n");
 			System.exit(1);
 		}
-		final Path genJava = FileSystems.getDefault().getPath(args[1], "java");
-
+		File defsFile;
 		try {
+			defsFile = FileSystems.getDefault().getPath(args[0]).toAbsolutePath().toFile();
+			if (!defsFile.getName().endsWith("xml") || defsFile.isDirectory())
+				defsFile = new File(defsFile, "IMC.xml");
+			
+			MultiIMCDefinitions.loadAlternativeDefinitions();
+			LOG.info("Adding definitions from "+defsFile);
+			MultiIMCDefinitions.setDefinition(defsFile);
+			
+			
+			final Path genJava = FileSystems.getDefault().getPath(args[1], "java");
+
 			Map<String, Integer> addrs = GenerationUtils.getImcAddresses();
 
 			File output = getOutputDir(genJava.toFile(), "pt.lsts.imc");
 			clearDir(output);
 
+			
+
+			for (IMCDefinition def : MultiIMCDefinitions.getAllDefinitions()) {
+				generateClasses("pt.lsts.imc", genJava.toFile(), def);
+			}
 			generateClasses("pt.lsts.imc", genJava.toFile(), MultiIMCDefinitions.getInstance());
-			System.out.println("Generate String Definitions");
+			LOG.info("Generate String Definitions");
 			generateStringDefinitions("pt.lsts.imc", addrs, "sha", "branch", "commit", genJava.toFile());
-			System.out.println("Generate IMC Factory");
+			LOG.info("Generate IMC Factory");
 			generateImcFactory(MultiIMCDefinitions.getAllDefinitions(), genJava.toFile());
 			System.exit(0);
 		} catch (Exception e) {
