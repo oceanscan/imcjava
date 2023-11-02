@@ -118,7 +118,7 @@ public class MultiIMCDefinitions {
             IMCDefinition def = IMCDefinition.getInstance(is);
             alternativeDefinitions.put(def.getSyncWord(), def);
             alternativeDefinitions.put(def.getSwappedWord(), def);
-            LOG.info("Loaded IMC definition: " + def.getSyncWord() + " from " + f.getAbsolutePath());
+            LOG.info("Loaded IMC definition: " + def.getSyncWord() + " from " + f.getAbsolutePath());            
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "Could not load alternative IMC definition: " + f.getName(), e);
         }
@@ -146,6 +146,9 @@ public class MultiIMCDefinitions {
                             alternativeDefinitions.put(def.getSyncWord(), def);
                             alternativeDefinitions.put(def.getSwappedWord(), def);
                             LOG.info("Loaded IMC definition: " + def.getSyncWord() + " from " + f.getAbsolutePath());
+                        }
+                        else {
+                            LOG.info("Not loading another IMC definition with synch " + def.getSyncWord() + ", ignoring " + f.getAbsolutePath());
                         }
                     } catch (Exception e) {
                         LOG.log(Level.SEVERE, "Could not load alternative IMC definition: " + f.getName(), e);
