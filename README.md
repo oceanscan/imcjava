@@ -6,10 +6,10 @@ Java bindings for IMC.
 # Generating Messages
 
 * IMC.xml resides in PROJECT_ROOT/..:
-gradle generate
+./gradlew generate
 
 * IMC.xml resides in \<FOLDER\>:
-gradle generate -PimcDir=\<FOLDER\>
+./gradlew generate -PimcDir=\<FOLDER\>
 
 # Deploying a new version
 
