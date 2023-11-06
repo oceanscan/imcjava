@@ -30,15 +30,17 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message Typed Entity Parameters (2009)<br/>
- *  This message can be used to query/report the entities and respective parameters in the system<br/>
+ *  IMC Message LBL Configuration Extended (205)<br/>
+ *  Long Base Line configuration.<br/>
  */
 
-public class TypedEntityParameters extends IMCMessage {
+public class LblConfigExtended extends IMCMessage {
 
 	public enum OP {
-		REQUEST(0),
-		REPLY(1);
+		SET_CFG(0),
+		GET_CFG(1),
+		CUR_CFG(2),
+		POS_CFG(3);
 
 		protected long value;
 
@@ -51,13 +53,13 @@ public class TypedEntityParameters extends IMCMessage {
 		}
 	}
 
-	public static final int ID_STATIC = 2009;
+	public static final int ID_STATIC = 205;
 
-	public TypedEntityParameters() {
+	public LblConfigExtended() {
 		super(ID_STATIC);
 	}
 
-	public TypedEntityParameters(IMCMessage msg) {
+	public LblConfigExtended(IMCMessage msg) {
 		super(ID_STATIC);
 		try{
 			copyFrom(msg);
@@ -67,24 +69,24 @@ public class TypedEntityParameters extends IMCMessage {
 		}
 	}
 
-	public TypedEntityParameters(IMCDefinition defs) {
+	public LblConfigExtended(IMCDefinition defs) {
 		super(defs, ID_STATIC);
 	}
 
-	public TypedEntityParameters(IMCDefinition defs, int type) {
+	public LblConfigExtended(IMCDefinition defs, int type) {
 		super(defs, type);
 	}
 
-	public static TypedEntityParameters create(Object... values) {
-		TypedEntityParameters m = new TypedEntityParameters();
+	public static LblConfigExtended create(Object... values) {
+		LblConfigExtended m = new LblConfigExtended();
 		for (int i = 0; i < values.length-1; i+= 2)
 			m.setValue(values[i].toString(), values[i+1]);
 		return m;
 	}
 
-	public static TypedEntityParameters clone(IMCMessage msg) throws Exception {
+	public static LblConfigExtended clone(IMCMessage msg) throws Exception {
 
-		TypedEntityParameters m = new TypedEntityParameters();
+		LblConfigExtended m = new LblConfigExtended();
 		if (msg == null)
 			return m;
 		if(msg.definitions != m.definitions){
@@ -99,14 +101,11 @@ public class TypedEntityParameters extends IMCMessage {
 		return m;
 	}
 
-	public TypedEntityParameters(OP op, long request_id, String entity_name, java.util.Collection<TypedEntityParameter> parameters) {
+	public LblConfigExtended(OP op, java.util.Collection<LblBeaconExtended> beacons) {
 		super(ID_STATIC);
 		setOp(op);
-		setRequestId(request_id);
-		if (entity_name != null)
-			setEntityName(entity_name);
-		if (parameters != null)
-			setParameters(parameters);
+		if (beacons != null)
+			setBeacons(beacons);
 	}
 
 	/**
@@ -133,7 +132,7 @@ public class TypedEntityParameters extends IMCMessage {
 	/**
 	 *  @param op Operation (enumerated)
 	 */
-	public TypedEntityParameters setOp(OP op) {
+	public LblConfigExtended setOp(OP op) {
 		values.put("op", op.value());
 		return this;
 	}
@@ -141,7 +140,7 @@ public class TypedEntityParameters extends IMCMessage {
 	/**
 	 *  @param op Operation (as a String)
 	 */
-	public TypedEntityParameters setOpStr(String op) {
+	public LblConfigExtended setOpStr(String op) {
 		setValue("op", op);
 		return this;
 	}
@@ -149,47 +148,17 @@ public class TypedEntityParameters extends IMCMessage {
 	/**
 	 *  @param op Operation (integer value)
 	 */
-	public TypedEntityParameters setOpVal(short op) {
+	public LblConfigExtended setOpVal(short op) {
 		setValue("op", op);
 		return this;
 	}
 
 	/**
-	 *  @return Request identitier - uint32_t
+	 *  @return Beacons - message-list
 	 */
-	public long getRequestId() {
-		return getLong("request_id");
-	}
-
-	/**
-	 *  @param request_id Request identitier
-	 */
-	public TypedEntityParameters setRequestId(long request_id) {
-		values.put("request_id", request_id);
-		return this;
-	}
-
-	/**
-	 *  @return Entity Name - plaintext
-	 */
-	public String getEntityName() {
-		return getString("entity_name");
-	}
-
-	/**
-	 *  @param entity_name Entity Name
-	 */
-	public TypedEntityParameters setEntityName(String entity_name) {
-		values.put("entity_name", entity_name);
-		return this;
-	}
-
-	/**
-	 *  @return Parameters - message-list
-	 */
-	public java.util.Vector<TypedEntityParameter> getParameters() {
+	public java.util.Vector<LblBeaconExtended> getBeacons() {
 		try {
-			return getMessageList("parameters", TypedEntityParameter.class);
+			return getMessageList("beacons", LblBeaconExtended.class);
 		}
 		catch (Exception e) {
 			return null;
@@ -198,10 +167,10 @@ public class TypedEntityParameters extends IMCMessage {
 	}
 
 	/**
-	 *  @param parameters Parameters
+	 *  @param beacons Beacons
 	 */
-	public TypedEntityParameters setParameters(java.util.Collection<TypedEntityParameter> parameters) {
-		values.put("parameters", parameters);
+	public LblConfigExtended setBeacons(java.util.Collection<LblBeaconExtended> beacons) {
+		values.put("beacons", beacons);
 		return this;
 	}
 
