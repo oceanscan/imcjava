@@ -30,6 +30,7 @@
  */
 package pt.lsts.imc.lsf;
 
+import java.io.File;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
@@ -49,7 +50,10 @@ public class LsfGenericIterator implements Iterator<IMCMessage>, Iterable<IMCMes
         this.msgType = index.getDefinitions().getMessageId(msgType);
         this.timestepSeconds = timestepMillis / 1000.0;
         this.nextIndex = index.getNextMessageOfType(msgType, startIndex);
-        divideById = index.fieldIdOf(nextIndex) != -1;        
+        divideById = index.fieldIdOf(nextIndex) != -1;
+        int hashcode = divideById ? index.fieldIdOf(nextIndex) : index.hashOf(nextIndex);
+        entityTimeStamps.put(hashcode, index.timeOf(nextIndex));
+
     }
     
     @Override
@@ -105,5 +109,18 @@ public class LsfGenericIterator implements Iterator<IMCMessage>, Iterable<IMCMes
     public void remove() {
         throw new UnsupportedOperationException();
     }
+
+    // public static void main(String[] args) {
+    //     File lsfFile = new File("/home/omst/Documents/neptus/log/downloaded/lauv-trud/20240123/122715/Data.lsf");
+    //     try {
+    //         LsfIndex lsfIndex = new LsfIndex(lsfFile);
+    //         Iterable<IMCMessage> msgs = lsfIndex.getIterator("Rpm", 0, 2000);
+    //         for (IMCMessage m : msgs) {
+    //             System.out.printf("%s %.1f\n", m.getMessageType().getFullName(), m.getTimestamp());
+    //         }
+    //     } catch (Exception e) {
+    //         System.out.println(e.getMessage());
+    //     }
+    // }
     
 }
