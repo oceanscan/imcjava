@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
 group 'pt.lsts'
-version '5.5.2.6'
+version '5.5.2.8-unify'
 
 ext
 {
