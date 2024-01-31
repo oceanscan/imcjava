@@ -739,6 +739,8 @@ public class MessageFactory {
 					return new ValuesIf(defs, 2018);
 				case 2019:
 					return new DirSonarData(defs, 2019);
+				case 2020:
+					return new ManeuverResumed(defs, 2020);
 				default:
 					return new IMCMessage(defs);
 			}

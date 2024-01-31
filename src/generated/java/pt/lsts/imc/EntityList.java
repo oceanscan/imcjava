@@ -39,7 +39,8 @@ public class EntityList extends IMCMessage {
 
 	public enum OP {
 		REPORT(0),
-		QUERY(1);
+		QUERY(1),
+		RELOAD(2);
 
 		protected long value;
 

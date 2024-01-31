@@ -10,7 +10,7 @@
           xsi:noNamespaceSchemaLocation="IMC.xsd"
           name="IMC"
           long-name="Inter Module Communication"
-          version="5.5.2">
+          version="5.5.3">
 
   <description>
     This document describes the communications protocol associated
@@ -331,6 +331,7 @@
       <message-type abbrev="IdleManeuver"/>
       <message-type abbrev="ImageTracking"/>
       <message-type abbrev="Elevator"/>
+      <message-type abbrev="FollowCommand"/>
       <message-type abbrev="FollowPath"/>
       <message-type abbrev="FollowPoint"/>
       <message-type abbrev="FollowReference"/>
@@ -547,8 +548,21 @@
       <description>
         Operation to perform.
       </description>
-      <value abbrev="REPORT" name="Report" id="0"/>
-      <value abbrev="QUERY" name="Query" id="1"/>
+      <value abbrev="REPORT" name="Report" id="0">
+        <description>
+          Report the entity list.
+        </description>
+      </value>
+      <value abbrev="QUERY" name="Query" id="1">
+        <description>
+          Request the entity list.
+        </description>
+      </value>
+      <value abbrev="RELOAD" name="Reload" id="2">
+        <description>
+          Reload the entity list.
+        </description>
+      </value>
     </field>
     <field name="list" abbrev="list" type="plaintext" unit="TupleList">
       <description>
@@ -856,6 +870,7 @@
   <message id="20" name="Message List" abbrev="MsgList" category="Core">
     <field name="Messages" abbrev="msgs" type="message-list"/>
   </message>
+  
 
   <!-- Simulation -->
   <message id="50" name="Simulated State" abbrev="SimulatedState" source="vehicle" category="Simulation">
@@ -11684,6 +11699,7 @@
       <description>List of possible values if param=value</description>
     </field>
   </message>
+  
   <message id="2019" name="Directional Sonar Data" abbrev="DirSonarData" source="vehicle" flags="periodic" category="Sensors">
     <description>
       This message contains the data acquired by a single sonar measurement whose angle can be controlled.
@@ -11696,6 +11712,22 @@
     <field name="Measurement" abbrev="measurement" type="message" message-type="SonarData">
       <description>
         Data acquired by the measurement.
+      </description>
+    </field>
+  </message>
+
+  <message id="2020" name="Maneuver Resumed" abbrev="ManeuverResumed" source="vehicle" category="Maneuvering">
+    <description>
+      This message is sent when a maneuver is stoped, describing how it could be resumed to completion later.
+    </description>
+    <field name="Maneuver Identifier" abbrev="man_id" type="plaintext">
+      <description>
+        ID of the maneuver that was stopped.
+      </description>
+    </field>
+    <field name="Maneuver List" abbrev="man_list" type="message-list" message-type="Maneuver">
+      <description>
+        List of maneuvers that can be executed to resume the stopped maneuver.
       </description>
     </field>
   </message>

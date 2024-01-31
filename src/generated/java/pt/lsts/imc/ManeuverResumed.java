@@ -30,20 +30,19 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message Follow Command Maneuver (496)<br/>
- *  This maneuver follows a direct command given by an external entity.<br/>
+ *  IMC Message Maneuver Resumed (2020)<br/>
+ *  This message is sent when a maneuver is stoped, describing how it could be resumed to completion later.<br/>
  */
 
-@SuppressWarnings("unchecked")
-public class FollowCommand extends Maneuver {
+public class ManeuverResumed extends IMCMessage {
 
-	public static final int ID_STATIC = 496;
+	public static final int ID_STATIC = 2020;
 
-	public FollowCommand() {
+	public ManeuverResumed() {
 		super(ID_STATIC);
 	}
 
-	public FollowCommand(IMCMessage msg) {
+	public ManeuverResumed(IMCMessage msg) {
 		super(ID_STATIC);
 		try{
 			copyFrom(msg);
@@ -53,24 +52,24 @@ public class FollowCommand extends Maneuver {
 		}
 	}
 
-	public FollowCommand(IMCDefinition defs) {
+	public ManeuverResumed(IMCDefinition defs) {
 		super(defs, ID_STATIC);
 	}
 
-	public FollowCommand(IMCDefinition defs, int type) {
+	public ManeuverResumed(IMCDefinition defs, int type) {
 		super(defs, type);
 	}
 
-	public static FollowCommand create(Object... values) {
-		FollowCommand m = new FollowCommand();
+	public static ManeuverResumed create(Object... values) {
+		ManeuverResumed m = new ManeuverResumed();
 		for (int i = 0; i < values.length-1; i+= 2)
 			m.setValue(values[i].toString(), values[i+1]);
 		return m;
 	}
 
-	public static FollowCommand clone(IMCMessage msg) throws Exception {
+	public static ManeuverResumed clone(IMCMessage msg) throws Exception {
 
-		FollowCommand m = new FollowCommand();
+		ManeuverResumed m = new ManeuverResumed();
 		if (msg == null)
 			return m;
 		if(msg.definitions != m.definitions){
@@ -85,55 +84,47 @@ public class FollowCommand extends Maneuver {
 		return m;
 	}
 
-	public FollowCommand(int control_src, short control_ent, float timeout) {
+	public ManeuverResumed(String man_id, java.util.Collection<Maneuver> man_list) {
 		super(ID_STATIC);
-		setControlSrc(control_src);
-		setControlEnt(control_ent);
-		setTimeout(timeout);
+		if (man_id != null)
+			setManId(man_id);
+		if (man_list != null)
+			setManList(man_list);
 	}
 
 	/**
-	 *  @return Controlling Source - uint16_t
+	 *  @return Maneuver Identifier - plaintext
 	 */
-	public int getControlSrc() {
-		return getInteger("control_src");
+	public String getManId() {
+		return getString("man_id");
 	}
 
 	/**
-	 *  @param control_src Controlling Source
+	 *  @param man_id Maneuver Identifier
 	 */
-	public FollowCommand setControlSrc(int control_src) {
-		values.put("control_src", control_src);
+	public ManeuverResumed setManId(String man_id) {
+		values.put("man_id", man_id);
 		return this;
 	}
 
 	/**
-	 *  @return Controlling Entity - uint8_t
+	 *  @return Maneuver List - message-list
 	 */
-	public short getControlEnt() {
-		return (short) getInteger("control_ent");
+	public java.util.Vector<Maneuver> getManList() {
+		try {
+			return getMessageList("man_list", Maneuver.class);
+		}
+		catch (Exception e) {
+			return null;
+		}
+
 	}
 
 	/**
-	 *  @param control_ent Controlling Entity
+	 *  @param man_list Maneuver List
 	 */
-	public FollowCommand setControlEnt(short control_ent) {
-		values.put("control_ent", control_ent);
-		return this;
-	}
-
-	/**
-	 *  @return Reference Update Timeout - fp32_t
-	 */
-	public double getTimeout() {
-		return getDouble("timeout");
-	}
-
-	/**
-	 *  @param timeout Reference Update Timeout
-	 */
-	public FollowCommand setTimeout(double timeout) {
-		values.put("timeout", timeout);
+	public ManeuverResumed setManList(java.util.Collection<Maneuver> man_list) {
+		values.put("man_list", man_list);
 		return this;
 	}
 
