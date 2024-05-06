@@ -24,8 +24,12 @@ dependencies {
     implementation group: 'org.apache.commons', name: 'commons-text', version: '1.2'
     implementation group: 'com.google.code.gson', name:'gson', version: '2.5'
     implementation group: 'com.fifesoft', name: 'rsyntaxtextarea', version: '2.5.8'
+    implementation 'org.apache.commons:commons-compress:1.26.1'
+    implementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.0'
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.0'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
@@ -71,6 +75,10 @@ task sender(type: JavaExec) {
     main = "pt.lsts.imc.sender.MessageSender"
 }
 
+task convert(type: JavaExec) {
+    classpath sourceSets.main.runtimeClasspath
+    main = "pt.lsts.util.ImcConverter"
+}
 
 task replay(type: JavaExec) {
     classpath sourceSets.main.runtimeClasspath
