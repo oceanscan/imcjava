@@ -705,6 +705,12 @@ public class MessageFactory {
 					return new CurrentProfileCell(defs, 1015);
 				case 1016:
 					return new ADCPBeam(defs, 1016);
+				case 1102:
+					return new FileSampleEvent(defs, 1102);
+				case 1103:
+					return new QueryGsmCredit(defs, 1103);
+				case 1104:
+					return new FileClassification(defs, 1104);
 				case 2000:
 					return new GpioState(defs, 2000);
 				case 2001:
@@ -739,6 +745,10 @@ public class MessageFactory {
 					return new ValuesIf(defs, 2018);
 				case 2019:
 					return new DirSonarData(defs, 2019);
+				case 2020:
+					return new ManeuverResumed(defs, 2020);
+				case 2021:
+					return new VersionInfo(defs, 2021);
 				default:
 					return new IMCMessage(defs);
 			}

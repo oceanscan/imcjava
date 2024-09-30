@@ -30,36 +30,19 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message Entity List (5)<br/>
- *  This message describes the names and identification numbers of<br/>
- *  all entities in the system.<br/>
+ *  IMC Message Query GSM Credit (1103)<br/>
+ *  Request to check gsm credit<br/>
  */
 
-public class EntityList extends IMCMessage {
+public class QueryGsmCredit extends IMCMessage {
 
-	public enum OP {
-		REPORT(0),
-		QUERY(1),
-		RELOAD(2);
+	public static final int ID_STATIC = 1103;
 
-		protected long value;
-
-		public long value() {
-			return value;
-		}
-
-		OP(long value) {
-			this.value = value;
-		}
-	}
-
-	public static final int ID_STATIC = 5;
-
-	public EntityList() {
+	public QueryGsmCredit() {
 		super(ID_STATIC);
 	}
 
-	public EntityList(IMCMessage msg) {
+	public QueryGsmCredit(IMCMessage msg) {
 		super(ID_STATIC);
 		try{
 			copyFrom(msg);
@@ -69,24 +52,24 @@ public class EntityList extends IMCMessage {
 		}
 	}
 
-	public EntityList(IMCDefinition defs) {
+	public QueryGsmCredit(IMCDefinition defs) {
 		super(defs, ID_STATIC);
 	}
 
-	public EntityList(IMCDefinition defs, int type) {
+	public QueryGsmCredit(IMCDefinition defs, int type) {
 		super(defs, type);
 	}
 
-	public static EntityList create(Object... values) {
-		EntityList m = new EntityList();
+	public static QueryGsmCredit create(Object... values) {
+		QueryGsmCredit m = new QueryGsmCredit();
 		for (int i = 0; i < values.length-1; i+= 2)
 			m.setValue(values[i].toString(), values[i+1]);
 		return m;
 	}
 
-	public static EntityList clone(IMCMessage msg) throws Exception {
+	public static QueryGsmCredit clone(IMCMessage msg) throws Exception {
 
-		EntityList m = new EntityList();
+		QueryGsmCredit m = new QueryGsmCredit();
 		if (msg == null)
 			return m;
 		if(msg.definitions != m.definitions){
@@ -101,76 +84,23 @@ public class EntityList extends IMCMessage {
 		return m;
 	}
 
-	public EntityList(OP op, String list) {
+	public QueryGsmCredit(int req_id) {
 		super(ID_STATIC);
-		setOp(op);
-		if (list != null)
-			setList(list);
+		setReqId(req_id);
 	}
 
 	/**
-	 *  @return operation (enumerated) - uint8_t
+	 *  @return Request ID - uint16_t
 	 */
-	public OP getOp() {
-		try {
-			OP o = OP.valueOf(getMessageType().getFieldPossibleValues("op").get(getLong("op")));
-			return o;
-		}
-		catch (Exception e) {
-			return null;
-		}
-	}
-
-	public String getOpStr() {
-		return getString("op");
-	}
-
-	public short getOpVal() {
-		return (short) getInteger("op");
+	public int getReqId() {
+		return getInteger("req_id");
 	}
 
 	/**
-	 *  @param op operation (enumerated)
+	 *  @param req_id Request ID
 	 */
-	public EntityList setOp(OP op) {
-		values.put("op", op.value());
-		return this;
-	}
-
-	/**
-	 *  @param op operation (as a String)
-	 */
-	public EntityList setOpStr(String op) {
-		setValue("op", op);
-		return this;
-	}
-
-	/**
-	 *  @param op operation (integer value)
-	 */
-	public EntityList setOpVal(short op) {
-		setValue("op", op);
-		return this;
-	}
-
-	/**
-	 *  @return list (tuplelist) - plaintext
-	 */
-	public java.util.LinkedHashMap<String, String> getList() {
-		return getTupleList("list");
-	}
-
-	/**
-	 *  @param list list (tuplelist)
-	 */
-	public EntityList setList(java.util.LinkedHashMap<String, ?> list) {
-		String val = encodeTupleList(list);
-		values.put("list", val);
-		return this;
-	}
-
-	public EntityList setList(String list) {
-		values.put("list", list);
+	public QueryGsmCredit setReqId(int req_id) {
+		values.put("req_id", req_id);
 		return this;
 	}
 

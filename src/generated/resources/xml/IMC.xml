@@ -10,7 +10,7 @@
           xsi:noNamespaceSchemaLocation="IMC.xsd"
           name="IMC"
           long-name="Inter Module Communication"
-          version="5.5.2">
+          version="5.5.4.4">
 
   <description>
     This document describes the communications protocol associated
@@ -548,8 +548,21 @@
       <description>
         Operation to perform.
       </description>
-      <value abbrev="REPORT" name="Report" id="0"/>
-      <value abbrev="QUERY" name="Query" id="1"/>
+      <value abbrev="REPORT" name="Report" id="0">
+        <description>
+          Report the entity list.
+        </description>
+      </value>
+      <value abbrev="QUERY" name="Query" id="1">
+        <description>
+          Request the entity list.
+        </description>
+      </value>
+      <value abbrev="RELOAD" name="Reload" id="2">
+        <description>
+          Reload the entity list.
+        </description>
+      </value>
     </field>
     <field name="list" abbrev="list" type="plaintext" unit="TupleList">
       <description>
@@ -3225,6 +3238,13 @@
     <description>
       Hardware pulse detection.
     </description>
+    <field name="Original Timestamp" abbrev="origin_timestamp" type="fp64_t" unit="s">
+      <description>
+        The time at which the pulse was dispatched from the original source. 
+        Represented in Universal Coordinated Time (UCT) in seconds since Jan 1, 1970 using IEEE
+        double precision floating point numbers.
+      </description>
+    </field>
   </message>
 
   <message id="278" name="Pulse Detection Control" abbrev="PulseDetectionControl" source="vehicle,ccu" category="Sensors">
@@ -11327,6 +11347,48 @@
     </field>
   </message>
 
+  <message id="1102" name="File Sample Event" abbrev="FileSampleEvent" source="vehicle" category="Networking">
+    <description>
+      Report a sample stored to disk.
+    </description>
+    <field name="File Type" abbrev="fstype" type="uint8_t" unit="Enumerated" prefix="FSTYPE">
+      <description>
+        Type of event.
+      </description>
+      <value id="0" name="Image" abbrev="IMAGE"/>
+      <value id="1" name="Audio" abbrev="AUDIO"/>
+      <value id="2" name="Sonar" abbrev="SONAR"/>
+      <value id="255" name="Other" abbrev="OTHER"/>
+    </field>
+    <field name="File name" abbrev="filename" type="plaintext">
+      <description>
+        File name this event is related to.
+      </description>
+    </field>
+  </message>
+
+  <message id="1103" name="Query GSM Credit" abbrev="QueryGsmCredit" category="Networking">
+    <description>Request to check gsm credit</description>
+    <field name="Request ID" abbrev="req_id" type="uint16_t"></field>
+  </message>
+
+  <message id="1104" name="File Classification Event" abbrev="FileClassification" source="vehicle" category="Networking">
+    <description>Signals that an object has been detected by any of the vehicle's sensors</description>
+    <field name="Original Filepath" abbrev="original_filepath" type="plaintext"/>
+    <field name="Resized Filepath" abbrev="resized_filepath" type="plaintext"/>
+    <field name="Classification Prediction" abbrev="class_prediction" type="plaintext"/>
+    <field name="Confidence Value" abbrev="confidence" type="uint8_t" max="100"/>
+    <field name="File Type" abbrev="fstype" type="uint8_t" unit="Enumerated" prefix="FSTYPE">
+      <description>
+        Type of event.
+      </description>
+      <value id="0" name="Image" abbrev="IMAGE"/>
+      <value id="1" name="Audio" abbrev="AUDIO"/>
+      <value id="2" name="Sonar" abbrev="SONAR"/>
+      <value id="255" name="Other" abbrev="OTHER"/>
+    </field>
+  </message>
+
   <message id="2000" name="GPIO State" abbrev="GpioState" source="vehicle" category="Actuation">
     <description>
       Current state of a GPIO.
@@ -11686,6 +11748,7 @@
       <description>List of possible values if param=value</description>
     </field>
   </message>
+  
   <message id="2019" name="Directional Sonar Data" abbrev="DirSonarData" source="vehicle" flags="periodic" category="Sensors">
     <description>
       This message contains the data acquired by a single sonar measurement whose angle can be controlled.
@@ -11698,6 +11761,53 @@
     <field name="Measurement" abbrev="measurement" type="message" message-type="SonarData">
       <description>
         Data acquired by the measurement.
+      </description>
+    </field>
+  </message>
+
+  <message id="2020" name="Maneuver Resumed" abbrev="ManeuverResumed" source="vehicle" category="Maneuvering">
+    <description>
+      This message is sent when a maneuver is stoped, describing how it could be resumed to completion later.
+    </description>
+    <field name="Maneuver Identifier" abbrev="man_id" type="plaintext">
+      <description>
+        ID of the maneuver that was stopped.
+      </description>
+    </field>
+    <field name="Maneuver List" abbrev="man_list" type="message-list" message-type="Maneuver">
+      <description>
+        List of maneuvers that can be executed to resume the stopped maneuver.
+      </description>
+    </field>
+  </message>
+
+  <message id="2021" name="Version Info" abbrev="VersionInfo" source="vehicle" category="Core">
+    <description>
+      This message is used to query / report version information related to an entity.
+    </description>
+    <field name="Operation" abbrev="op" type="uint8_t" unit="Enumerated" prefix="OP">
+      <description>
+        Operation to perform.
+      </description>
+      <value abbrev="REPLY" name="Reply" id="0">
+        <description>
+          Report the entity list.
+        </description>
+      </value>
+      <value abbrev="QUERY" name="Query" id="1">
+        <description>
+          Request the entity list.
+        </description>
+      </value>     
+    </field>
+    <field name="Version" abbrev="version" type="plaintext" >
+      <description>
+        Version of the entity.
+      </description>
+    </field>
+    <field name="Description" abbrev="description" type="plaintext" >
+      <description>
+        Description of the entity.
       </description>
     </field>
   </message>

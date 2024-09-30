@@ -10,7 +10,7 @@
           xsi:noNamespaceSchemaLocation="IMC.xsd"
           name="IMC"
           long-name="Inter Module Communication"
-          version="5.5.2">
+          version="5.5.4.4">
 
   <description>
     This document describes the communications protocol associated
@@ -331,6 +331,7 @@
       <message-type abbrev="IdleManeuver"/>
       <message-type abbrev="ImageTracking"/>
       <message-type abbrev="Elevator"/>
+      <message-type abbrev="FollowCommand"/>
       <message-type abbrev="FollowPath"/>
       <message-type abbrev="FollowPoint"/>
       <message-type abbrev="FollowReference"/>
@@ -456,27 +457,6 @@
     </field>
   </footer>
 
-  <categories>
-    <category name="Core"/>
-    <category name="Acoustic Communication"/>
-    <category name="Acoustic Networking"/>
-    <category name="Actuation"/>
-    <category name="Autonomy"/>
-    <category name="CCU"/>
-    <category name="Development"/>
-    <category name="Guidance"/>
-    <category name="Maneuvering"/>
-    <category name="Navigation"/>
-    <category name="Networking"/>
-    <category name="Plan Supervision"/>
-    <category name="Sensors"/>
-    <category name="Simulation"/>
-    <category name="Storage"/>
-    <category name="Vehicle Supervision"/>
-    <category name="Vision"/>
-    <category name="Custom"/>
-    <category name="External"/>
-  </categories>
 
   <!-- Core -->
   <message id="1" name="Entity State" abbrev="EntityState" source="vehicle" category="Core">
@@ -568,8 +548,21 @@
       <description>
         Operation to perform.
       </description>
-      <value abbrev="REPORT" name="Report" id="0"/>
-      <value abbrev="QUERY" name="Query" id="1"/>
+      <value abbrev="REPORT" name="Report" id="0">
+        <description>
+          Report the entity list.
+        </description>
+      </value>
+      <value abbrev="QUERY" name="Query" id="1">
+        <description>
+          Request the entity list.
+        </description>
+      </value>
+      <value abbrev="RELOAD" name="Reload" id="2">
+        <description>
+          Reload the entity list.
+        </description>
+      </value>
     </field>
     <field name="list" abbrev="list" type="plaintext" unit="TupleList">
       <description>
@@ -877,6 +870,7 @@
   <message id="20" name="Message List" abbrev="MsgList" category="Core">
     <field name="Messages" abbrev="msgs" type="message-list"/>
   </message>
+  
 
   <!-- Simulation -->
   <message id="50" name="Simulated State" abbrev="SimulatedState" source="vehicle" category="Simulation">
@@ -2079,6 +2073,102 @@
     </field>
   </message>
 
+  <message id="204" name="LBL Beacon Configuration Extended" abbrev="LblBeaconExtended" source="ccu,vehicle" category="Acoustic Communication">
+    <description>
+      Position and configuration of an LBL transponder (beacon). The LBL transponder may be fixed or mobile, depending on TTL value.
+    </description>
+    <field name="Beacon Name" abbrev="beacon" type="plaintext">
+      <description>
+        Name/Label of the acoustic transponder.
+      </description>
+    </field>
+    <field name="Latitude WGS-84" abbrev="lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+      <description>
+        WGS-84 Latitude coordinate.
+      </description>
+    </field>
+    <field name="Longitude WGS-84" abbrev="lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        WGS-84 Longitude coordinate.
+      </description>
+    </field>
+    <field name="Depth" abbrev="depth" type="fp32_t" unit="m">
+      <description>
+        The beacon's depth.
+      </description>
+    </field>
+    <field name="Interrogation channel" abbrev="query_channel" type="uint8_t">
+      <description>
+        Interrogation channel.
+      </description>
+    </field>
+    <field name="Reply channel" abbrev="reply_channel" type="uint8_t">
+      <description>
+        Reply channel.
+      </description>
+    </field>
+    <field name="Transponder delay" abbrev="transponder_delay" type="uint8_t" unit="ms">
+      <description>
+        Transponder delay.
+      </description>
+    </field>
+    <field name="Configuration Timestamp" abbrev="ctime" type="fp64_t" unit="s">
+      <description>
+        Epoch time of this beacon configuration. For *ttl* seconds after this instant, position is estimated 
+        to vary according to *vx*, *vy* and *vz*.
+      </description>
+    </field>
+    <field name="Time to live" abbrev="ttl" type="uint16_t" unit="s">
+      <description>
+        Defines if LBL Beacon is fixed or mobile. If set to 0, LBL Beacon is fixed. Otherwise, it's the time, 
+        in seconds, that the current position is considered valid.
+      </description>
+    </field>
+    <field name="Ground Velocity X (North)" abbrev="vx" type="fp32_t" unit="m/s">
+      <description>
+        For mobile LBL Beacons. Ground Velocity xx axis velocity component.
+      </description>
+    </field>
+    <field name="Ground Velocity Y (East)" abbrev="vy" type="fp32_t" unit="m/s">
+      <description>
+        For mobile LBL Beacons. Ground Velocity yy axis velocity component.
+      </description>
+    </field>
+    <field name="Ground Velocity Z (Down)" abbrev="vz" type="fp32_t" unit="m/s">
+      <description>
+        For mobile LBL Beacons. Ground Velocity zz axis velocity component.
+      </description>
+    </field>
+  </message>
+
+  <message id="205" name="LBL Configuration Extended" abbrev="LblConfigExtended" source="ccu,vehicle" category="Acoustic Communication">
+    <description>
+      Long Base Line configuration.
+    </description>
+    <field name="Operation" abbrev="op" type="uint8_t" unit="Enumerated" prefix="OP">
+      <description>
+        Used to define the type of the operation this message holds.
+      </description>
+      <value abbrev="SET_CFG" name="Set LBL Configuration" id="0">
+        <description>Set the beacons configuration aboard the vehicle.</description>
+      </value>
+      <value abbrev="GET_CFG" name="Retrieve LBL Configuration" id="1">
+        <description>Request the vehicle to send its current beacons configuration.</description>
+      </value>
+      <value abbrev="CUR_CFG" name="Reply to a GET command" id="2">
+        <description>Reply from vehicle with its current beacons configuration.</description>
+      </value>
+      <value abbrev="POS_CFG" name="Update LBL Configuration (beacons position)" id="3">
+        <description>Update the beacons position aboard the vehicle.</description>
+      </value>
+    </field>
+    <field name="Beacons" abbrev="beacons" type="message-list" message-type="LblBeaconExtended">
+      <description>
+        A list of LBL Beacon Configuration Extended messages.
+      </description>
+    </field>
+  </message>
+
   <message id="206" name="Acoustic Message" abbrev="AcousticMessage" source="vehicle" category="Acoustic Communication">
     <description>
       Send an acoustic message.
@@ -3148,6 +3238,13 @@
     <description>
       Hardware pulse detection.
     </description>
+    <field name="Original Timestamp" abbrev="origin_timestamp" type="fp64_t" unit="s">
+      <description>
+        The time at which the pulse was dispatched from the original source. 
+        Represented in Universal Coordinated Time (UCT) in seconds since Jan 1, 1970 using IEEE
+        double precision floating point numbers.
+      </description>
+    </field>
   </message>
 
   <message id="278" name="Pulse Detection Control" abbrev="PulseDetectionControl" source="vehicle,ccu" category="Sensors">
@@ -11250,6 +11347,48 @@
     </field>
   </message>
 
+  <message id="1102" name="File Sample Event" abbrev="FileSampleEvent" source="vehicle" category="Networking">
+    <description>
+      Report a sample stored to disk.
+    </description>
+    <field name="File Type" abbrev="fstype" type="uint8_t" unit="Enumerated" prefix="FSTYPE">
+      <description>
+        Type of event.
+      </description>
+      <value id="0" name="Image" abbrev="IMAGE"/>
+      <value id="1" name="Audio" abbrev="AUDIO"/>
+      <value id="2" name="Sonar" abbrev="SONAR"/>
+      <value id="255" name="Other" abbrev="OTHER"/>
+    </field>
+    <field name="File name" abbrev="filename" type="plaintext">
+      <description>
+        File name this event is related to.
+      </description>
+    </field>
+  </message>
+
+  <message id="1103" name="Query GSM Credit" abbrev="QueryGsmCredit" category="Networking">
+    <description>Request to check gsm credit</description>
+    <field name="Request ID" abbrev="req_id" type="uint16_t"></field>
+  </message>
+
+  <message id="1104" name="File Classification Event" abbrev="FileClassification" source="vehicle" category="Networking">
+    <description>Signals that an object has been detected by any of the vehicle's sensors</description>
+    <field name="Original Filepath" abbrev="original_filepath" type="plaintext"/>
+    <field name="Resized Filepath" abbrev="resized_filepath" type="plaintext"/>
+    <field name="Classification Prediction" abbrev="class_prediction" type="plaintext"/>
+    <field name="Confidence Value" abbrev="confidence" type="uint8_t" max="100"/>
+    <field name="File Type" abbrev="fstype" type="uint8_t" unit="Enumerated" prefix="FSTYPE">
+      <description>
+        Type of event.
+      </description>
+      <value id="0" name="Image" abbrev="IMAGE"/>
+      <value id="1" name="Audio" abbrev="AUDIO"/>
+      <value id="2" name="Sonar" abbrev="SONAR"/>
+      <value id="255" name="Other" abbrev="OTHER"/>
+    </field>
+  </message>
+
   <message id="2000" name="GPIO State" abbrev="GpioState" source="vehicle" category="Actuation">
     <description>
       Current state of a GPIO.
@@ -11359,92 +11498,6 @@
       <description>
         An inline plan specification to be used both in requests and replies.
       </description>
-    </field>
-  </message>
-
-  <message id="2008" name="Typed Entity Parameter" abbrev="TypedEntityParameter" source="vehicle" category="CCU">
-    <description>
-      Entity parameter with all the data that defines an entity parameter.
-    </description>
-    <field name="Entity Name" abbrev="name" type="plaintext">
-      <description>
-        Name of the parameter.
-      </description>
-    </field>
-    <field name="Type" abbrev="type" type="uint8_t" unit="Enumerated" prefix="TYPE">
-      <value id="1" name="Boolean Domain" abbrev="BOOL" />
-      <value id="2" name="Integer Domain" abbrev="INT" />
-      <value id="3" name="Float Domain" abbrev="FLOAT" />
-      <value id="4" name="String Domain" abbrev="STRING" />
-      <value id="5" name="List of Booleans" abbrev="LIST_BOOL"/>
-      <value id="6" name="List of Integers" abbrev="LIST_INT"/>
-      <value id="7" name="List of Floats" abbrev="LIST_FLOAT"/>
-      <value id="8" name="List of Strings" abbrev="LIST_STRING"/>
-    </field>
-    <field name="Default Value" abbrev="default_value" type="plaintext">
-      <description>
-        Default value of the parameter.
-      </description>
-    </field>
-    <field name="Units" abbrev="units" type="plaintext">
-      <description>
-        The units of the field, if applicable
-      </description>
-    </field>
-    <field name="Description" abbrev="description" type="plaintext">
-      <description>
-        Description of the parameter
-      </description>
-    </field>
-    <field name="Min Value" abbrev="min_value" type="fp32_t">
-      <description>
-        Optional. Min value of the parameter
-      </description>
-    </field>
-    <field name="Max Value" abbrev="max_value" type="fp32_t">
-      <description>
-        Optional. Max value of the parameter
-      </description>
-    </field>
-    <field name="List Min Size" abbrev="list_min_size" type="uint32_t">
-      <description>
-        When the parameter is a list, list_min_size indicates the minimum size of the list
-      </description>
-    </field>
-    <field name="List Max Size" abbrev="list_max_size" type="uint32_t">
-      <description>
-        When the parameter is a list, list_max_size indicates the maximum size of the list
-      </description>
-    </field>
-    <field name="Visibility" abbrev="visibility" type="uint8_t" unit="Enumerated" prefix="VISIBILITY">
-      <value id="0" name="User" abbrev="USER" />
-      <value id="1" name="Developer" abbrev="DEVELOPER" />
-    </field>
-    <field name="Scope" abbrev="scope" type="uint8_t" unit="Enumerated" prefix="SCOPE">
-      <value id="0" name="Global" abbrev="GLOBAL" />
-      <value id="1" name="Idle" abbrev="IDLE" />
-      <value id="2" name="Plan" abbrev="PLAN" />
-      <value id="3" name="Maneuver" abbrev="MANEUVER" />
-    </field>
-  </message>
-
-  <message id="2009" name="Typed Entity Parameters" abbrev="TypedEntityParameters" source="vehicle" category="CCU">
-    <description>This message can be used to query/report the entities and respective parameters in the system</description>
-    <field name="Operation" abbrev="op" type="uint8_t" unit="Enumerated" prefix="OP">
-      <description>
-        Operation to perform.
-      </description>
-      <value id="0" name="Request" abbrev="REQUEST" />
-      <value id="1" name="Reply" abbrev="REPLY" />
-    </field>
-    <field name="Request identitier" abbrev="request_id" type="uint32_t">
-      <description>Echoes the request_id in the request</description>
-    </field>
-    <field name="Entity Name" abbrev="entity_name" type="plaintext">
-      <description>Entity Label of the task that's replying to the request</description>
-    </field>
-    <field name="Parameters" abbrev="parameters" type="message-list" message-type="TypedEntityParameter">
-      <description>Contains an optionally defined List of TypedEntityParameter as a response to a TypedEntityParamaters Request.</description>
     </field>
   </message>
 
@@ -11695,6 +11748,7 @@
       <description>List of possible values if param=value</description>
     </field>
   </message>
+  
   <message id="2019" name="Directional Sonar Data" abbrev="DirSonarData" source="vehicle" flags="periodic" category="Sensors">
     <description>
       This message contains the data acquired by a single sonar measurement whose angle can be controlled.
@@ -11707,6 +11761,53 @@
     <field name="Measurement" abbrev="measurement" type="message" message-type="SonarData">
       <description>
         Data acquired by the measurement.
+      </description>
+    </field>
+  </message>
+
+  <message id="2020" name="Maneuver Resumed" abbrev="ManeuverResumed" source="vehicle" category="Maneuvering">
+    <description>
+      This message is sent when a maneuver is stoped, describing how it could be resumed to completion later.
+    </description>
+    <field name="Maneuver Identifier" abbrev="man_id" type="plaintext">
+      <description>
+        ID of the maneuver that was stopped.
+      </description>
+    </field>
+    <field name="Maneuver List" abbrev="man_list" type="message-list" message-type="Maneuver">
+      <description>
+        List of maneuvers that can be executed to resume the stopped maneuver.
+      </description>
+    </field>
+  </message>
+
+  <message id="2021" name="Version Info" abbrev="VersionInfo" source="vehicle" category="Core">
+    <description>
+      This message is used to query / report version information related to an entity.
+    </description>
+    <field name="Operation" abbrev="op" type="uint8_t" unit="Enumerated" prefix="OP">
+      <description>
+        Operation to perform.
+      </description>
+      <value abbrev="REPLY" name="Reply" id="0">
+        <description>
+          Report the entity list.
+        </description>
+      </value>
+      <value abbrev="QUERY" name="Query" id="1">
+        <description>
+          Request the entity list.
+        </description>
+      </value>     
+    </field>
+    <field name="Version" abbrev="version" type="plaintext" >
+      <description>
+        Version of the entity.
+      </description>
+    </field>
+    <field name="Description" abbrev="description" type="plaintext" >
+      <description>
+        Description of the entity.
       </description>
     </field>
   </message>

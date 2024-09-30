@@ -30,17 +30,15 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message Entity List (5)<br/>
- *  This message describes the names and identification numbers of<br/>
- *  all entities in the system.<br/>
+ *  IMC Message Version Info (2021)<br/>
+ *  This message is used to query / report version information related to an entity.<br/>
  */
 
-public class EntityList extends IMCMessage {
+public class VersionInfo extends IMCMessage {
 
 	public enum OP {
-		REPORT(0),
-		QUERY(1),
-		RELOAD(2);
+		REPLY(0),
+		QUERY(1);
 
 		protected long value;
 
@@ -53,13 +51,13 @@ public class EntityList extends IMCMessage {
 		}
 	}
 
-	public static final int ID_STATIC = 5;
+	public static final int ID_STATIC = 2021;
 
-	public EntityList() {
+	public VersionInfo() {
 		super(ID_STATIC);
 	}
 
-	public EntityList(IMCMessage msg) {
+	public VersionInfo(IMCMessage msg) {
 		super(ID_STATIC);
 		try{
 			copyFrom(msg);
@@ -69,24 +67,24 @@ public class EntityList extends IMCMessage {
 		}
 	}
 
-	public EntityList(IMCDefinition defs) {
+	public VersionInfo(IMCDefinition defs) {
 		super(defs, ID_STATIC);
 	}
 
-	public EntityList(IMCDefinition defs, int type) {
+	public VersionInfo(IMCDefinition defs, int type) {
 		super(defs, type);
 	}
 
-	public static EntityList create(Object... values) {
-		EntityList m = new EntityList();
+	public static VersionInfo create(Object... values) {
+		VersionInfo m = new VersionInfo();
 		for (int i = 0; i < values.length-1; i+= 2)
 			m.setValue(values[i].toString(), values[i+1]);
 		return m;
 	}
 
-	public static EntityList clone(IMCMessage msg) throws Exception {
+	public static VersionInfo clone(IMCMessage msg) throws Exception {
 
-		EntityList m = new EntityList();
+		VersionInfo m = new VersionInfo();
 		if (msg == null)
 			return m;
 		if(msg.definitions != m.definitions){
@@ -101,15 +99,17 @@ public class EntityList extends IMCMessage {
 		return m;
 	}
 
-	public EntityList(OP op, String list) {
+	public VersionInfo(OP op, String version, String description) {
 		super(ID_STATIC);
 		setOp(op);
-		if (list != null)
-			setList(list);
+		if (version != null)
+			setVersion(version);
+		if (description != null)
+			setDescription(description);
 	}
 
 	/**
-	 *  @return operation (enumerated) - uint8_t
+	 *  @return Operation (enumerated) - uint8_t
 	 */
 	public OP getOp() {
 		try {
@@ -130,47 +130,56 @@ public class EntityList extends IMCMessage {
 	}
 
 	/**
-	 *  @param op operation (enumerated)
+	 *  @param op Operation (enumerated)
 	 */
-	public EntityList setOp(OP op) {
+	public VersionInfo setOp(OP op) {
 		values.put("op", op.value());
 		return this;
 	}
 
 	/**
-	 *  @param op operation (as a String)
+	 *  @param op Operation (as a String)
 	 */
-	public EntityList setOpStr(String op) {
+	public VersionInfo setOpStr(String op) {
 		setValue("op", op);
 		return this;
 	}
 
 	/**
-	 *  @param op operation (integer value)
+	 *  @param op Operation (integer value)
 	 */
-	public EntityList setOpVal(short op) {
+	public VersionInfo setOpVal(short op) {
 		setValue("op", op);
 		return this;
 	}
 
 	/**
-	 *  @return list (tuplelist) - plaintext
+	 *  @return Version - plaintext
 	 */
-	public java.util.LinkedHashMap<String, String> getList() {
-		return getTupleList("list");
+	public String getVersion() {
+		return getString("version");
 	}
 
 	/**
-	 *  @param list list (tuplelist)
+	 *  @param version Version
 	 */
-	public EntityList setList(java.util.LinkedHashMap<String, ?> list) {
-		String val = encodeTupleList(list);
-		values.put("list", val);
+	public VersionInfo setVersion(String version) {
+		values.put("version", version);
 		return this;
 	}
 
-	public EntityList setList(String list) {
-		values.put("list", list);
+	/**
+	 *  @return Description - plaintext
+	 */
+	public String getDescription() {
+		return getString("description");
+	}
+
+	/**
+	 *  @param description Description
+	 */
+	public VersionInfo setDescription(String description) {
+		values.put("description", description);
 		return this;
 	}
 

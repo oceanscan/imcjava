@@ -30,36 +30,19 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message Entity List (5)<br/>
- *  This message describes the names and identification numbers of<br/>
- *  all entities in the system.<br/>
+ *  IMC Message Maneuver Resumed (2020)<br/>
+ *  This message is sent when a maneuver is stoped, describing how it could be resumed to completion later.<br/>
  */
 
-public class EntityList extends IMCMessage {
+public class ManeuverResumed extends IMCMessage {
 
-	public enum OP {
-		REPORT(0),
-		QUERY(1),
-		RELOAD(2);
+	public static final int ID_STATIC = 2020;
 
-		protected long value;
-
-		public long value() {
-			return value;
-		}
-
-		OP(long value) {
-			this.value = value;
-		}
-	}
-
-	public static final int ID_STATIC = 5;
-
-	public EntityList() {
+	public ManeuverResumed() {
 		super(ID_STATIC);
 	}
 
-	public EntityList(IMCMessage msg) {
+	public ManeuverResumed(IMCMessage msg) {
 		super(ID_STATIC);
 		try{
 			copyFrom(msg);
@@ -69,24 +52,24 @@ public class EntityList extends IMCMessage {
 		}
 	}
 
-	public EntityList(IMCDefinition defs) {
+	public ManeuverResumed(IMCDefinition defs) {
 		super(defs, ID_STATIC);
 	}
 
-	public EntityList(IMCDefinition defs, int type) {
+	public ManeuverResumed(IMCDefinition defs, int type) {
 		super(defs, type);
 	}
 
-	public static EntityList create(Object... values) {
-		EntityList m = new EntityList();
+	public static ManeuverResumed create(Object... values) {
+		ManeuverResumed m = new ManeuverResumed();
 		for (int i = 0; i < values.length-1; i+= 2)
 			m.setValue(values[i].toString(), values[i+1]);
 		return m;
 	}
 
-	public static EntityList clone(IMCMessage msg) throws Exception {
+	public static ManeuverResumed clone(IMCMessage msg) throws Exception {
 
-		EntityList m = new EntityList();
+		ManeuverResumed m = new ManeuverResumed();
 		if (msg == null)
 			return m;
 		if(msg.definitions != m.definitions){
@@ -101,76 +84,47 @@ public class EntityList extends IMCMessage {
 		return m;
 	}
 
-	public EntityList(OP op, String list) {
+	public ManeuverResumed(String man_id, java.util.Collection<Maneuver> man_list) {
 		super(ID_STATIC);
-		setOp(op);
-		if (list != null)
-			setList(list);
+		if (man_id != null)
+			setManId(man_id);
+		if (man_list != null)
+			setManList(man_list);
 	}
 
 	/**
-	 *  @return operation (enumerated) - uint8_t
+	 *  @return Maneuver Identifier - plaintext
 	 */
-	public OP getOp() {
+	public String getManId() {
+		return getString("man_id");
+	}
+
+	/**
+	 *  @param man_id Maneuver Identifier
+	 */
+	public ManeuverResumed setManId(String man_id) {
+		values.put("man_id", man_id);
+		return this;
+	}
+
+	/**
+	 *  @return Maneuver List - message-list
+	 */
+	public java.util.Vector<Maneuver> getManList() {
 		try {
-			OP o = OP.valueOf(getMessageType().getFieldPossibleValues("op").get(getLong("op")));
-			return o;
+			return getMessageList("man_list", Maneuver.class);
 		}
 		catch (Exception e) {
 			return null;
 		}
-	}
 
-	public String getOpStr() {
-		return getString("op");
-	}
-
-	public short getOpVal() {
-		return (short) getInteger("op");
 	}
 
 	/**
-	 *  @param op operation (enumerated)
+	 *  @param man_list Maneuver List
 	 */
-	public EntityList setOp(OP op) {
-		values.put("op", op.value());
-		return this;
-	}
-
-	/**
-	 *  @param op operation (as a String)
-	 */
-	public EntityList setOpStr(String op) {
-		setValue("op", op);
-		return this;
-	}
-
-	/**
-	 *  @param op operation (integer value)
-	 */
-	public EntityList setOpVal(short op) {
-		setValue("op", op);
-		return this;
-	}
-
-	/**
-	 *  @return list (tuplelist) - plaintext
-	 */
-	public java.util.LinkedHashMap<String, String> getList() {
-		return getTupleList("list");
-	}
-
-	/**
-	 *  @param list list (tuplelist)
-	 */
-	public EntityList setList(java.util.LinkedHashMap<String, ?> list) {
-		String val = encodeTupleList(list);
-		values.put("list", val);
-		return this;
-	}
-
-	public EntityList setList(String list) {
-		values.put("list", list);
+	public ManeuverResumed setManList(java.util.Collection<Maneuver> man_list) {
+		values.put("man_list", man_list);
 		return this;
 	}
 

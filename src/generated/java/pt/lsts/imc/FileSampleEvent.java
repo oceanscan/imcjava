@@ -30,17 +30,17 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message Entity List (5)<br/>
- *  This message describes the names and identification numbers of<br/>
- *  all entities in the system.<br/>
+ *  IMC Message File Sample Event (1102)<br/>
+ *  Report a sample stored to disk.<br/>
  */
 
-public class EntityList extends IMCMessage {
+public class FileSampleEvent extends IMCMessage {
 
-	public enum OP {
-		REPORT(0),
-		QUERY(1),
-		RELOAD(2);
+	public enum FSTYPE {
+		IMAGE(0),
+		AUDIO(1),
+		SONAR(2),
+		OTHER(255);
 
 		protected long value;
 
@@ -48,18 +48,18 @@ public class EntityList extends IMCMessage {
 			return value;
 		}
 
-		OP(long value) {
+		FSTYPE(long value) {
 			this.value = value;
 		}
 	}
 
-	public static final int ID_STATIC = 5;
+	public static final int ID_STATIC = 1102;
 
-	public EntityList() {
+	public FileSampleEvent() {
 		super(ID_STATIC);
 	}
 
-	public EntityList(IMCMessage msg) {
+	public FileSampleEvent(IMCMessage msg) {
 		super(ID_STATIC);
 		try{
 			copyFrom(msg);
@@ -69,24 +69,24 @@ public class EntityList extends IMCMessage {
 		}
 	}
 
-	public EntityList(IMCDefinition defs) {
+	public FileSampleEvent(IMCDefinition defs) {
 		super(defs, ID_STATIC);
 	}
 
-	public EntityList(IMCDefinition defs, int type) {
+	public FileSampleEvent(IMCDefinition defs, int type) {
 		super(defs, type);
 	}
 
-	public static EntityList create(Object... values) {
-		EntityList m = new EntityList();
+	public static FileSampleEvent create(Object... values) {
+		FileSampleEvent m = new FileSampleEvent();
 		for (int i = 0; i < values.length-1; i+= 2)
 			m.setValue(values[i].toString(), values[i+1]);
 		return m;
 	}
 
-	public static EntityList clone(IMCMessage msg) throws Exception {
+	public static FileSampleEvent clone(IMCMessage msg) throws Exception {
 
-		EntityList m = new EntityList();
+		FileSampleEvent m = new FileSampleEvent();
 		if (msg == null)
 			return m;
 		if(msg.definitions != m.definitions){
@@ -101,19 +101,19 @@ public class EntityList extends IMCMessage {
 		return m;
 	}
 
-	public EntityList(OP op, String list) {
+	public FileSampleEvent(FSTYPE fstype, String filename) {
 		super(ID_STATIC);
-		setOp(op);
-		if (list != null)
-			setList(list);
+		setFstype(fstype);
+		if (filename != null)
+			setFilename(filename);
 	}
 
 	/**
-	 *  @return operation (enumerated) - uint8_t
+	 *  @return File Type (enumerated) - uint8_t
 	 */
-	public OP getOp() {
+	public FSTYPE getFstype() {
 		try {
-			OP o = OP.valueOf(getMessageType().getFieldPossibleValues("op").get(getLong("op")));
+			FSTYPE o = FSTYPE.valueOf(getMessageType().getFieldPossibleValues("fstype").get(getLong("fstype")));
 			return o;
 		}
 		catch (Exception e) {
@@ -121,56 +121,50 @@ public class EntityList extends IMCMessage {
 		}
 	}
 
-	public String getOpStr() {
-		return getString("op");
+	public String getFstypeStr() {
+		return getString("fstype");
 	}
 
-	public short getOpVal() {
-		return (short) getInteger("op");
+	public short getFstypeVal() {
+		return (short) getInteger("fstype");
 	}
 
 	/**
-	 *  @param op operation (enumerated)
+	 *  @param fstype File Type (enumerated)
 	 */
-	public EntityList setOp(OP op) {
-		values.put("op", op.value());
+	public FileSampleEvent setFstype(FSTYPE fstype) {
+		values.put("fstype", fstype.value());
 		return this;
 	}
 
 	/**
-	 *  @param op operation (as a String)
+	 *  @param fstype File Type (as a String)
 	 */
-	public EntityList setOpStr(String op) {
-		setValue("op", op);
+	public FileSampleEvent setFstypeStr(String fstype) {
+		setValue("fstype", fstype);
 		return this;
 	}
 
 	/**
-	 *  @param op operation (integer value)
+	 *  @param fstype File Type (integer value)
 	 */
-	public EntityList setOpVal(short op) {
-		setValue("op", op);
+	public FileSampleEvent setFstypeVal(short fstype) {
+		setValue("fstype", fstype);
 		return this;
 	}
 
 	/**
-	 *  @return list (tuplelist) - plaintext
+	 *  @return File name - plaintext
 	 */
-	public java.util.LinkedHashMap<String, String> getList() {
-		return getTupleList("list");
+	public String getFilename() {
+		return getString("filename");
 	}
 
 	/**
-	 *  @param list list (tuplelist)
+	 *  @param filename File name
 	 */
-	public EntityList setList(java.util.LinkedHashMap<String, ?> list) {
-		String val = encodeTupleList(list);
-		values.put("list", val);
-		return this;
-	}
-
-	public EntityList setList(String list) {
-		values.put("list", list);
+	public FileSampleEvent setFilename(String filename) {
+		values.put("filename", filename);
 		return this;
 	}
 
