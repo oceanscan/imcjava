@@ -37,15 +37,18 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.TimeZone;
 import java.util.Vector;
@@ -86,7 +89,7 @@ public class LsfIndex {
 	protected LinkedHashMap<Long, MappedByteBuffer> buffers = new LinkedHashMap<Long, MappedByteBuffer>();
 
 	protected double startTime, curTime, endTime;
-	protected MappedByteBuffer index;
+	protected List<MappedByteBuffer> indexBuffers = new ArrayList<>();
 	protected long indexSize;
 	protected int numMessages;
 	protected int generatorSrcId;
@@ -100,12 +103,14 @@ public class LsfIndex {
 	protected int HEADER_SIZE = 12;
 	protected int ENTRY_SIZE = 14;
 	protected int OFFSET_OF_TIME = 0, OFFSET_OF_MGID = 4, OFFSET_OF_POS = 6;
-	
+
 	// cache indexes for first and last occurrence of messages
 	private LinkedHashMap<Integer, Integer> firstMessagesOfType = new LinkedHashMap<Integer, Integer>();
 	private LinkedHashMap<Integer, Integer> lastMessagesOfType = new LinkedHashMap<Integer, Integer>();
-
-	/*
+	
+	private int chunkSize;
+	
+		/*
 	 * [Header]: 12 bytes 0 - 'I' 1 - 'D' 2 - 'X' 3 - '1' 4 - start timestamp
 	 * (double)
 	 * 
@@ -249,23 +254,39 @@ public class LsfIndex {
 
 		load(lsfFile, defs);
 	}
+	
+		protected void loadIndex() throws Exception {
+			checkIndex();
+			new File(lsfFile.getParent(), "mra").mkdirs();
+	
+			indexInputStream = new FileInputStream(new File(lsfFile.getParent(),
+					FILENAME));
+			indexSize = new File(lsfFile.getParent(), FILENAME).length();
+			indexChannel = indexInputStream.getChannel();
+	
+			// Read the header directly from the file
+			byte[] header = new byte[HEADER_SIZE];
+			indexInputStream.read(header);
+			ByteBuffer headerBuffer = ByteBuffer.wrap(header);
+			if (headerBuffer.get() != 'I' || headerBuffer.get() != 'D' || headerBuffer.get() != 'X' || headerBuffer.get() != '1') {
+				throw new Exception("Index buffer is not valid. Please regenerate the index.");
+			}
+			curTime = startTime = headerBuffer.getDouble();
+	
+			long remainingSize = indexSize - HEADER_SIZE;
+			long position = HEADER_SIZE;
+			chunkSize = Integer.MAX_VALUE - (Integer.MAX_VALUE % ENTRY_SIZE);
+			numMessages = 0;
 
-	protected void loadIndex() throws Exception {
-		checkIndex();
-		new File(lsfFile.getParent(), "mra").mkdirs();
-
-		indexInputStream = new FileInputStream(new File(lsfFile.getParent(),
-				FILENAME));
-		indexSize = new File(lsfFile.getParent(), FILENAME).length();
-		indexChannel = indexInputStream.getChannel();
-		index = indexChannel.map(MapMode.READ_ONLY, 0, indexSize);
-		if (index.get() != 'I' || index.get() != 'D' || index.get() != 'X'
-				|| index.get() != '1') {
-			throw new Exception(
-					"The index file is not valid. Please regenerate the index.");
+		
+		while (remainingSize > 0) {
+			long mapSize = Math.min(chunkSize, remainingSize);
+			indexBuffers.add(indexChannel.map(MapMode.READ_ONLY, position, mapSize));
+			position += mapSize;
+			remainingSize -= mapSize;
+			numMessages += mapSize / ENTRY_SIZE;
 		}
-		curTime = startTime = index.getDouble();
-		numMessages = (int) indexSize / ENTRY_SIZE;
+		
 		endTime = getEndTime();
 		generatorSrcId = getMessage(0).getHeader().getInteger("src");
 	}
@@ -291,6 +312,36 @@ public class LsfIndex {
 		return arr;
 	}
 
+	public byte getIndexByte(long position) {
+		int bufferIndex = (int) (position / chunkSize);
+		int bufferPosition = (int) (position % chunkSize);
+		return indexBuffers.get(bufferIndex).get(bufferPosition);
+	}
+
+	public short getIndexShort(long position) {
+		int bufferIndex = (int) (position / chunkSize);
+		int bufferPosition = (int) (position % chunkSize);
+		return indexBuffers.get(bufferIndex).getShort(bufferPosition);
+	}
+
+	public int getIndexInt(long position) {
+		int bufferIndex = (int) (position / chunkSize);
+		int bufferPosition = (int) (position % chunkSize);
+		return indexBuffers.get(bufferIndex).getInt(bufferPosition);
+	}
+
+	public long getIndexLong(long position) {
+		int bufferIndex = (int) (position / chunkSize);
+		int bufferPosition = (int) (position % chunkSize);
+		return indexBuffers.get(bufferIndex).getLong(bufferPosition);
+	}
+
+	public double getIndexDouble(long position) {
+		int bufferIndex = (int) (position / chunkSize);
+		int bufferPosition = (int) (position % chunkSize);
+		return indexBuffers.get(bufferIndex).getDouble(bufferPosition);
+	}
+
 	/**
 	 * Retrieve the type of message at given index
 	 * 
@@ -301,8 +352,7 @@ public class LsfIndex {
 	public int typeOf(int messageNumber) {
 		if (messageNumber > numMessages)
 			return -1;
-		return index.getShort(HEADER_SIZE + messageNumber * ENTRY_SIZE
-				+ OFFSET_OF_MGID) & 0xFFFF;
+		return getIndexShort((long) messageNumber * ENTRY_SIZE + OFFSET_OF_MGID) & 0xFFFF;
 	}
 
 	/**
@@ -310,15 +360,13 @@ public class LsfIndex {
 	 * message
 	 * 
 	 * @param messageNumber
-	 *            The index of the message in the log
+	 *                      The index of the message in the log
 	 * @return Time, in seconds since January 1st 1970 UTC of the given message
 	 */
 	public double timeOf(int messageNumber) {
 		if (messageNumber > numMessages)
 			return Double.NaN;
-		return startTime
-				+ index.getInt(HEADER_SIZE + messageNumber * ENTRY_SIZE
-						+ OFFSET_OF_TIME) / 1000.0;
+		return startTime + getIndexInt((long) messageNumber * ENTRY_SIZE + OFFSET_OF_TIME) / 1000.0;
 	}
 
 	public synchronized boolean isBigEndian(int messageNumber) {
@@ -403,8 +451,7 @@ public class LsfIndex {
 	public long positionOf(int messageNumber) {
 		if (messageNumber > numMessages)
 			return -1;
-		return index.getLong(HEADER_SIZE + messageNumber * ENTRY_SIZE
-				+ OFFSET_OF_POS);
+		return getIndexLong((long) messageNumber * ENTRY_SIZE + OFFSET_OF_POS);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -972,8 +1019,8 @@ public class LsfIndex {
 	public void cleanup() {
 		if (buffer != null)
 			buffer = null;
-		if (index != null)
-			index = null;
+		if (!indexBuffers.isEmpty())
+			indexBuffers.clear();
 		if (lsfChannel != null) {
 			try {
 				lsfChannel.close();
