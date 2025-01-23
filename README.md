@@ -8,8 +8,8 @@ Java bindings for IMC.
 IMC.xml resides in conf/imc/
 imcjava supports multiple IMC versions.
 
-Use `gradle generate` to create the bindings.
+Use `./gradlew generate` to create the bindings.
 
-Use `gradle publishToMavenLocal` to test locally.
+Use `./gradlew publishToMavenLocal` to test locally.
 
 `mvn_update.sh` to publish the current build to omst's maven repository.
