@@ -78,18 +78,67 @@ task toJson(type: JavaExec) {
 //******************************************************************************
 
 apply plugin: 'maven-publish'
+
+// Configure javadoc to be lenient with errors
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.encoding = 'UTF-8'
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
+            
+            pom {
+                name = 'IMC Java'
+                description = 'Java bindings for Inter-Module Communication (IMC) protocol'
+                url = 'https://github.com/oceanscan/imcjava'
+                
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://opensource.org/licenses/MIT'
+                    }
+                }
+                
+                developers {
+                    developer {
+                        id = 'oceanscan'
+                        name = 'OceanScan'
+                        organization = 'OceanScan'
+                        organizationUrl = 'https://github.com/oceanscan'
+                    }
+                }
+                
+                scm {
+                    connection = 'scm:git:git://github.com/oceanscan/imcjava.git'
+                    developerConnection = 'scm:git:ssh://github.com/oceanscan/imcjava.git'
+                    url = 'https://github.com/oceanscan/imcjava'
+                }
+            }
         }
     }
-}
-
-publishing {
+    
     repositories {
         maven {
-            url "file://" + System.getProperty("user.home") + "/maven"
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/oceanscan/imcjava")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+                password = project.findProperty("gpr.token") ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+        
+        // Keep local publishing option for testing
+        maven {
+            name = "Local"
+            url = "file://" + System.getProperty("user.home") + "/maven"
         }
     }
 }
