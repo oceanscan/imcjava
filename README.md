@@ -12,6 +12,14 @@ Use `./gradlew generate` to create the bindings.
 
 # Publishing
 
+## Automated Publishing (CI/CD)
+
+This repository includes a GitHub Actions workflow that automatically publishes to GitHub Packages when:
+- A new release is created
+- The workflow is manually triggered
+
+The workflow runs on every release and authenticates automatically using the `GITHUB_TOKEN` secret.
+
 ## Publish to GitHub Packages
 
 To publish to GitHub Packages, you need to authenticate with your GitHub credentials:
