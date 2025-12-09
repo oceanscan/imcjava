@@ -30,40 +30,19 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message Remote Actions Request (304)<br/>
- *  This message is used as query to request for the possible remote<br/>
- *  actions (operation=QUERY and the list is empty in this<br/>
- *  case). The vehicle responds using the same message type<br/>
- *  returning the tuplelist with the pairs: Action,Type<br/>
- *  (operation=REPORT). The type of action can be Axis, Hat or<br/>
- *  Button.<br/>
+ *  IMC Message Desired Servo Position (317)<br/>
+ *  Desired position of a fin.<br/>
  */
 
-public class RemoteActionsRequest extends IMCMessage {
+public class DesiredServoPosition extends IMCMessage {
 
-	public enum OP {
-		REPORT(0),
-		QUERY(1),
-		REGISTER(2);
+	public static final int ID_STATIC = 317;
 
-		protected long value;
-
-		public long value() {
-			return value;
-		}
-
-		OP(long value) {
-			this.value = value;
-		}
-	}
-
-	public static final int ID_STATIC = 304;
-
-	public RemoteActionsRequest() {
+	public DesiredServoPosition() {
 		super(ID_STATIC);
 	}
 
-	public RemoteActionsRequest(IMCMessage msg) {
+	public DesiredServoPosition(IMCMessage msg) {
 		super(ID_STATIC);
 		try{
 			copyFrom(msg);
@@ -73,24 +52,24 @@ public class RemoteActionsRequest extends IMCMessage {
 		}
 	}
 
-	public RemoteActionsRequest(IMCDefinition defs) {
+	public DesiredServoPosition(IMCDefinition defs) {
 		super(defs, ID_STATIC);
 	}
 
-	public RemoteActionsRequest(IMCDefinition defs, int type) {
+	public DesiredServoPosition(IMCDefinition defs, int type) {
 		super(defs, type);
 	}
 
-	public static RemoteActionsRequest create(Object... values) {
-		RemoteActionsRequest m = new RemoteActionsRequest();
+	public static DesiredServoPosition create(Object... values) {
+		DesiredServoPosition m = new DesiredServoPosition();
 		for (int i = 0; i < values.length-1; i+= 2)
 			m.setValue(values[i].toString(), values[i+1]);
 		return m;
 	}
 
-	public static RemoteActionsRequest clone(IMCMessage msg) throws Exception {
+	public static DesiredServoPosition clone(IMCMessage msg) throws Exception {
 
-		RemoteActionsRequest m = new RemoteActionsRequest();
+		DesiredServoPosition m = new DesiredServoPosition();
 		if (msg == null)
 			return m;
 		if(msg.definitions != m.definitions){
@@ -105,76 +84,39 @@ public class RemoteActionsRequest extends IMCMessage {
 		return m;
 	}
 
-	public RemoteActionsRequest(OP op, String actions) {
+	public DesiredServoPosition(short id, float position) {
 		super(ID_STATIC);
-		setOp(op);
-		if (actions != null)
-			setActions(actions);
+		setId(id);
+		setPosition(position);
 	}
 
 	/**
-	 *  @return operation (enumerated) - uint8_t
+	 *  @return Servo Identifier - uint8_t
 	 */
-	public OP getOp() {
-		try {
-			OP o = OP.valueOf(getMessageType().getFieldPossibleValues("op").get(getLong("op")));
-			return o;
-		}
-		catch (Exception e) {
-			return null;
-		}
-	}
-
-	public String getOpStr() {
-		return getString("op");
-	}
-
-	public short getOpVal() {
-		return (short) getInteger("op");
+	public short getId() {
+		return (short) getInteger("id");
 	}
 
 	/**
-	 *  @param op operation (enumerated)
+	 *  @param id Servo Identifier
 	 */
-	public RemoteActionsRequest setOp(OP op) {
-		values.put("op", op.value());
+	public DesiredServoPosition setId(short id) {
+		values.put("id", id);
 		return this;
 	}
 
 	/**
-	 *  @param op operation (as a String)
+	 *  @return Position (rad) - fp32_t
 	 */
-	public RemoteActionsRequest setOpStr(String op) {
-		setValue("op", op);
-		return this;
+	public double getPosition() {
+		return getDouble("position");
 	}
 
 	/**
-	 *  @param op operation (integer value)
+	 *  @param position Position (rad)
 	 */
-	public RemoteActionsRequest setOpVal(short op) {
-		setValue("op", op);
-		return this;
-	}
-
-	/**
-	 *  @return Actions (tuplelist) - plaintext
-	 */
-	public java.util.LinkedHashMap<String, String> getActions() {
-		return getTupleList("actions");
-	}
-
-	/**
-	 *  @param actions Actions (tuplelist)
-	 */
-	public RemoteActionsRequest setActions(java.util.LinkedHashMap<String, ?> actions) {
-		String val = encodeTupleList(actions);
-		values.put("actions", val);
-		return this;
-	}
-
-	public RemoteActionsRequest setActions(String actions) {
-		values.put("actions", actions);
+	public DesiredServoPosition setPosition(double position) {
+		values.put("position", position);
 		return this;
 	}
 

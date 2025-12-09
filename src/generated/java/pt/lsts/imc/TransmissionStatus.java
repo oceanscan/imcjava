@@ -44,7 +44,8 @@ public class TransmissionStatus extends IMCMessage {
 		RANGE_RECEIVED(60),
 		INPUT_FAILURE(101),
 		TEMPORARY_FAILURE(102),
-		PERMANENT_FAILURE(103);
+		PERMANENT_FAILURE(103),
+		INV_ADDR(104);
 
 		protected long value;
 

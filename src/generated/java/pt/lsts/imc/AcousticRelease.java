@@ -30,33 +30,15 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message Acoustic Operation (211)<br/>
- *  Acoustic operation.<br/>
+ *  IMC Message Acoustic Release Request (217)<br/>
+ *  Request a system (local or remote) to activate its acoustic release.<br/>
  */
 
-public class AcousticOperation extends IMCMessage {
+public class AcousticRelease extends IMCMessage {
 
 	public enum OP {
-		ABORT(0),
-		ABORT_IP(1),
-		ABORT_TIMEOUT(2),
-		ABORT_ACKED(3),
-		RANGE(4),
-		RANGE_IP(5),
-		RANGE_TIMEOUT(6),
-		RANGE_RECVED(7),
-		BUSY(8),
-		UNSUPPORTED(9),
-		NO_TXD(10),
-		MSG(11),
-		MSG_QUEUED(12),
-		MSG_IP(13),
-		MSG_DONE(14),
-		MSG_FAILURE(15),
-		MSG_SHORT(16),
-		REVERSE_RANGE(17),
-		FORCED_ABORT(18),
-		MSG_FRAGMENT(19);
+		OPEN(0),
+		CLOSE(1);
 
 		protected long value;
 
@@ -69,13 +51,13 @@ public class AcousticOperation extends IMCMessage {
 		}
 	}
 
-	public static final int ID_STATIC = 211;
+	public static final int ID_STATIC = 217;
 
-	public AcousticOperation() {
+	public AcousticRelease() {
 		super(ID_STATIC);
 	}
 
-	public AcousticOperation(IMCMessage msg) {
+	public AcousticRelease(IMCMessage msg) {
 		super(ID_STATIC);
 		try{
 			copyFrom(msg);
@@ -85,24 +67,24 @@ public class AcousticOperation extends IMCMessage {
 		}
 	}
 
-	public AcousticOperation(IMCDefinition defs) {
+	public AcousticRelease(IMCDefinition defs) {
 		super(defs, ID_STATIC);
 	}
 
-	public AcousticOperation(IMCDefinition defs, int type) {
+	public AcousticRelease(IMCDefinition defs, int type) {
 		super(defs, type);
 	}
 
-	public static AcousticOperation create(Object... values) {
-		AcousticOperation m = new AcousticOperation();
+	public static AcousticRelease create(Object... values) {
+		AcousticRelease m = new AcousticRelease();
 		for (int i = 0; i < values.length-1; i+= 2)
 			m.setValue(values[i].toString(), values[i+1]);
 		return m;
 	}
 
-	public static AcousticOperation clone(IMCMessage msg) throws Exception {
+	public static AcousticRelease clone(IMCMessage msg) throws Exception {
 
-		AcousticOperation m = new AcousticOperation();
+		AcousticRelease m = new AcousticRelease();
 		if (msg == null)
 			return m;
 		if(msg.definitions != m.definitions){
@@ -117,14 +99,26 @@ public class AcousticOperation extends IMCMessage {
 		return m;
 	}
 
-	public AcousticOperation(OP op, String system, float range, IMCMessage msg) {
+	public AcousticRelease(String system, OP op) {
 		super(ID_STATIC);
-		setOp(op);
 		if (system != null)
 			setSystem(system);
-		setRange(range);
-		if (msg != null)
-			setMsg(msg);
+		setOp(op);
+	}
+
+	/**
+	 *  @return System - plaintext
+	 */
+	public String getSystem() {
+		return getString("system");
+	}
+
+	/**
+	 *  @param system System
+	 */
+	public AcousticRelease setSystem(String system) {
+		values.put("system", system);
+		return this;
 	}
 
 	/**
@@ -151,7 +145,7 @@ public class AcousticOperation extends IMCMessage {
 	/**
 	 *  @param op Operation (enumerated)
 	 */
-	public AcousticOperation setOp(OP op) {
+	public AcousticRelease setOp(OP op) {
 		values.put("op", op.value());
 		return this;
 	}
@@ -159,7 +153,7 @@ public class AcousticOperation extends IMCMessage {
 	/**
 	 *  @param op Operation (as a String)
 	 */
-	public AcousticOperation setOpStr(String op) {
+	public AcousticRelease setOpStr(String op) {
 		setValue("op", op);
 		return this;
 	}
@@ -167,57 +161,8 @@ public class AcousticOperation extends IMCMessage {
 	/**
 	 *  @param op Operation (integer value)
 	 */
-	public AcousticOperation setOpVal(short op) {
+	public AcousticRelease setOpVal(short op) {
 		setValue("op", op);
-		return this;
-	}
-
-	/**
-	 *  @return System - plaintext
-	 */
-	public String getSystem() {
-		return getString("system");
-	}
-
-	/**
-	 *  @param system System
-	 */
-	public AcousticOperation setSystem(String system) {
-		values.put("system", system);
-		return this;
-	}
-
-	/**
-	 *  @return Range (m) - fp32_t
-	 */
-	public double getRange() {
-		return getDouble("range");
-	}
-
-	/**
-	 *  @param range Range (m)
-	 */
-	public AcousticOperation setRange(double range) {
-		values.put("range", range);
-		return this;
-	}
-
-	/**
-	 *  @return Message To Send - message
-	 */
-	public IMCMessage getMsg() {
-		return getMessage("msg");
-	}
-
-	public <T extends IMCMessage> T getMsg(Class<T> clazz) throws Exception {
-		return getMessage(clazz, "msg");
-	}
-
-	/**
-	 *  @param msg Message To Send
-	 */
-	public AcousticOperation setMsg(IMCMessage msg) {
-		values.put("msg", msg);
 		return this;
 	}
 

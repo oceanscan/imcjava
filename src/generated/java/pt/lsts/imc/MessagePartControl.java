@@ -30,33 +30,20 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message Acoustic Operation (211)<br/>
- *  Acoustic operation.<br/>
+ *  IMC Message Message Fragment Control (878)<br/>
+ *  This message is used by the receiver of MessageParts messages<br/>
+ *  to inform the sender of the status of the reception of a message<br/>
+ *  in fragments.<br/>
+ *  The sender can then use this information to determine which<br/>
+ *  fragments were received and which ones were not.<br/>
+ *  This message is sent in response to a MessagePart message.<br/>
  */
 
-public class AcousticOperation extends IMCMessage {
+public class MessagePartControl extends IMCMessage {
 
 	public enum OP {
-		ABORT(0),
-		ABORT_IP(1),
-		ABORT_TIMEOUT(2),
-		ABORT_ACKED(3),
-		RANGE(4),
-		RANGE_IP(5),
-		RANGE_TIMEOUT(6),
-		RANGE_RECVED(7),
-		BUSY(8),
-		UNSUPPORTED(9),
-		NO_TXD(10),
-		MSG(11),
-		MSG_QUEUED(12),
-		MSG_IP(13),
-		MSG_DONE(14),
-		MSG_FAILURE(15),
-		MSG_SHORT(16),
-		REVERSE_RANGE(17),
-		FORCED_ABORT(18),
-		MSG_FRAGMENT(19);
+		STATUS_RECEIVED(0),
+		REQUEST_RETRANSMIT(1);
 
 		protected long value;
 
@@ -69,13 +56,13 @@ public class AcousticOperation extends IMCMessage {
 		}
 	}
 
-	public static final int ID_STATIC = 211;
+	public static final int ID_STATIC = 878;
 
-	public AcousticOperation() {
+	public MessagePartControl() {
 		super(ID_STATIC);
 	}
 
-	public AcousticOperation(IMCMessage msg) {
+	public MessagePartControl(IMCMessage msg) {
 		super(ID_STATIC);
 		try{
 			copyFrom(msg);
@@ -85,24 +72,24 @@ public class AcousticOperation extends IMCMessage {
 		}
 	}
 
-	public AcousticOperation(IMCDefinition defs) {
+	public MessagePartControl(IMCDefinition defs) {
 		super(defs, ID_STATIC);
 	}
 
-	public AcousticOperation(IMCDefinition defs, int type) {
+	public MessagePartControl(IMCDefinition defs, int type) {
 		super(defs, type);
 	}
 
-	public static AcousticOperation create(Object... values) {
-		AcousticOperation m = new AcousticOperation();
+	public static MessagePartControl create(Object... values) {
+		MessagePartControl m = new MessagePartControl();
 		for (int i = 0; i < values.length-1; i+= 2)
 			m.setValue(values[i].toString(), values[i+1]);
 		return m;
 	}
 
-	public static AcousticOperation clone(IMCMessage msg) throws Exception {
+	public static MessagePartControl clone(IMCMessage msg) throws Exception {
 
-		AcousticOperation m = new AcousticOperation();
+		MessagePartControl m = new MessagePartControl();
 		if (msg == null)
 			return m;
 		if(msg.definitions != m.definitions){
@@ -117,14 +104,27 @@ public class AcousticOperation extends IMCMessage {
 		return m;
 	}
 
-	public AcousticOperation(OP op, String system, float range, IMCMessage msg) {
+	public MessagePartControl(short uid, OP op, String frag_ids) {
 		super(ID_STATIC);
+		setUid(uid);
 		setOp(op);
-		if (system != null)
-			setSystem(system);
-		setRange(range);
-		if (msg != null)
-			setMsg(msg);
+		if (frag_ids != null)
+			setFragIds(frag_ids);
+	}
+
+	/**
+	 *  @return Transmission Unique Id - uint8_t
+	 */
+	public short getUid() {
+		return (short) getInteger("uid");
+	}
+
+	/**
+	 *  @param uid Transmission Unique Id
+	 */
+	public MessagePartControl setUid(short uid) {
+		values.put("uid", uid);
+		return this;
 	}
 
 	/**
@@ -151,7 +151,7 @@ public class AcousticOperation extends IMCMessage {
 	/**
 	 *  @param op Operation (enumerated)
 	 */
-	public AcousticOperation setOp(OP op) {
+	public MessagePartControl setOp(OP op) {
 		values.put("op", op.value());
 		return this;
 	}
@@ -159,7 +159,7 @@ public class AcousticOperation extends IMCMessage {
 	/**
 	 *  @param op Operation (as a String)
 	 */
-	public AcousticOperation setOpStr(String op) {
+	public MessagePartControl setOpStr(String op) {
 		setValue("op", op);
 		return this;
 	}
@@ -167,57 +167,23 @@ public class AcousticOperation extends IMCMessage {
 	/**
 	 *  @param op Operation (integer value)
 	 */
-	public AcousticOperation setOpVal(short op) {
+	public MessagePartControl setOpVal(short op) {
 		setValue("op", op);
 		return this;
 	}
 
 	/**
-	 *  @return System - plaintext
+	 *  @return Fragments IDs - plaintext
 	 */
-	public String getSystem() {
-		return getString("system");
+	public String getFragIds() {
+		return getString("frag_ids");
 	}
 
 	/**
-	 *  @param system System
+	 *  @param frag_ids Fragments IDs
 	 */
-	public AcousticOperation setSystem(String system) {
-		values.put("system", system);
-		return this;
-	}
-
-	/**
-	 *  @return Range (m) - fp32_t
-	 */
-	public double getRange() {
-		return getDouble("range");
-	}
-
-	/**
-	 *  @param range Range (m)
-	 */
-	public AcousticOperation setRange(double range) {
-		values.put("range", range);
-		return this;
-	}
-
-	/**
-	 *  @return Message To Send - message
-	 */
-	public IMCMessage getMsg() {
-		return getMessage("msg");
-	}
-
-	public <T extends IMCMessage> T getMsg(Class<T> clazz) throws Exception {
-		return getMessage(clazz, "msg");
-	}
-
-	/**
-	 *  @param msg Message To Send
-	 */
-	public AcousticOperation setMsg(IMCMessage msg) {
-		values.put("msg", msg);
+	public MessagePartControl setFragIds(String frag_ids) {
+		values.put("frag_ids", frag_ids);
 		return this;
 	}
 

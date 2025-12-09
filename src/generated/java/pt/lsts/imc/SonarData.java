@@ -66,9 +66,9 @@ package pt.lsts.imc;
  *  +--------+------------------+-----+<br/>
  *  | Section| Flag Label       | Bit |<br/>
  *  +========+==================+=====+<br/>
- *  | H4.1   | Intensities flag | 0   |<br/>
+ *  | H3.1   | Intensities flag | 0   |<br/>
  *  +--------+------------------+-----+<br/>
- *  | H4.2   | Angle step flag  | 1   |<br/>
+ *  | H3.2   | Angle step flag  | 1   |<br/>
  *  +--------+------------------+-----+<br/>
  *  <code>Notes:</code><br/>
  *  <code> Each angle at step *i</code> can be calculated is defined by:<br/>

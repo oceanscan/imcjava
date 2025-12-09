@@ -30,40 +30,19 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message Remote Actions Request (304)<br/>
- *  This message is used as query to request for the possible remote<br/>
- *  actions (operation=QUERY and the list is empty in this<br/>
- *  case). The vehicle responds using the same message type<br/>
- *  returning the tuplelist with the pairs: Action,Type<br/>
- *  (operation=REPORT). The type of action can be Axis, Hat or<br/>
- *  Button.<br/>
+ *  IMC Message Absolute Wind (911)<br/>
+ *  Measurement of absolute wind speed (Meaning without vehicle effects).<br/>
  */
 
-public class RemoteActionsRequest extends IMCMessage {
+public class AbsoluteWind extends IMCMessage {
 
-	public enum OP {
-		REPORT(0),
-		QUERY(1),
-		REGISTER(2);
+	public static final int ID_STATIC = 911;
 
-		protected long value;
-
-		public long value() {
-			return value;
-		}
-
-		OP(long value) {
-			this.value = value;
-		}
-	}
-
-	public static final int ID_STATIC = 304;
-
-	public RemoteActionsRequest() {
+	public AbsoluteWind() {
 		super(ID_STATIC);
 	}
 
-	public RemoteActionsRequest(IMCMessage msg) {
+	public AbsoluteWind(IMCMessage msg) {
 		super(ID_STATIC);
 		try{
 			copyFrom(msg);
@@ -73,24 +52,24 @@ public class RemoteActionsRequest extends IMCMessage {
 		}
 	}
 
-	public RemoteActionsRequest(IMCDefinition defs) {
+	public AbsoluteWind(IMCDefinition defs) {
 		super(defs, ID_STATIC);
 	}
 
-	public RemoteActionsRequest(IMCDefinition defs, int type) {
+	public AbsoluteWind(IMCDefinition defs, int type) {
 		super(defs, type);
 	}
 
-	public static RemoteActionsRequest create(Object... values) {
-		RemoteActionsRequest m = new RemoteActionsRequest();
+	public static AbsoluteWind create(Object... values) {
+		AbsoluteWind m = new AbsoluteWind();
 		for (int i = 0; i < values.length-1; i+= 2)
 			m.setValue(values[i].toString(), values[i+1]);
 		return m;
 	}
 
-	public static RemoteActionsRequest clone(IMCMessage msg) throws Exception {
+	public static AbsoluteWind clone(IMCMessage msg) throws Exception {
 
-		RemoteActionsRequest m = new RemoteActionsRequest();
+		AbsoluteWind m = new AbsoluteWind();
 		if (msg == null)
 			return m;
 		if(msg.definitions != m.definitions){
@@ -105,76 +84,55 @@ public class RemoteActionsRequest extends IMCMessage {
 		return m;
 	}
 
-	public RemoteActionsRequest(OP op, String actions) {
+	public AbsoluteWind(float direction, float speed, float turbulence) {
 		super(ID_STATIC);
-		setOp(op);
-		if (actions != null)
-			setActions(actions);
+		setDirection(direction);
+		setSpeed(speed);
+		setTurbulence(turbulence);
 	}
 
 	/**
-	 *  @return operation (enumerated) - uint8_t
+	 *  @return Direction (rad) - fp32_t
 	 */
-	public OP getOp() {
-		try {
-			OP o = OP.valueOf(getMessageType().getFieldPossibleValues("op").get(getLong("op")));
-			return o;
-		}
-		catch (Exception e) {
-			return null;
-		}
-	}
-
-	public String getOpStr() {
-		return getString("op");
-	}
-
-	public short getOpVal() {
-		return (short) getInteger("op");
+	public double getDirection() {
+		return getDouble("direction");
 	}
 
 	/**
-	 *  @param op operation (enumerated)
+	 *  @param direction Direction (rad)
 	 */
-	public RemoteActionsRequest setOp(OP op) {
-		values.put("op", op.value());
+	public AbsoluteWind setDirection(double direction) {
+		values.put("direction", direction);
 		return this;
 	}
 
 	/**
-	 *  @param op operation (as a String)
+	 *  @return Speed (m/s) - fp32_t
 	 */
-	public RemoteActionsRequest setOpStr(String op) {
-		setValue("op", op);
+	public double getSpeed() {
+		return getDouble("speed");
+	}
+
+	/**
+	 *  @param speed Speed (m/s)
+	 */
+	public AbsoluteWind setSpeed(double speed) {
+		values.put("speed", speed);
 		return this;
 	}
 
 	/**
-	 *  @param op operation (integer value)
+	 *  @return Turbulence (m/s) - fp32_t
 	 */
-	public RemoteActionsRequest setOpVal(short op) {
-		setValue("op", op);
-		return this;
+	public double getTurbulence() {
+		return getDouble("turbulence");
 	}
 
 	/**
-	 *  @return Actions (tuplelist) - plaintext
+	 *  @param turbulence Turbulence (m/s)
 	 */
-	public java.util.LinkedHashMap<String, String> getActions() {
-		return getTupleList("actions");
-	}
-
-	/**
-	 *  @param actions Actions (tuplelist)
-	 */
-	public RemoteActionsRequest setActions(java.util.LinkedHashMap<String, ?> actions) {
-		String val = encodeTupleList(actions);
-		values.put("actions", val);
-		return this;
-	}
-
-	public RemoteActionsRequest setActions(String actions) {
-		values.put("actions", actions);
+	public AbsoluteWind setTurbulence(double turbulence) {
+		values.put("turbulence", turbulence);
 		return this;
 	}
 

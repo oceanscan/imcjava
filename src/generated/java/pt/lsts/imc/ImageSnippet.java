@@ -30,33 +30,14 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message Acoustic Operation (211)<br/>
- *  Acoustic operation.<br/>
+ *  IMC Message Image Snippet (704)<br/>
+ *  Small image encoded as several frames (transferable over low bandwidth lossy links).<br/>
  */
 
-public class AcousticOperation extends IMCMessage {
+public class ImageSnippet extends IMCMessage {
 
-	public enum OP {
-		ABORT(0),
-		ABORT_IP(1),
-		ABORT_TIMEOUT(2),
-		ABORT_ACKED(3),
-		RANGE(4),
-		RANGE_IP(5),
-		RANGE_TIMEOUT(6),
-		RANGE_RECVED(7),
-		BUSY(8),
-		UNSUPPORTED(9),
-		NO_TXD(10),
-		MSG(11),
-		MSG_QUEUED(12),
-		MSG_IP(13),
-		MSG_DONE(14),
-		MSG_FAILURE(15),
-		MSG_SHORT(16),
-		REVERSE_RANGE(17),
-		FORCED_ABORT(18),
-		MSG_FRAGMENT(19);
+	public enum CODEC {
+		JPEG2000(0);
 
 		protected long value;
 
@@ -64,18 +45,18 @@ public class AcousticOperation extends IMCMessage {
 			return value;
 		}
 
-		OP(long value) {
+		CODEC(long value) {
 			this.value = value;
 		}
 	}
 
-	public static final int ID_STATIC = 211;
+	public static final int ID_STATIC = 704;
 
-	public AcousticOperation() {
+	public ImageSnippet() {
 		super(ID_STATIC);
 	}
 
-	public AcousticOperation(IMCMessage msg) {
+	public ImageSnippet(IMCMessage msg) {
 		super(ID_STATIC);
 		try{
 			copyFrom(msg);
@@ -85,24 +66,24 @@ public class AcousticOperation extends IMCMessage {
 		}
 	}
 
-	public AcousticOperation(IMCDefinition defs) {
+	public ImageSnippet(IMCDefinition defs) {
 		super(defs, ID_STATIC);
 	}
 
-	public AcousticOperation(IMCDefinition defs, int type) {
+	public ImageSnippet(IMCDefinition defs, int type) {
 		super(defs, type);
 	}
 
-	public static AcousticOperation create(Object... values) {
-		AcousticOperation m = new AcousticOperation();
+	public static ImageSnippet create(Object... values) {
+		ImageSnippet m = new ImageSnippet();
 		for (int i = 0; i < values.length-1; i+= 2)
 			m.setValue(values[i].toString(), values[i+1]);
 		return m;
 	}
 
-	public static AcousticOperation clone(IMCMessage msg) throws Exception {
+	public static ImageSnippet clone(IMCMessage msg) throws Exception {
 
-		AcousticOperation m = new AcousticOperation();
+		ImageSnippet m = new ImageSnippet();
 		if (msg == null)
 			return m;
 		if(msg.definitions != m.definitions){
@@ -117,22 +98,67 @@ public class AcousticOperation extends IMCMessage {
 		return m;
 	}
 
-	public AcousticOperation(OP op, String system, float range, IMCMessage msg) {
+	public ImageSnippet(int snippet_id, short total_frames, short frame_id, CODEC codec, byte[] data) {
 		super(ID_STATIC);
-		setOp(op);
-		if (system != null)
-			setSystem(system);
-		setRange(range);
-		if (msg != null)
-			setMsg(msg);
+		setSnippetId(snippet_id);
+		setTotalFrames(total_frames);
+		setFrameId(frame_id);
+		setCodec(codec);
+		if (data != null)
+			setData(data);
 	}
 
 	/**
-	 *  @return Operation (enumerated) - uint8_t
+	 *  @return Snippet Id - uint16_t
 	 */
-	public OP getOp() {
+	public int getSnippetId() {
+		return getInteger("snippet_id");
+	}
+
+	/**
+	 *  @param snippet_id Snippet Id
+	 */
+	public ImageSnippet setSnippetId(int snippet_id) {
+		values.put("snippet_id", snippet_id);
+		return this;
+	}
+
+	/**
+	 *  @return Total Frames - uint8_t
+	 */
+	public short getTotalFrames() {
+		return (short) getInteger("total_frames");
+	}
+
+	/**
+	 *  @param total_frames Total Frames
+	 */
+	public ImageSnippet setTotalFrames(short total_frames) {
+		values.put("total_frames", total_frames);
+		return this;
+	}
+
+	/**
+	 *  @return Frame Number - uint8_t
+	 */
+	public short getFrameId() {
+		return (short) getInteger("frame_id");
+	}
+
+	/**
+	 *  @param frame_id Frame Number
+	 */
+	public ImageSnippet setFrameId(short frame_id) {
+		values.put("frame_id", frame_id);
+		return this;
+	}
+
+	/**
+	 *  @return Codec (enumerated) - uint8_t
+	 */
+	public CODEC getCodec() {
 		try {
-			OP o = OP.valueOf(getMessageType().getFieldPossibleValues("op").get(getLong("op")));
+			CODEC o = CODEC.valueOf(getMessageType().getFieldPossibleValues("codec").get(getLong("codec")));
 			return o;
 		}
 		catch (Exception e) {
@@ -140,84 +166,50 @@ public class AcousticOperation extends IMCMessage {
 		}
 	}
 
-	public String getOpStr() {
-		return getString("op");
+	public String getCodecStr() {
+		return getString("codec");
 	}
 
-	public short getOpVal() {
-		return (short) getInteger("op");
+	public short getCodecVal() {
+		return (short) getInteger("codec");
 	}
 
 	/**
-	 *  @param op Operation (enumerated)
+	 *  @param codec Codec (enumerated)
 	 */
-	public AcousticOperation setOp(OP op) {
-		values.put("op", op.value());
+	public ImageSnippet setCodec(CODEC codec) {
+		values.put("codec", codec.value());
 		return this;
 	}
 
 	/**
-	 *  @param op Operation (as a String)
+	 *  @param codec Codec (as a String)
 	 */
-	public AcousticOperation setOpStr(String op) {
-		setValue("op", op);
+	public ImageSnippet setCodecStr(String codec) {
+		setValue("codec", codec);
 		return this;
 	}
 
 	/**
-	 *  @param op Operation (integer value)
+	 *  @param codec Codec (integer value)
 	 */
-	public AcousticOperation setOpVal(short op) {
-		setValue("op", op);
+	public ImageSnippet setCodecVal(short codec) {
+		setValue("codec", codec);
 		return this;
 	}
 
 	/**
-	 *  @return System - plaintext
+	 *  @return Data - rawdata
 	 */
-	public String getSystem() {
-		return getString("system");
+	public byte[] getData() {
+		return getRawData("data");
 	}
 
 	/**
-	 *  @param system System
+	 *  @param data Data
 	 */
-	public AcousticOperation setSystem(String system) {
-		values.put("system", system);
-		return this;
-	}
-
-	/**
-	 *  @return Range (m) - fp32_t
-	 */
-	public double getRange() {
-		return getDouble("range");
-	}
-
-	/**
-	 *  @param range Range (m)
-	 */
-	public AcousticOperation setRange(double range) {
-		values.put("range", range);
-		return this;
-	}
-
-	/**
-	 *  @return Message To Send - message
-	 */
-	public IMCMessage getMsg() {
-		return getMessage("msg");
-	}
-
-	public <T extends IMCMessage> T getMsg(Class<T> clazz) throws Exception {
-		return getMessage(clazz, "msg");
-	}
-
-	/**
-	 *  @param msg Message To Send
-	 */
-	public AcousticOperation setMsg(IMCMessage msg) {
-		values.put("msg", msg);
+	public ImageSnippet setData(byte[] data) {
+		values.put("data", data);
 		return this;
 	}
 
