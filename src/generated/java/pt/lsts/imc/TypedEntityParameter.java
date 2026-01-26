@@ -34,7 +34,8 @@ package pt.lsts.imc;
  *  Entity parameter with all the data that defines an entity parameter.<br/>
  */
 
-public class TypedEntityParameter extends IMCMessage {
+@SuppressWarnings("unchecked")
+public class TypedEntityParameter extends TypedEntityParametersOptions {
 
 	public enum TYPE {
 		BOOL(1),

@@ -1261,6 +1261,14 @@ public class MessageFactory {
 					return new NLF(defs, 2034);
 				case 2035:
 					return new BDI(defs, 2035);
+				case 2036:
+					return new TypedEntityParameterEditor(defs, 2036);
+				case 2037:
+					return new NavigationalArea(defs, 2037);
+				case 2038:
+					return new Zone(defs, 2038);
+				case 2039:
+					return new GeoCoordinates(defs, 2039);
 				default:
 					return new IMCMessage(defs);
 			}

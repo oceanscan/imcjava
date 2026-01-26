@@ -30,15 +30,15 @@
 package pt.lsts.imc;
 
 /**
- *  IMC Message Query Typed Entity Parameters (2016)<br/>
- *  This message can be used to query/report the entities and respective parameters in the system<br/>
+ *  IMC Message Navigational Area (2037)<br/>
  */
 
-public class QueryTypedEntityParameters extends IMCMessage {
+public class NavigationalArea extends IMCMessage {
 
 	public enum OP {
-		REQUEST(0),
-		REPLY(1);
+		SET(0),
+		GET(1),
+		CLEAR(2);
 
 		protected long value;
 
@@ -51,13 +51,13 @@ public class QueryTypedEntityParameters extends IMCMessage {
 		}
 	}
 
-	public static final int ID_STATIC = 2016;
+	public static final int ID_STATIC = 2037;
 
-	public QueryTypedEntityParameters() {
+	public NavigationalArea() {
 		super(ID_STATIC);
 	}
 
-	public QueryTypedEntityParameters(IMCMessage msg) {
+	public NavigationalArea(IMCMessage msg) {
 		super(ID_STATIC);
 		try{
 			copyFrom(msg);
@@ -67,24 +67,24 @@ public class QueryTypedEntityParameters extends IMCMessage {
 		}
 	}
 
-	public QueryTypedEntityParameters(IMCDefinition defs) {
+	public NavigationalArea(IMCDefinition defs) {
 		super(defs, ID_STATIC);
 	}
 
-	public QueryTypedEntityParameters(IMCDefinition defs, int type) {
+	public NavigationalArea(IMCDefinition defs, int type) {
 		super(defs, type);
 	}
 
-	public static QueryTypedEntityParameters create(Object... values) {
-		QueryTypedEntityParameters m = new QueryTypedEntityParameters();
+	public static NavigationalArea create(Object... values) {
+		NavigationalArea m = new NavigationalArea();
 		for (int i = 0; i < values.length-1; i+= 2)
 			m.setValue(values[i].toString(), values[i+1]);
 		return m;
 	}
 
-	public static QueryTypedEntityParameters clone(IMCMessage msg) throws Exception {
+	public static NavigationalArea clone(IMCMessage msg) throws Exception {
 
-		QueryTypedEntityParameters m = new QueryTypedEntityParameters();
+		NavigationalArea m = new NavigationalArea();
 		if (msg == null)
 			return m;
 		if(msg.definitions != m.definitions){
@@ -99,14 +99,13 @@ public class QueryTypedEntityParameters extends IMCMessage {
 		return m;
 	}
 
-	public QueryTypedEntityParameters(OP op, long request_id, String entity_name, java.util.Collection<TypedEntityParametersOptions> parameters) {
+	public NavigationalArea(OP op, java.util.Collection<Zone> admissible_zones, java.util.Collection<Zone> forbidden_zones) {
 		super(ID_STATIC);
 		setOp(op);
-		setRequestId(request_id);
-		if (entity_name != null)
-			setEntityName(entity_name);
-		if (parameters != null)
-			setParameters(parameters);
+		if (admissible_zones != null)
+			setAdmissibleZones(admissible_zones);
+		if (forbidden_zones != null)
+			setForbiddenZones(forbidden_zones);
 	}
 
 	/**
@@ -133,7 +132,7 @@ public class QueryTypedEntityParameters extends IMCMessage {
 	/**
 	 *  @param op Operation (enumerated)
 	 */
-	public QueryTypedEntityParameters setOp(OP op) {
+	public NavigationalArea setOp(OP op) {
 		values.put("op", op.value());
 		return this;
 	}
@@ -141,7 +140,7 @@ public class QueryTypedEntityParameters extends IMCMessage {
 	/**
 	 *  @param op Operation (as a String)
 	 */
-	public QueryTypedEntityParameters setOpStr(String op) {
+	public NavigationalArea setOpStr(String op) {
 		setValue("op", op);
 		return this;
 	}
@@ -149,47 +148,17 @@ public class QueryTypedEntityParameters extends IMCMessage {
 	/**
 	 *  @param op Operation (integer value)
 	 */
-	public QueryTypedEntityParameters setOpVal(short op) {
+	public NavigationalArea setOpVal(short op) {
 		setValue("op", op);
 		return this;
 	}
 
 	/**
-	 *  @return Request identitier - uint32_t
+	 *  @return Admissible Zones - message-list
 	 */
-	public long getRequestId() {
-		return getLong("request_id");
-	}
-
-	/**
-	 *  @param request_id Request identitier
-	 */
-	public QueryTypedEntityParameters setRequestId(long request_id) {
-		values.put("request_id", request_id);
-		return this;
-	}
-
-	/**
-	 *  @return Entity Name - plaintext
-	 */
-	public String getEntityName() {
-		return getString("entity_name");
-	}
-
-	/**
-	 *  @param entity_name Entity Name
-	 */
-	public QueryTypedEntityParameters setEntityName(String entity_name) {
-		values.put("entity_name", entity_name);
-		return this;
-	}
-
-	/**
-	 *  @return Parameters - message-list
-	 */
-	public java.util.Vector<TypedEntityParametersOptions> getParameters() {
+	public java.util.Vector<Zone> getAdmissibleZones() {
 		try {
-			return getMessageList("parameters", TypedEntityParametersOptions.class);
+			return getMessageList("admissible_zones", Zone.class);
 		}
 		catch (Exception e) {
 			return null;
@@ -198,10 +167,31 @@ public class QueryTypedEntityParameters extends IMCMessage {
 	}
 
 	/**
-	 *  @param parameters Parameters
+	 *  @param admissible_zones Admissible Zones
 	 */
-	public QueryTypedEntityParameters setParameters(java.util.Collection<TypedEntityParametersOptions> parameters) {
-		values.put("parameters", parameters);
+	public NavigationalArea setAdmissibleZones(java.util.Collection<Zone> admissible_zones) {
+		values.put("admissible_zones", admissible_zones);
+		return this;
+	}
+
+	/**
+	 *  @return Forbidden Zones - message-list
+	 */
+	public java.util.Vector<Zone> getForbiddenZones() {
+		try {
+			return getMessageList("forbidden_zones", Zone.class);
+		}
+		catch (Exception e) {
+			return null;
+		}
+
+	}
+
+	/**
+	 *  @param forbidden_zones Forbidden Zones
+	 */
+	public NavigationalArea setForbiddenZones(java.util.Collection<Zone> forbidden_zones) {
+		values.put("forbidden_zones", forbidden_zones);
 		return this;
 	}
 
