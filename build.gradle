@@ -135,6 +135,24 @@ publishing {
             }
         }
         
+        maven {
+            name = "OMSTPublic"
+            url = uri("https://maven.omst.pt/public")
+            credentials {
+                username = project.findProperty("omst.user") ?: System.getenv("OMST_USER")
+                password = project.findProperty("omst.password") ?: System.getenv("OMST_PASSWORD")
+            }
+        }
+        
+        maven {
+            name = "OMSTReleases"
+            url = uri("https://maven.omst.pt/releases")
+            credentials {
+                username = project.findProperty("omst.user") ?: System.getenv("OMST_USER")
+                password = project.findProperty("omst.password") ?: System.getenv("OMST_PASSWORD")
+            }
+        }
+        
         // Keep local publishing option for testing
         maven {
             name = "Local"
@@ -147,4 +165,10 @@ task printVersion {
    doLast { 
        logger.lifecycle(project.version)
    }
+}
+
+task publishToOmstMaven {
+    dependsOn 'publishMavenJavaPublicationToOMSTPublicRepository', 'publishMavenJavaPublicationToOMSTReleasesRepository'
+    description = 'Publishes to OMST Maven Repositories (public and releases)'
+    group = 'publishing'
 }
