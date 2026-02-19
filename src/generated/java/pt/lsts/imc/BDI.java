@@ -31,7 +31,7 @@ package pt.lsts.imc;
 
 /**
  *  IMC Message Battery Detailed Info (2035)<br/>
- *  Used to debug the state of a BMS<br/>
+ *  Deprecated: use QueryBmsData/BmsData instead. Used to debug the state of a BMS.<br/>
  */
 
 public class BDI extends IMCMessage {
