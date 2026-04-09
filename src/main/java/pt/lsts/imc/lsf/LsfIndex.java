@@ -1007,12 +1007,6 @@ public class LsfIndex {
 		}
 	}
 
-	@Override
-	protected void finalize() throws Throwable {
-		cleanup();
-		super.finalize();
-	}
-
 	/**
 	 * This must be called to break the mapping and free memory.
 	 */
