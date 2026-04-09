@@ -5,7 +5,7 @@ version '5.5.8.1-unify'
 
 ext
 {
-   imcDir = project.hasProperty('imcDir') ? project.getProperty('imcDir') : rootProject.file("../imc").absolutePath
+   imcDir = project.hasProperty('imcDir') ? project.getProperty('imcDir') : rootProject.file("imc").absolutePath
 }
 
 repositories {
@@ -24,16 +24,29 @@ dependencies {
     implementation group: 'org.apache.commons', name: 'commons-text', version: '1.2'
     implementation group: 'com.google.code.gson', name:'gson', version: '2.5'
     implementation group: 'com.fifesoft', name: 'rsyntaxtextarea', version: '2.5.8'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 sourceSets {
     main {
         java {
-            srcDirs = ['src/main/java', 'src/generated/java', 'src/sender/java', 'src/test/java']
+            srcDirs = ['src/main/java', 'src/generated/java', 'src/sender/java']
         }
 
         resources {
-            srcDirs = ['src/main/resources', 'src/generated/resources', 'src/sender/resources', 'src/test/resources']
+            srcDirs = ['src/main/resources', 'src/generated/resources', 'src/sender/resources']
+        }
+    }
+
+    test {
+        java {
+            srcDirs = ['src/test/java']
+        }
+
+        resources {
+            srcDirs = ['src/test/resources']
         }
     }
 }
