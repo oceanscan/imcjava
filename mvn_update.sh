@@ -1,34 +1,54 @@
 #!/usr/bin/env bash
 
-# Check for OMST credentials
-GRADLE_PROPS="$HOME/.gradle/gradle.properties"
-OMST_CREDS_SET=false
+LOCAL_ONLY=false
 
-if [[ -n "$OMST_USER" && -n "$OMST_PASSWORD" ]]; then
-    OMST_CREDS_SET=true
-elif [[ -f "$GRADLE_PROPS" ]]; then
-    if grep -q "omst.user" "$GRADLE_PROPS" && grep -q "omst.password" "$GRADLE_PROPS"; then
+for arg in "$@"; do
+    case "$arg" in
+        --local) LOCAL_ONLY=true ;;
+        *) echo "Unknown argument: $arg"; exit 1 ;;
+    esac
+done
+
+if [[ "$LOCAL_ONLY" != "true" ]]; then
+    # Check for OMST credentials
+    GRADLE_PROPS="$HOME/.gradle/gradle.properties"
+    OMST_CREDS_SET=false
+
+    if [[ -n "$OMST_USER" && -n "$OMST_PASSWORD" ]]; then
         OMST_CREDS_SET=true
+    elif [[ -f "$GRADLE_PROPS" ]]; then
+        if grep -q "omst.user" "$GRADLE_PROPS" && grep -q "omst.password" "$GRADLE_PROPS"; then
+            OMST_CREDS_SET=true
+        fi
+    fi
+
+    if [[ "$OMST_CREDS_SET" != "true" ]]; then
+        echo "ERROR: OMST Maven credentials not configured."
+        echo ""
+        echo "Please configure credentials using one of these methods:"
+        echo ""
+        echo "1. Add to $GRADLE_PROPS:"
+        echo "   omst.user=your-username"
+        echo "   omst.password=your-password"
+        echo ""
+        echo "2. Set environment variables:"
+        echo "   export OMST_USER=your-username"
+        echo "   export OMST_PASSWORD=your-password"
+        echo ""
+        exit 1
     fi
 fi
 
-if [[ "$OMST_CREDS_SET" != "true" ]]; then
-    echo "ERROR: OMST Maven credentials not configured."
-    echo ""
-    echo "Please configure credentials using one of these methods:"
-    echo ""
-    echo "1. Add to $GRADLE_PROPS:"
-    echo "   omst.user=your-username"
-    echo "   omst.password=your-password"
-    echo ""
-    echo "2. Set environment variables:"
-    echo "   export OMST_USER=your-username"
-    echo "   export OMST_PASSWORD=your-password"
-    echo ""
-    exit 1
-fi
-
 version=$(./gradlew printVersion -q | tail -1)
+
+if [[ "$LOCAL_ONLY" == "true" ]]; then
+    echo "Publishing IMCJava v$version to Maven Local..."
+    echo ""
+    ./gradlew publishToMavenLocal
+    echo ""
+    echo "Done publishing IMCJava v$version to Maven Local."
+    exit 0
+fi
 
 echo "Publishing IMCJava v$version to all Maven repositories..."
 echo ""
