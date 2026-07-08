@@ -329,6 +329,8 @@ public class MessageFactory {
 					return new PWM(defs, 316);
 				case 317:
 					return new DesiredServoPosition(defs, 317);
+				case 318:
+					return new DesiredThrusterActuation(defs, 318);
 				case 350:
 					return new EstimatedState(defs, 350);
 				case 351:
