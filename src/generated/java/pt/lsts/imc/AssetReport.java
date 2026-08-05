@@ -40,7 +40,9 @@ public class AssetReport extends IMCMessage {
 		WIFI(1),
 		SATELLITE(2),
 		ACOUSTIC(3),
-		SMS(4);
+		SMS(4),
+		AIS(5),
+		UHF(6);
 
 		protected long value;
 
