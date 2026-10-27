@@ -759,8 +759,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
         return 0;
     }
 
-    protected DecimalFormat format = new DecimalFormat("#.000");
-    protected DecimalFormat doubleFormat = new DecimalFormat("0.00000000");
+    private static final ThreadLocal<DecimalFormat> DOUBLE_FORMAT = ThreadLocal.withInitial(() -> new DecimalFormat("0.00000000"));
 
     public String getString(String field, boolean addUnits) {
         Object o = getValue(field);
@@ -794,7 +793,7 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
                 sb.append("...");
             return sb.toString();
         } else if (o instanceof Double) {
-            return doubleFormat.format(o);
+            return DOUBLE_FORMAT.get().format(o);
         } else if (o instanceof IMCMessage) {
             return "%INLINE{"
                     + (((IMCMessage) o).getMessageType() != null ? ((IMCMessage) o).getMessageType().getShortName()
