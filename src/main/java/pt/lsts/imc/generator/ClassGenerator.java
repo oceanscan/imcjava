@@ -969,7 +969,7 @@ public class ClassGenerator {
 				+ "() {\n\t\tsuper(IMCDefinition.getInstance().getHeaderType());\n\t}\n\n");
 		bw.write("\tpublic "
 				+ msgName
-				+ "(IMCDefinition defs) {\n\t\tsuper(defs.getHeaderType());\n\t}\n\n");
+				+ "(IMCDefinition defs) {\n\t\tsuper(defs, defs.getHeaderType());\n\t}\n\n");
 
 		for (String field : type.getFieldNames())
 			bw.write(generateGetters(type, field, false));

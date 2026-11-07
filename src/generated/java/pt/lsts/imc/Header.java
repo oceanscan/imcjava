@@ -40,7 +40,7 @@ public class Header extends IMCMessage {
 	}
 
 	public Header(IMCDefinition defs) {
-		super(defs.getHeaderType());
+		super(defs, defs.getHeaderType());
 	}
 
 	/**

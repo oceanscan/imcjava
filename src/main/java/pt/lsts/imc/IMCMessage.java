@@ -495,9 +495,12 @@ public class IMCMessage implements IMessage, Comparable<IMCMessage> {
             return this;
         }
 
-        header.setValue(field, value);
-        if (getMessageType().getFieldType(field) == null && header.type.getFieldType(field) != null) {
-            return this;
+        // Only header fields go to the header: copying every payload field there as well cost a
+        // second map entry per field for every message decoded.
+        if (header.type.getFieldType(field) != null) {
+            header.setValue(field, value);
+            if (getMessageType().getFieldType(field) == null)
+                return this;
         }
 
         if (getMessageType().getFieldMeanings(field) == null) {

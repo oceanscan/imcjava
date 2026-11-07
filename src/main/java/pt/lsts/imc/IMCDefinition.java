@@ -567,15 +567,14 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 			int numMessages = (Integer) deserialize(IMCFieldType.TYPE_UINT16,
 					in, context);
 			for (int i = 0; i < numMessages; i++) {
-				int mgid = (Integer) deserialize(IMCFieldType.TYPE_UINT16, in,
-						context + "[" + i + "]");
+				int mgid = (Integer) deserialize(IMCFieldType.TYPE_UINT16, in, context);
 				if (mgid == 65535)
 					vec.add(null);
 				else {
 					if (getType(mgid) == null)
 						throw new IOException(
 								"Message in message-list has an unknown type: "
-										+ mgid + " (" + context + ")");
+										+ mgid + " (" + context + "[" + i + "])");
 					IMCMessage m = MessageFactory.getInstance()
 							.createTypedMessage(getMessageName(mgid), this);
 					deserializeFields(m, in);
@@ -650,13 +649,22 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 		return null;
 	}
 
+	/**
+	 * The "Message.field" text of error messages, built only for the field types whose errors
+	 * use it (inline messages and message lists), not for every field of every message read.
+	 */
+	private static String context(IMCMessage message, String field, IMCFieldType type) {
+		if (type == IMCFieldType.TYPE_MESSAGE || type == IMCFieldType.TYPE_MESSAGELIST)
+			return message.getAbbrev() + "." + field;
+		return null;
+	}
+
 	public void deserializeFields(IMCMessage message, DataInput in)
 			throws IOException {
 		for (String field : message.getMessageType().getFieldNames()) {
 
-			Object o = deserialize(
-					message.getMessageType().getFieldType(field), in,
-					message.getAbbrev() + "." + field);
+			IMCFieldType fieldType = message.getMessageType().getFieldType(field);
+			Object o = deserialize(fieldType, in, context(message, field, fieldType));
 			if (o instanceof IMCMessage) {
 				for (String f : new String[] { "src", "dst", "src_ent",
 						"dst_ent" })
@@ -693,10 +701,8 @@ public class IMCDefinition implements IMessageProtocol<IMCMessage> {
 			if (field.equals(fieldToSkip))
 				continue;
 
-			message.setValue(
-					field,
-					deserialize(message.getMessageType().getFieldType(field),
-							in, message.getAbbrev() + "." + field));
+			IMCFieldType fieldType = message.getMessageType().getFieldType(field);
+			message.setValue(field, deserialize(fieldType, in, context(message, field, fieldType)));
 		}
 	}
 
